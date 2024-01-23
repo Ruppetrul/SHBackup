@@ -1,8 +1,11 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Shops') }}
-        </h2>
+        <div class="d-flex justify-content-between align-items-center">
+            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+                {{ __('Shops') }}
+            </h2>
+            <button class="btn btn-primary" id="openModalBtn">Создать магазин</button>
+        </div>
     </x-slot>
 
     @php
@@ -12,7 +15,7 @@
         ];
     @endphp
 
-    <div class="container">
+    <div class="container py-6">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
             @foreach ($shops as $shop)
                 <div class="col mb-4">
@@ -28,3 +31,41 @@
         </div>
     </div>
 </x-app-layout>
+
+<!-- Модальное окно -->
+<div class="modal fade" id="createShopModal" tabindex="-1" role="dialog" aria-labelledby="createShopModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="createShopModalLabel">Как называется ваш магазин?</h5>
+            </div>
+            <div class="modal-body">
+                <label for="shopName">Название магазина:</label>
+                <input type="text" id="shopName" class="form-control" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn" id="cancelShopBtn" data-dismiss="modal">Отмена</button>
+                <button type="button" class="btn" id="createShopBtn">Создать</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Прелоадер -->
+<div id="preloader" class="d-none">
+    <!-- Здесь можно использовать какой-то спиннер или анимацию загрузки -->
+    Loading...
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        $('#openModalBtn').click(function() {
+            $('#createShopModal').modal('toggle');
+        });
+
+        $('#cancelShopBtn').click(function() {
+            $('#createShopModal').modal('toggle');
+        });
+    });
+</script>
