@@ -21,20 +21,6 @@ class DevSeeder extends Seeder
                 'email' => 'admin@admin.com',
                 'password' => Hash::make('adminadmin'),
             ]);
-
-            for ($i = 1; $i <= 20; $i++) {
-                $shopName = 'Shop ' . $i;
-
-                Shop::factory()->create([
-                    'name' => $shopName,
-                    'owner_id' => $user->id,
-                    'payment_status' => 'trial',
-                    'state' => 'not_created',
-                    'last_used_at' => now(),
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
         });
     }
 }
