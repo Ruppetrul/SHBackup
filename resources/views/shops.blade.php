@@ -19,6 +19,7 @@
                             <p class="card-text">{{__('general.created_at')}} {{ $shop['created_at']->format('Y-m-d') }}</p>
                             <p class="card-text">{{__('general.status')}} {{__('states.' . $shop['state'])}}</p>
                         </div>
+                        <button class="btn btn-primary btn-sm edit-button" style="">{{__('general.management')}}</button>
                     </div>
                 </div>
             @endforeach
