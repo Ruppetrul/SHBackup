@@ -24,9 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/shops', function () {
-        return view('shops');
-    })->name('shops');
+    Route::get('/shops', [ShopController::class, 'shops'])->name('shops');
 
     Route::post('/shops/create', [ShopController::class, 'create'])->name('shops.create');
 });

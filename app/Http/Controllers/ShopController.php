@@ -36,4 +36,9 @@ class ShopController extends Controller {
             ]);
         }
     }
+
+    function shops() {
+        $shops = Shop::where('owner_id', Auth::id())->get();
+        return view('shops', ['shops' => $shops]);
+    }
 }

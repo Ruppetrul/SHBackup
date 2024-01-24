@@ -2,28 +2,22 @@
     <x-slot name="header">
         <div class="d-flex justify-content-between align-items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                {{ __('Shops') }}
+{{--                {{ __('Shops') }}--}}
             </h2>
             <button class="btn btn-primary" id="openModalBtn">Создать магазин</button>
         </div>
     </x-slot>
-
-    @php
-        $shops = [
-            ['name' => 'Shop 1', 'image' => 'https://placekitten.com/300/200'],
-            ['name' => 'Shop 2', 'image' => 'https://placekitten.com/300/200'],
-        ];
-    @endphp
 
     <div class="container py-6">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
             @foreach ($shops as $shop)
                 <div class="col mb-4">
                     <div class="card">
-                        <img src="{{ $shop['image'] }}" class="card-img-top" alt="{{ $shop['name'] }}">
+                        <img src="https://placekitten.com/300/200" class="card-img-top" alt="{{ $shop['name'] }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ $shop['name'] }}</h5>
-                            <p class="card-text">Description</p>
+                            <p class="card-text">{{__('general.created_at')}} {{ $shop['created_at']->format('Y-m-d') }}</p>
+                            <p class="card-text">{{__('general.status')}} {{__('states.' . $shop['state'])}}</p>
                         </div>
                     </div>
                 </div>
