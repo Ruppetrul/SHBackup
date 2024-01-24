@@ -15,6 +15,10 @@ class Shop extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name'
+        'name',
+        'owner_id',
+        'payment_status',
+        'state',
+        'last_used_at',
     ];
 }

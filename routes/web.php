@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +27,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/shops', function () {
         return view('shops');
     })->name('shops');
+
+    Route::post('/shops/create', [ShopController::class, 'create'])->name('shops.create');
 });
 
 Route::middleware('auth')->group(function () {

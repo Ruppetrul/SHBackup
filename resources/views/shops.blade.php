@@ -40,8 +40,8 @@
                 <h5 class="modal-title" id="createShopModalLabel">Как называется ваш магазин?</h5>
             </div>
             <div class="modal-body">
-                <label for="shopName">Название магазина:</label>
-                <input type="text" id="shopName" class="form-control" />
+                <label for="shop_name">Название магазина:</label>
+                <input type="text" id="shop_name" class="form-control" />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn" id="cancelShopBtn" data-dismiss="modal">Отмена</button>
@@ -60,12 +60,36 @@
 
 <script>
     $(document).ready(function() {
-        $('#openModalBtn').click(function() {
+        $('#openModalBtn, #cancelShopBtn').click(function() {
             $('#createShopModal').modal('toggle');
         });
 
-        $('#cancelShopBtn').click(function() {
-            $('#createShopModal').modal('toggle');
+        $('#createShopBtn').click(function() {
+            const shop_name = $('#shop_name').val();
+            if (shop_name == '') {
+                alert('Введите название магазина');
+                return false;
+            }
+
+            $.ajax({
+                url: "{{ route('shops.create') }}",
+                type: "POST",
+                data: {
+                    name: shop_name,
+                    _token : document.querySelector('meta[name="csrf-token"]').content
+                },
+                success: function(response) {
+                    if (response.success) {
+                        $('#createShopModal').on('hidden.bs.modal', function () {
+                            alert('Магазин успешно создан');
+                            location.reload();
+                        });
+                        $('#createShopModal').modal('toggle');
+                    } else {
+                        alert(response.message || 'Неизвестная ошибка');
+                    }
+                }
+            });
         });
     });
 </script>
