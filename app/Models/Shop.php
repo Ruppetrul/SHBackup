@@ -32,6 +32,7 @@ class Shop extends Model
         if ($instance) {
             $db_name = self::copyDatabase($instance->id);
             $instance->db_name = $db_name;
+            $instance->state = 'created';
             $instance->save();
         }
 
