@@ -47,8 +47,32 @@
                     </ul>
                     <div class="tab-content" id="shopTabsContent">
                         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="overflow-hidden sm:rounded-lg">
+                                <div class="p-6">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div></div>
+                                        <button class="btn btn-primary ml-auto" id="addProductBtn">{{__('shop.add_item')}}</button>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="container py-6">
                                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+                                    @foreach ($products as $product)
+                                        <div class="col mb-4">
+                                            <div class="card">
+                                                <img src="https://placekitten.com/300/200" class="card-img-top" alt="{{ $product['title'] }}">
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ $product['title'] }}</h5>
+                                                    <p class="card-text">{{__('general.created_at')}} {{ $product['created_at'] }}</p>
+                                                    <p class="card-text">{{__('general.status')}} {{ $product['status'] }}</p>
+                                                    <div class="d-flex">
+                                                        <button class="btn btn-primary me-2 flex-grow-1"><i class="fas fa-edit"></i> Редактировать</button>
+                                                        <button class="btn btn-danger ms-auto"><i class="fas fa-trash-alt"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>

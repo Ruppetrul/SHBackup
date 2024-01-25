@@ -59,4 +59,18 @@ class Shop extends Model
 
         return $destinationDatabase;
     }
+
+    public static function fetchProducts($db_name)
+    {
+        DB::purge('shop_connection');
+        $config = config('database.connections.shop_connection');
+        $config['database'] = $db_name;
+        config(['database.connections.shop_connection' => $config]);
+        $products = DB::connection('shop_connection')->table('products')->get()->map(function ($item) {
+            return (array) $item;
+        })->all();
+        DB::disconnect('shop_connection');
+
+        return $products;
+    }
 }

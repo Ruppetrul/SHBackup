@@ -10,7 +10,12 @@ class ShopController extends Controller {
 
     public function showDetails($id) {
         $shop = Shop::find($id);
-        return view('shop.details', ['shop' => $shop]);
+
+        if ($shop) {
+            $products = Shop::fetchProducts($shop->db_name);
+            return view('shop.details', ['shop' => $shop, 'products' => $products]);
+        }
+        //TODO unknown shop
     }
 
     public function create(Request $request) {
