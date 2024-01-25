@@ -19,7 +19,10 @@
                             <p class="card-text">{{__('general.created_at')}} {{ $shop['created_at']->format('Y-m-d') }}</p>
                             <p class="card-text">{{__('general.status')}} {{__('states.' . $shop['state'])}}</p>
                         </div>
-                        <button class="btn btn-primary btn-sm edit-button" style="">{{__('general.management')}}</button>
+                        <a href="{{ route('shop.details', ['shopId' => $shop['id']]) }}"
+                           class="btn btn-primary btn-sm edit-button">
+                            {{__('general.management')}}
+                        </a>
                     </div>
                 </div>
             @endforeach
