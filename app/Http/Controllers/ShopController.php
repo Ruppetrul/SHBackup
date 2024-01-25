@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class ShopController extends Controller {
+
+    public function showDetails($id) {
+        $shop = Shop::find($id);
+        return view('shop.details', ['shop' => $shop]);
+    }
+
     public function create(Request $request) {
         try {
             if (Shop::where('name', $request->name)->exists()) {

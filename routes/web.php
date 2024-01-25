@@ -24,9 +24,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::get('/shops', [ShopController::class, 'shops'])->name('shops');
-
-    Route::post('/shops/create', [ShopController::class, 'create'])->name('shops.create');
+    Route::group(['prefix' => '/shops'], function () {
+        Route::get('/', [ShopController::class, 'shops'])->name('shops');
+        Route::get('/{shopId}', [ShopController::class, 'showDetails'])->name('shop.details');
+        Route::post('/create', [ShopController::class, 'create'])->name('shops.create');
+    });
 });
 
 Route::middleware('auth')->group(function () {
