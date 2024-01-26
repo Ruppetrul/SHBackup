@@ -1,15 +1,25 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="d-flex justify-content-between align-items-center">
-            <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-{{--                {{ __('Shops') }}--}}
-            </h2>
-            <button class="btn btn-primary" id="openModalBtn">Создать магазин</button>
-        </div>
-    </x-slot>
+    @if (count($shops) != 0)
+        <x-slot name="header">
+            <div class="d-flex justify-content-between align-items-center">
+                <div></div>
+                <button class="btn btn-primary" id="openModalBtn">{{__('shop.create_shop')}}</button>
+            </div>
+        </x-slot>
+    @endif
 
     <div class="container py-6">
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
+            @if (count($shops) == 0)
+                <div class="p-6 col d-flex align-items-center justify-content-center mx-auto">
+                    <div class="card text-center p-4">
+                        <div class="card-body">
+                            <h5 class="card-title">{{__('shop.no_shops')}}</h5>
+                            <button class="btn btn-primary" id="openModalBtn">{{__('shop.create_shop')}}</button>
+                        </div>
+                    </div>
+                </div>
+            @endif
             @foreach ($shops as $shop)
                 <div class="col mb-4">
                     <div class="card">

@@ -5,4 +5,6 @@ return [
     'analytics' => 'Analytics',
     'add_item' => 'Add item',
     'no_products' => 'No products',
+    'create_shop' => 'Create shop',
+    'no_shops' => 'Create shop',
 ];
