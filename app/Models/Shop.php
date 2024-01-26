@@ -89,6 +89,13 @@ class Shop extends Model
         }, 'Shop error case 1');
     }
 
+    public static function updateProduct($shop_id, $product_id, $data)
+    {
+        self::executeShopAction($shop_id, function ($connection) use ($product_id, $data) {
+            $connection->table('products')->where('id', $product_id)->update($data);
+        }, 'Shop error case 3');
+    }
+
     public static function deleteProduct($shop_id, $product_id)
     {
         self::executeShopAction($shop_id, function ($connection) use ($product_id) {
@@ -113,5 +120,22 @@ class Shop extends Model
         }
 
         DB::disconnect('shop_connection');
+    }
+
+    public static function fetchProduct($shop_id, $item_id)
+    {
+        $shop = Shop::where('id', $shop_id)->first();
+        $dbName = $shop->db_name;
+
+        DB::purge('shop_connection');
+        $config = config('database.connections.shop_connection');
+        $config['database'] = $dbName;
+        config(['database.connections.shop_connection' => $config]);
+        $products = DB::connection('shop_connection')->table('products')->where('id', $item_id)->get()->map(function ($item) {
+            return (array) $item;
+        })->all();
+        DB::disconnect('shop_connection');
+
+        return $products;
     }
 }

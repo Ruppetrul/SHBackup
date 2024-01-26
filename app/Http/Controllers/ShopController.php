@@ -75,4 +75,23 @@ class ShopController extends Controller {
 
         return Redirect::route('shop.details', ['shopId' => $shop_id]);
     }
+
+    function productUpdate(Request $request, $shopId, $itemId) {
+        $title = $request->get('title');
+        $data = array(
+            'title' => $title,
+        );
+        Shop::updateProduct($shopId, $itemId, $data);
+        return Redirect::route('shop.details', ['shopId' => $shopId]);
+    }
+
+    function productEdit($shopId, $itemId = null) {
+        $data = array();
+        $data['shopId'] = $shopId;
+        if ($itemId) {
+            $data['item'] = Shop::fetchProduct($shopId, $itemId)[0];
+        }
+
+        return view('shop.product-edit', $data);
+    }
 }

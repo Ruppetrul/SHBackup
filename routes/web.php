@@ -24,18 +24,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-    Route::group(['prefix' => '/shops'], function () {
-        Route::get('/', [ShopController::class, 'shops'])->name('shops');
+    Route::prefix('/shops')->group(function () {
+        Route::get('/', [ShopController::class, 'index'])->name('shops');
 
-        Route::group(['prefix' => '/{shopId}'], function () {
+        Route::prefix('/{shop}')->group(function () {
             Route::get('/', [ShopController::class, 'showDetails'])->name('shop.details');
-            Route::get('/product-create', function () {
-                $shopId = request()->route('shopId');
-                return view('shop.product-edit', ['shopId' => $shopId]);
-            })->name('product.create.view');
+            Route::get('/product-create', [ShopController::class, 'productCreateView'])->name('product.create.view');
+            Route::get('/product-edit/{product}', [ShopController::class, 'productEditView'])->name('product.edit.view');
 
-            Route::group(['prefix' => '/product'], function () {
+            Route::prefix('/product')->group(function () {
                 Route::post('/create', [ShopController::class, 'productCreate'])->name('product.create');
+                Route::put('/update/{product}', [ShopController::class, 'productUpdate'])->name('product.update');
                 Route::post('/delete', [ShopController::class, 'productDelete'])->name('product.delete');
             });
         });
