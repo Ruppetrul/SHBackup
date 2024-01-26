@@ -5,6 +5,7 @@ use App\Models\Shop;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 
 class ShopController extends Controller {
 
@@ -55,5 +56,23 @@ class ShopController extends Controller {
     function shops() {
         $shops = Shop::where('owner_id', Auth::id())->get();
         return view('shops', ['shops' => $shops]);
+    }
+
+    function productCreate($shop_id, Request $request) {
+        $data = array(
+            'title' => $request->get('title')
+        );
+
+        Shop::createProduct($shop_id, $data);
+
+        return Redirect::route('shop.details', ['shopId' => $shop_id]);
+    }
+
+    function productDelete($shop_id, Request $request) {
+        $produtId = $request->get('id');
+
+        Shop::deleteProduct($shop_id, $produtId);
+
+        return Redirect::route('shop.details', ['shopId' => $shop_id]);
     }
 }

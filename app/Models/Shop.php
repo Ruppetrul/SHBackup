@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class Shop extends Model
 {
@@ -78,5 +80,38 @@ class Shop extends Model
         DB::disconnect('shop_connection');
 
         return $products;
+    }
+
+    public static function createProduct($shop_id, $data)
+    {
+        self::executeShopAction($shop_id, function ($connection) use ($data) {
+            $connection->table('products')->insert($data);
+        }, 'Shop error case 1');
+    }
+
+    public static function deleteProduct($shop_id, $product_id)
+    {
+        self::executeShopAction($shop_id, function ($connection) use ($product_id) {
+            $connection->table('products')->where('id', $product_id)->delete();
+        }, 'Shop error case 2');
+    }
+
+    private static function executeShopAction($shop_id, $callback, $error_message_prefix)
+    {
+        $shop = Shop::where('id', $shop_id)->first();
+        $dbName = $shop->db_name;
+
+        DB::purge('shop_connection');
+        $config = config('database.connections.shop_connection');
+        $config['database'] = $dbName;
+        config(['database.connections.shop_connection' => $config]);
+
+        try {
+            $callback(DB::connection('shop_connection'));
+        } catch (\Exception $exception) {
+            Log::error($error_message_prefix . ': ' . $exception->getMessage());
+        }
+
+        DB::disconnect('shop_connection');
     }
 }

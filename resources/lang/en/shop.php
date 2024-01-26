@@ -7,4 +7,7 @@ return [
     'no_products' => 'No products',
     'create_shop' => 'Create shop',
     'no_shops' => 'Create shop',
+    'new_item' => 'New item',
+    'edit_item' => 'Edit item',
+    'item_title' => 'Item title',
 ];

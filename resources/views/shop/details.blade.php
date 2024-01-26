@@ -52,7 +52,7 @@
                                     <div class="card text-center p-4">
                                         <div class="card-body">
                                             <h5 class="card-title">{{__('shop.no_products')}}</h5>
-                                            <a href="" class="btn btn-primary mt-3">Добавить товар</a>
+                                            <a href="{{ route('product.create.view', ['shopId' => $shop['id']]) }}"  class="btn btn-primary mt-3">{{__('shop.add_item')}}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -61,7 +61,7 @@
                                     <div class="p-6">
                                         <div class="d-flex justify-content-between align-items-center">
                                             <div></div>
-                                            <button class="btn btn-primary ml-auto" id="addProductBtn">{{__('shop.add_item')}}</button>
+                                            <a href="{{ route('product.create.view', ['shopId' => $shop['id']]) }}"  class="btn btn-primary mt-3">{{__('shop.add_item')}}</a>
                                         </div>
                                     </div>
                                 </div>
@@ -78,7 +78,7 @@
                                                     <p class="card-text">{{__('general.status')}} {{ $product['status'] }}</p>
                                                     <div class="d-flex">
                                                         <button class="btn btn-primary me-2 flex-grow-1"><i class="fas fa-edit"></i> Редактировать</button>
-                                                        <button class="btn btn-danger ms-auto"><i class="fas fa-trash-alt"></i></button>
+                                                        <button class="btn btn-danger ms-auto deleteButton" data-product-id="{{ $product['id'] }}"><i class="fas fa-trash-alt"></i></button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -94,4 +94,26 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('.deleteButton').on('click', function() {
+                var productId = $(this).data('product-id');
+                $.ajax({
+                    url: '{{ route('product.delete', ['shopId' => $shop['id']]) }}',
+                    type: 'POST',
+                    data: {
+                        id: productId,
+                        _token : document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    success: function(response) {
+                        alert(response);
+                        location.reload();
+                    },
+                    error: function(error) {
+                        console.error('Error:', error);
+                    }
+                });
+            });
+        });
+    </script>
 </x-app-layout>
