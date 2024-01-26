@@ -41,21 +41,27 @@ class Shop extends Model
 
     public static function copyDatabase(int $id)
     {
-        $sourceDatabase = 'default_db';
-
         $destinationDatabase = 'shop_' . $id;
 
         $sql = "CREATE DATABASE $destinationDatabase;";
 
         DB::statement($sql);
 
-        $tables = DB::select("SHOW TABLES FROM $sourceDatabase");
+        DB::purge('shop_connection');
+        $config = config('database.connections.shop_connection');
+        $config['database'] = $destinationDatabase;
+        config(['database.connections.shop_connection' => $config]);
 
-        foreach ($tables as $table) {
-            $tableName = reset($table);
+        $dumpPath = Storage::path('dump/default_db.sql');
 
-            DB::statement("CREATE TABLE $destinationDatabase.$tableName AS SELECT * FROM $sourceDatabase.$tableName");
+        $dumpPath = str_replace('/', '\\', $dumpPath);
+
+        if (!file_exists($dumpPath)) {
+            //TODO handle
         }
+
+        DB::connection('shop_connection')->unprepared(file_get_contents($dumpPath));
+        DB::disconnect('shop_connection');
 
         return $destinationDatabase;
     }

@@ -26,7 +26,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::group(['prefix' => '/shops'], function () {
         Route::get('/', [ShopController::class, 'shops'])->name('shops');
-        Route::get('/{shopId}', [ShopController::class, 'showDetails'])->name('shop.details');
+
+        Route::group(['prefix' => '/{shopId}'], function () {
+            Route::get('/', [ShopController::class, 'showDetails'])->name('shop.details');
+            Route::get('/product-create', function () {
+                $shopId = request()->route('shopId');
+                return view('shop.product-edit', ['shopId' => $shopId]);
+            })->name('product.create.view');
+
+            Route::group(['prefix' => '/product'], function () {
+                Route::post('/create', [ShopController::class, 'productCreate'])->name('product.create');
+                Route::post('/delete', [ShopController::class, 'productDelete'])->name('product.delete');
+            });
+        });
+
         Route::post('/create', [ShopController::class, 'create'])->name('shops.create');
     });
 });

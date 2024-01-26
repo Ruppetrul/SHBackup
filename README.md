@@ -4,6 +4,7 @@ For development
 
 1) php artisan migrate
 2) php artisan db:seed --class=DevSeeder
+3) php artisan db:seed --class=PrepareWorkflowSeeder - Create actual db dump.
 
 Login user: admin 
 password: adminadmin
