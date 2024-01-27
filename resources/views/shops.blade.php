@@ -26,7 +26,7 @@
                         <img src="https://placekitten.com/300/200" class="card-img-top" alt="{{ $shop['name'] }}">
                         <div class="card-body">
                             <h5 class="card-title">{{ $shop['name'] }}</h5>
-                            <p class="card-text">{{__('general.created_at')}} {{ $shop['created_at']->format('Y-m-d') }}</p>
+                            <p class="card-text">{{__('general.created_at')}} {{ $shop['created_at'] }}</p>{{--/*->format('Y-m-d') */--}}
                             <p class="card-text">{{__('general.status')}} {{__('states.' . $shop['state'])}}</p>
                         </div>
                         <a href="{{ route('shop.details', ['shopId' => $shop['id']]) }}"

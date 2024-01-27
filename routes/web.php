@@ -20,21 +20,21 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+//    Route::get('/dashboard', function () {
+//        return view('dashboard');
+//    })->name('dashboard');
 
     Route::prefix('/shops')->group(function () {
-        Route::get('/', [ShopController::class, 'index'])->name('shops');
+        Route::get('/', [ShopController::class, 'index'])->name('shops.view');
 
-        Route::prefix('/{shop}')->group(function () {
+        Route::prefix('/{shopId}')->group(function () {
             Route::get('/', [ShopController::class, 'showDetails'])->name('shop.details');
-            Route::get('/product-create', [ShopController::class, 'productCreateView'])->name('product.create.view');
-            Route::get('/product-edit/{product}', [ShopController::class, 'productEditView'])->name('product.edit.view');
+            Route::get('/product-create', [ShopController::class, 'productEdit'])->name('product.create.view');
+            Route::get('/product-edit/{itemId}', [ShopController::class, 'productEdit'])->name('product.edit.view');
 
             Route::prefix('/product')->group(function () {
                 Route::post('/create', [ShopController::class, 'productCreate'])->name('product.create');
-                Route::put('/update/{product}', [ShopController::class, 'productUpdate'])->name('product.update');
+                Route::put('/update/{itemId}', [ShopController::class, 'productUpdate'])->name('product.update');
                 Route::post('/delete', [ShopController::class, 'productDelete'])->name('product.delete');
             });
         });
