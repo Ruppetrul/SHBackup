@@ -10,4 +10,5 @@ return [
     'new_item' => 'New item',
     'edit_item' => 'Edit item',
     'item_title' => 'Item title',
+    'item_price' => 'Price',
 ];

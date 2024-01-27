@@ -59,10 +59,12 @@ class ShopController extends Controller {
     }
 
     function productCreate($shop_id, Request $request) {
+        $title = $request->get('title');
+        $price = $request->get('price');
         $data = array(
-            'title' => $request->get('title')
+            'title' => $title,
+            'price' => $price,
         );
-
         Shop::createProduct($shop_id, $data);
 
         return Redirect::route('shop.details', ['shopId' => $shop_id]);
@@ -78,8 +80,10 @@ class ShopController extends Controller {
 
     function productUpdate(Request $request, $shopId, $itemId) {
         $title = $request->get('title');
+        $price = $request->get('price');
         $data = array(
             'title' => $title,
+            'price' => $price,
         );
         Shop::updateProduct($shopId, $itemId, $data);
         return Redirect::route('shop.details', ['shopId' => $shopId]);

@@ -76,6 +76,7 @@
                                                     <h5 class="card-title">{{ $product['title'] }}</h5>
                                                     <p class="card-text">{{__('general.created_at')}} {{ $product['created_at'] }}</p>
                                                     <p class="card-text">{{__('general.status')}} {{ $product['status'] }}</p>
+                                                    <p class="card-text">{{__('shop.item_price')}} {{ $product['price'] }}</p>
                                                     <div class="d-flex">
                                                         <a class="btn btn-primary me-2 flex-grow-1 editButton" href="{{ route('product.edit.view', ['shopId' => $shop['id'], 'itemId' => $product['id']]) }}">Редактировать</a>
                                                         <button class="btn btn-danger ms-auto deleteButton" data-product-id="{{ $product['id'] }}"><i class="fas fa-trash-alt"></i></button>
