@@ -12,11 +12,19 @@ class ShopController extends Controller {
     public function showDetails($id) {
         $shop = Shop::find($id);
 
+        $success = false;
         if ($shop) {
-            $products = Shop::fetchProducts($shop->db_name);
-            return view('shop.details', ['shop' => $shop, 'products' => $products]);
+            $products = [];
+            if (!$shop->db_name) {
+                //TODO log and report it
+            } else {
+                list ($success, $products) = Shop::fetchProducts($shop->id);
+                if (!$success) {
+                    //TODO log and report it
+                }
+            }
         }
-        //TODO unknown shop
+        return view('shop.details', ['shop' => $shop, 'products' => $products, 'success' => $success]);
     }
 
     public function create(Request $request) {

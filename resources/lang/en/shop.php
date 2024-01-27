@@ -11,4 +11,5 @@ return [
     'edit_item' => 'Edit item',
     'item_title' => 'Item title',
     'item_price' => 'Price',
+    'unknown_error' => "Something's gone wrong. Contact the administrator.",
 ];

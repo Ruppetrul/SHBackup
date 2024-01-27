@@ -68,18 +68,16 @@ class Shop extends Model
         return $destinationDatabase;
     }
 
-    public static function fetchProducts($db_name)
+    public static function fetchProducts($shop_id)
     {
-        DB::purge('shop_connection');
-        $config = config('database.connections.shop_connection');
-        $config['database'] = $db_name;
-        config(['database.connections.shop_connection' => $config]);
-        $products = DB::connection('shop_connection')->table('products')->get()->map(function ($item) {
-            return (array) $item;
-        })->all();
-        DB::disconnect('shop_connection');
+        $products = [];
+        $success = self::executeShopAction($shop_id, function () {
+            $products = DB::connection('shop_connection')->table('products')->get()->map(function ($item) {
+                return (array) $item;
+            })->all();
+        }, 'Shop error case 4');
 
-        return $products;
+        return array($success, $products);
     }
 
     public static function createProduct($shop_id, $data)
@@ -113,13 +111,17 @@ class Shop extends Model
         $config['database'] = $dbName;
         config(['database.connections.shop_connection' => $config]);
 
+        $success = true;
         try {
             $callback(DB::connection('shop_connection'));
         } catch (\Exception $exception) {
             Log::error($error_message_prefix . ': ' . $exception->getMessage());
+            $success = false;
+            //TODO report exception
         }
 
         DB::disconnect('shop_connection');
+        return $success;
     }
 
     public static function fetchProduct($shop_id, $item_id)
