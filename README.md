@@ -1,3 +1,7 @@
+Install
+0) php81 composer.phar install --no-dev --optimize-autoloader
+1) configure .env
+
 For development
 
 0) First, you need to deploy simply-shop and perform DevSeeder for create default_db

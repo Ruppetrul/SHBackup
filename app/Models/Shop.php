@@ -71,7 +71,7 @@ class Shop extends Model
     public static function fetchProducts($shop_id)
     {
         $products = [];
-        $success = self::executeShopAction($shop_id, function () {
+        $success = self::executeShopAction($shop_id, function () use (&$products) {
             $products = DB::connection('shop_connection')->table('products')->get()->map(function ($item) {
                 return (array) $item;
             })->all();

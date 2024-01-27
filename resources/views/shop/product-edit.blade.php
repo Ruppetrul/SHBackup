@@ -27,6 +27,9 @@
                                               required autofocus autocomplete="price"
                                               inputmode="numeric" oninput="formatDecimal(this)" pattern="[0-9]+([.][0-9]{0,2})?"
                                 />
+
+                                <label for="images">{{ __('shop.item_avatar') }}</label> <br>
+                                <input data-item-id="{{ isset($item) ? $item['id'] : null }}" id="fileInput" type="file" name="file">
                             </div>
                             <button type="submit" class="btn">{{ isset($item) ? __('general.update') : __('general.create') }}</button>
                         </form>
@@ -35,6 +38,31 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function () {
+            $('#fileInput').on('change', function () {
+                var formData = new FormData();
+                formData.append('file', $(this)[0].files[0]);
+                formData.append('_token', '{{ csrf_token() }}');
+
+                const item_id = $(this).data('item-id');
+                $.ajax({
+                    url: '/shops/{{ $shopId }}/product/update-avatar/' + item_id,  // Замените на ваш роут для загрузки файлов
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        console.log('Файл успешно загружен', response);
+                        // Здесь вы можете выполнить дополнительные действия после успешной загрузки
+                    },
+                    error: function (error) {
+                        console.error('Ошибка при загрузке файла', error);
+                    }
+                });
+            });
+        });
+    </script>
     <script>
         function formatDecimal(input) {
             input.value = input.value.replace(/[^0-9.]/g, '');

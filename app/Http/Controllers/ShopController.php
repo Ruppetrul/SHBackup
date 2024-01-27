@@ -24,6 +24,10 @@ class ShopController extends Controller {
                 }
             }
         }
+
+//        var_dump($shop->db_name);
+//        var_dump($products);
+//        die();
         return view('shop.details', ['shop' => $shop, 'products' => $products, 'success' => $success]);
     }
 
@@ -105,5 +109,10 @@ class ShopController extends Controller {
         }
 
         return view('shop.product-edit', $data);
+    }
+
+    function productUpdateAvatar($shopId, $itemId, Request $request) {
+        $path = $request->file('file')->store('avatars', 'public');
+        return $path;
     }
 }
