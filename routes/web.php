@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
+use Modules\Mini\Http\Controllers\MiniController;
 
 /*
 |--------------------------------------------------------------------------

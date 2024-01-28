@@ -1,0 +1,204 @@
+@section('title', $product->title)
+
+@section('content')
+    <section class="product-section">
+        <div class="container-fluid-lg">
+            <div class="row">
+                <div class="col-xxl-9 col-xl-8 col-lg-7 wow fadeInUp">
+                    <div class="row g-4">
+                        <div class="col-xl-6 wow fadeInUp">
+                            <div class="product-left-box">
+                                <div class="row g-2">
+                                    <div class="col-12">
+                                        <div class="product-main-1 no-arrow">
+                                            <img src="
+                                            @if (isset($product->first_media->thumb))
+                                                {{ URL::to('/') . '/'  . $product->first_media->thumb }}
+                                            @else
+                                                {{ asset('home/images/default_item_img.jpg') }}
+                                            @endif
+                                             " class="img-fluid blur-up lazyload" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="bottom-slider-image left-slider no-arrow slick-top">
+{{--                                            @foreach ($product->galleries as $gallery)--}}
+{{--                                                <div>--}}
+{{--                                                    <div class="sidebar-image">--}}
+{{--                                                        <img src="{{ $gallery->thumb }}" alt="gallery"--}}
+{{--                                                        class="img-fluid blur-up lazyload">--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                            @endforeach--}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 wow fadeInUp" data-wow-delay="0.1s">
+                            <div class="right-box-contain right-box-contain-mini">
+                                <h2 class="name">{{ $product->title }}</h2>
+                                <div class="price-rating">
+                                    <h3 class="theme-color price">
+                                        {{ $product->getPrice() }} ₽
+                                    </h3>
+                                    <div class="product-rating custom-rate">
+                                        <ul class="rating">
+                                            @if ((int) $product->rates_count === 0)
+                                                <li>
+                                                    <i data-feather="star" class="fill"></i>
+                                                </li>
+                                            @else
+                                                @for ($i = 0; $i < $product->rates_count; $i++)
+                                                    <li>
+                                                        <i data-feather="star" class="fill"></i>
+                                                    </li>
+                                                @endfor
+                                            @endif
+                                        </ul>
+                                        <span>({{ $product->rates_count }}) Оценка пользователей</span>
+                                    </div>
+                                </div>
+                                <div class="procuct-contain">
+                                    <p>
+                                        {{ $product->short_description }}
+                                    </p>
+                                </div>
+                                <div class="note-box product-packege">
+                                    @if (isset($cart_detail[$product['id']]))
+                                    <div class="cart_qty qty-box product-qty">
+                                        <div class="input-group">
+                                            <button id="qty-left-minus" type="button" data-type="minus" data-field="">
+                                                <i class="fa fa-minus" aria-hidden="true"></i>
+                                            </button>
+                                            <input id="quantity" class="form-control input-number qty-input" type="text"
+                                                   name="quantity"
+                                                   @if (isset($cart_detail[$product['id']]))
+                                                       value="{{ $cart_detail[$product['id']]['quantity'] }}"
+                                                   @else
+                                                       value="0"
+                                                   @endif
+                                            >
+                                            <button id="qty-right-plus" type="button" data-type="plus"
+                                                    data-field="">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    @endif
+                                    @if (!isset($cart_detail[$product['id']]))
+                                    <button data-id="{{ $product['id'] }}" id="btn-add-cart"
+                                            class="btn btn-md bg-dark cart-button text-white w-100">
+                                        Добавить в корзину
+                                    </button>
+                                    @endif
+                                </div>
+
+                                <div class="buy-box">
+                                </div>
+                                <div class="pickup-box">
+                                    <div class="product-title">
+                                        <h4>Информация о товаре</h4>
+                                    </div>
+                                    <div class="product-info">
+                                        <ul class="product-info-list product-info-list-2">
+                                            <li>Остаток :
+                                                <a href="javascript:void(0)"> {{ $product->count }} шт</a>
+                                            </li>
+                                            <li>Категория :
+                                                @foreach ($product->categories as $category)
+                                                    <a href="{{ $category->path() }}">{{ $category->title }},</a>
+                                                @endforeach
+                                            </li>
+                                            <li>Описание :
+                                                <a>{{ $product->body }}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+@endsection
+
+<script src="https://yastatic.net/jquery/3.3.1/jquery.min.js"></script>
+@section('js')
+    <script>
+        $(document).ready(function() {
+
+            let debounceTimer;
+            const debounceTime = 300;
+
+            $(".note-box").on('click', '#btn-add-cart' ,function () {
+                clearTimeout(debounceTimer);
+                tg_disable_main_button();
+
+                const item_id = {{ $product->id }};
+                const template = `<div class="cart_qty qty-box product-qty">
+                                      <div class="input-group">
+                                          <button id="qty-left-minus" type="button" data-type="minus">
+                                              <i class="fa fa-minus" aria-hidden="true"></i>
+                                          </button>
+                                          <input name="quantity[${item_id}]" id="quantity" class="form-control input-number qty-input" type="text" value="1">
+                                          <button id="qty-right-plus" type="button" data-type="plus">
+                                              <i class="fa fa-plus" aria-hidden="true"></i>
+                                          </button>
+                                      </div>
+                                  </div>`;
+                $(`[data-id=${item_id}]`).parent().append(template);
+                $(`[data-id=${item_id}]`).remove();
+
+                debounceTimer = setTimeout(() => {
+                    item_add(item_id);
+                    tg_enable_main_button();
+                }, debounceTime);
+
+            });
+
+            $('.note-box').on('click', '#qty-right-plus', function(){
+                clearTimeout(debounceTimer);
+                tg_disable_main_button();
+
+                const item_id = {{ $product->id }};
+                const new_count =  Number($('#quantity').val()) + 1;
+                $('#quantity').val(new_count);
+
+                debounceTimer = setTimeout(() => {
+                    item_update(item_id, new_count);
+                    tg_enable_main_button();
+                }, debounceTime);
+            });
+
+            $('.note-box').on('click', '#qty-left-minus', function(){
+                clearTimeout(debounceTimer);
+                tg_disable_main_button();
+
+                const item_id = {{ $product->id }};
+
+                if (Number($('#quantity').val()) > 1){
+                const new_count =  Number($('#quantity').val()) - 1;
+                $('#quantity').val(new_count);
+                    debounceTimer = setTimeout(() => {
+                        item_update(item_id, new_count);
+                    }, debounceTime);
+                } else{
+                    const template = `<button data-id="{{ $product['id'] }}" id="btn-add-cart" class="btn btn-md bg-dark cart-button text-white w-100">
+                                          Добавить в корзину
+                                      </button>`;
+
+                    $(`#quantity`).parent().parent().parent().append(template);
+                    $(`#quantity`).parent().parent().remove();
+
+                    debounceTimer = setTimeout(() => {
+                        item_delete(item_id);
+                        tg_enable_main_button();
+                    }, debounceTime);
+                }
+            });
+        });
+    </script>
+@endsection
