@@ -26,48 +26,55 @@
                 <div class="col-xxl-12">
                     @if($cart_detail)
                     @foreach($cart_detail as $product)
-                    <div class="cart-table mini-cart-table">
-                        <div class="table-responsive-xl">
-                            <div class="card">
-                                <div class="row no-gutters">
-                                    <div class="col-md-4">
-                                        <a href="{{ route('home.details', ['shopId' => $shopId, 'itemId' => $product['id']]) }}">
-                                            <img src="http://simply-shop/home/images/default_item_img.jpg" class="card-img" alt="product image">
-                                        </a>
-                                    </div>
-                                    <div class="col-md-8">
-                                        <div class="card-body">
-                                            <h5 class="card-title">
-                                                <a href="http://simply-shop/86/mini/3/detail">Тестовый товар 5</a>
-                                            </h5>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <h6 class="card-subtitle mb-2 text-muted">Цена</h6>
-                                                    <p class="card-text text-nowrap">78 ₽</p>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <h6 class="card-subtitle mb-2 text-muted">Количество</h6>
-                                                    <div class="input-group">
-                                                        <button class="btn btn-outline-secondary" type="button" data-type="minus" data-product="3">
-                                                            <i class="fa fa-minus" aria-hidden="true"></i>
-                                                        </button>
-                                                        <input name="quantity[3]" id="quantity_3" class="form-control input-number qty-input" type="text" value="2">
-                                                        <button class="btn btn-outline-secondary" type="button" data-type="plus" data-product="3">
-                                                            <i class="fa fa-plus" aria-hidden="true"></i>
-                                                        </button>
+                            <div class="cart-table mini-cart-table">
+                                <div class="table-responsive-xl">
+                                    <div class="card">
+                                        <div class="row no-gutters">
+                                            <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 col-xl-2">
+                                                <a href="{{ route('home.details', ['shopId' => $shopId, 'itemId' => $product['id']]) }}">
+                                                    <img src="http://simply-shop/home/images/default_item_img.jpg" class="card-img" alt="product image">
+                                                </a>
+                                            </div>
+                                            <div class="col-xs-10 col-sm-9 col-md-9 col-lg-10">
+                                                <div class="card h-100">
+                                                    <div class="card-body d-flex flex-column">
+                                                        <div class="h-50">
+                                                            <h5 class="card-title">
+                                                                <a href="http://simply-shop/86/mini/3/detail">Тестовый товар 5</a>
+                                                            </h5>
+                                                        </div>
+                                                        <div class="h-50">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <div class="input-group">
+                                                                        <button class="btn btn-outline-secondary" type="button" data-type="minus" data-product="3">
+                                                                            <i class="fa fa-minus" aria-hidden="true"></i>
+                                                                        </button>
+                                                                        <input name="quantity[3]" id="quantity_3" class="form-control input-number qty-input" type="text" value="2">
+                                                                        <button class="btn btn-outline-secondary" type="button" data-type="plus" data-product="3">
+                                                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-7"></div>
+                                                                <div class="col-md-2">
+                                                                    <div class="ml-auto mt-3">
+                                                                        <h6 class="card-subtitle mb-2 text-muted">Всего</h6>
+                                                                        <div class="input-group">
+                                                                            <p class="card-text text-nowrap">155.4 ₽</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <h6 class="card-subtitle mb-2 text-muted mt-3">Всего</h6>
-                                            <p class="card-text text-nowrap">155.4 ₽</p>
-                                            <a href="javascript:void(0)" onclick="showConfirmMessage('Удалить?', 'http://simply-shop/86/cart/3/delete');" class="card-link">Удалить</a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    @endforeach
+                        @endforeach
                     @else
                       <h1>Сейчас ваша корзина пуста!</h1>
                     @endif
