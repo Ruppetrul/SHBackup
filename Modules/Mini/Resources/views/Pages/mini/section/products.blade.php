@@ -5,8 +5,8 @@
                 <div class="product-image">
                     <a href="{{ route('home.details', ['shopId' => $shopId, 'itemId' => $product->id]) }}">
                         <img src="
-                        @if (isset($product->first_media->thumb))
-                            {{ URL::to('/') . '/'  . $product->first_media->thumb }}
+                        @if (isset($product->avatar[0]->filename))
+                            {{ asset('storage/' . $shopId . '/' . $product->avatar[0]->filename) }}
                         @else
                             {{ asset('home/images/default_item_img.jpg') }}
                         @endif

@@ -191,44 +191,25 @@ class CartController extends Controller
     public static function getCartData() {
         $cart_id = null;
 
-        if (Auth::check()) {
-            $cart = DB::table('cart')
-                ->where('user_id', '=', Auth::user()->id, 'AND')
-                ->where('status', '=', 0)
-                ->first();
-            if ($cart) {
-                $cart_id = $cart->id;
-            }
-        } else {
-            $cart = DB::table('cart')
-                ->where('ip_address', '=', $_SERVER['REMOTE_ADDR'], 'AND')
-                ->where('status', '=', 0)
-                ->first();
+        $cart = DB::table('cart')
+            ->where('ip_address', '=', $_SERVER['REMOTE_ADDR'], 'AND')
+            ->where('status', '=', 0)
+            ->first();
 
-            if ($cart) {
-                $cart_id = $cart->id;
-            }
+        if ($cart) {
+            $cart_id = $cart->id;
         }
 
         $cart_detail = array();
         $cart_total = 0;
 
         if ($cart_id === null) {
-            if (Auth::check()) {
-                $cart_id = DB::table('cart')->insertGetId(
-                    [
-                        'user_id' => Auth::user()->id,
-                        'status' => 0,
-                    ]
-                );
-            } else {
-                $cart_id = DB::table('cart')->insertGetId(
-                    [
-                        'ip_address' => $_SERVER['REMOTE_ADDR'],
-                        'status' => 0,
-                    ]
-                );
-            }
+            $cart_id = DB::table('cart')->insertGetId(
+                [
+                    'ip_address' => $_SERVER['REMOTE_ADDR'],
+                    'status' => 0,
+                ]
+            );
         }
 
         $cart_detail = array();

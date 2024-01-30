@@ -140,4 +140,25 @@ class Shop extends Model
 
         return $products;
     }
+
+    public static function updateProductAvatar($shop_id, $item_id, $media_url, $path) {
+        self::executeShopAction($shop_id, function ($connection) use ($item_id, $media_url, $shop_id, $path) {
+            $avatarMediaId = $connection->table('products')->where('id', $item_id)->value('first_media_id');
+            Log::debug($avatarMediaId);
+            if ($avatarMediaId) {
+                $fileName = $connection->table('medias')->where('id', $avatarMediaId)->value('filename');
+                if ($fileName) {
+                    Storage::delete('public/' . $shop_id . '/' . $fileName);
+                }
+                $connection->table('medias')->where('id', $avatarMediaId)->delete();
+            }
+
+            $mediaId = $connection->table('medias')->insertGetId([
+                'item_id' => $item_id,
+                'filename' => $media_url
+            ]);
+
+            $connection->table('products')->where('id', $item_id)->update(['first_media_id' => $mediaId]);
+        }, 'Shop error case 4');
+    }
 }

@@ -20,7 +20,7 @@ return new class() extends Migration {
 
         Schema::create('products', static function (Blueprint $table) use ($statuses) {
             $table->id();
-            $table->foreignId('first_media_id')->nullable();
+            $table->integer('first_media_id')->nullable();
             $table->string('title')->unique();
             $table->decimal('price')->default(0);
             $table->string('count')->default(1);

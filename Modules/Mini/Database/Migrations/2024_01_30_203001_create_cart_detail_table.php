@@ -1,5 +1,7 @@
 <?php
 
+namespace Modules\Cart\Database\Migrations;
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,9 +14,11 @@ return new class() extends Migration {
      */
     public function up()
     {
-        Schema::create('product_category', static function (Blueprint $table) {
+        Schema::create('cart', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->string('ip_address')->nullable();
+            $table->integer('user_id')->nullable();
+            $table->integer('status');
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ return new class() extends Migration {
      */
     public function down()
     {
-        Schema::dropIfExists('product_category');
+        Schema::dropIfExists('cart');
     }
 };

@@ -32,7 +32,13 @@
                                         <div class="row no-gutters">
                                             <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 col-xl-2">
                                                 <a href="{{ route('home.details', ['shopId' => $shopId, 'itemId' => $product['id']]) }}">
-                                                    <img src="http://simply-shop/home/images/default_item_img.jpg" class="card-img" alt="product image">
+                                                    <img src="
+                                                        @if (isset($product->avatar[0]->filename))
+                                                            {{ asset('storage/' . $shopId . '/' . $product->avatar[0]->filename) }}
+                                                        @else
+                                                             http://simply-shop/home/images/default_item_img.jpg
+                                                        @endif
+                                                    "class="card-img" alt="product image">
                                                 </a>
                                             </div>
                                             <div class="col-xs-10 col-sm-9 col-md-9 col-lg-10">

@@ -13,4 +13,5 @@ return [
     'item_price' => 'Price',
     'unknown_error' => "Something's gone wrong. Contact the administrator.",
     'item_avatar' => "Avatar",
+    'item_images' => "Images",
 ];

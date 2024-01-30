@@ -29,7 +29,39 @@
                                 />
 
                                 <label for="images">{{ __('shop.item_avatar') }}</label> <br>
-                                <input data-item-id="{{ isset($item) ? $item['id'] : null }}" id="fileInput" type="file" name="file">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input data-item-id="{{ isset($item) ? $item['id'] : null }}" id="imagePanelAvatar" type="file" name="file" multiple>
+                                    </div>
+                                    <div class="col-md-12 mt-3">
+                                        <div id="imagePanel" class="container">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="d-flex overflow-auto" style="height: 150px;">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label for="images">{{ __('shop.item_images') }}</label> <br>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <input data-item-id="{{ isset($item) ? $item['id'] : null }}" id="imagePanelAdditional" type="file" name="file" multiple>
+                                    </div>
+                                    <div class="col-md-12 mt-3">
+                                        <div id="imagePanel" class="container">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="d-flex overflow-auto" style="height: 150px;">
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <button type="submit" class="btn">{{ isset($item) ? __('general.update') : __('general.create') }}</button>
                         </form>
@@ -40,7 +72,7 @@
     </div>
     <script>
         $(document).ready(function () {
-            $('#fileInput').on('change', function () {
+            $('#imagePanelAvatar').on('change', function () {
                 var formData = new FormData();
                 formData.append('file', $(this)[0].files[0]);
                 formData.append('_token', '{{ csrf_token() }}');
@@ -54,7 +86,11 @@
                     processData: false,
                     success: function (response) {
                         console.log('Файл успешно загружен', response);
-                        // Здесь вы можете выполнить дополнительные действия после успешной загрузки
+                        const imgElement = document.createElement('img');
+                        imgElement.src = response;
+                        imgElement.classList.add('mr-2');
+
+                        document.getElementById('imagePanel').appendChild(imgElement);
                     },
                     error: function (error) {
                         console.error('Ошибка при загрузке файла', error);

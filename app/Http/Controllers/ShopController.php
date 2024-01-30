@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 
 class ShopController extends Controller {
 
@@ -112,7 +113,18 @@ class ShopController extends Controller {
     }
 
     function productUpdateAvatar($shopId, $itemId, Request $request) {
-        $path = $request->file('file')->store('avatars', 'public');
-        return $path;
+        $path = $request->file('file')->store($shopId, 'public');
+        $filename = basename($path);
+
+        Shop::updateProductAvatar($shopId, $itemId, $filename, $path);
+        return asset(Storage::url($path));
+    }
+
+    function productUpdateImage($shopId, $itemId, Request $request) {
+        $path = $request->file('file')->store($shopId, 'public');
+        $url = asset(Storage::url($path));
+
+//TODO process on shop
+        return $url;
     }
 }

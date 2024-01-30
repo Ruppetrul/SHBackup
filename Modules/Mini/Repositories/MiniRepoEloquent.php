@@ -27,44 +27,25 @@ class MiniRepoEloquent implements MiniRepoEloquentInterface
     public static function getCartData() {
         $cart_id = null;
 
-        if (Auth::check()) {
-            $cart = DB::table('cart')
-                ->where('user_id', '=', Auth::user()->id, 'AND')
-                ->where('status', '=', 0)
-                ->first();
-            if ($cart) {
-                $cart_id = $cart->id;
-            }
-        } else {
-            $cart = DB::table('cart')
-                ->where('ip_address', '=', $_SERVER['REMOTE_ADDR'], 'AND')
-                ->where('status', '=', 0)
-                ->first();
+        $cart = DB::table('cart')
+            ->where('ip_address', '=', $_SERVER['REMOTE_ADDR'], 'AND')
+            ->where('status', '=', 0)
+            ->first();
 
-            if ($cart) {
-                $cart_id = $cart->id;
-            }
+        if ($cart) {
+            $cart_id = $cart->id;
         }
 
         $cart_detail = array();
         $cart_total = 0;
 
         if ($cart_id === null) {
-            if (Auth::check()) {
-                $cart_id = DB::table('cart')->insertGetId(
-                    [
-                        'user_id' => Auth::user()->id,
-                        'status' => 0,
-                    ]
-                );
-            } else {
-                $cart_id = DB::table('cart')->insertGetId(
-                    [
-                        'ip_address' => $_SERVER['REMOTE_ADDR'],
-                        'status' => 0,
-                    ]
-                );
-            }
+            $cart_id = DB::table('cart')->insertGetId(
+                [
+                    'ip_address' => $_SERVER['REMOTE_ADDR'],
+                    'status' => 0,
+                ]
+            );
         }
 
         $cart_detail = array();
@@ -77,23 +58,8 @@ class MiniRepoEloquent implements MiniRepoEloquentInterface
 
             foreach ($cart_detail as $cd) {
                 $product_id = $cd->product_id;
-
-                $product_d = Product::query()->where('id', '=', $product_id)->first();
-
-                $cart_item = array(
-                    'id'       => $product_id,
-                    'title'    => $product_d->title,
-                    'quantity' => $cd->count,
-                    'price'    => $product_d->price,
-                    'sku'      => $product_d->sku,
-                    'slug'     => $product_d->slug,
-                );
-
-                if (isset($product_d->first_media)) {
-                    $cart_item['first_media'] = $product_d->first_media->thumb;
-                }
-                $product_d->quantity = $cd->count;
-                $cart_detail_res[$product_id] = $cart_item;
+                $product_d = Product::query()->where('id', '=', $product_id)->with('avatar')->first();
+                $cart_detail_res[$product_id] = $product_d;
             }
 
             $cart_detail = $cart_detail_res;

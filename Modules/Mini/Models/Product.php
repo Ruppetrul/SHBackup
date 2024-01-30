@@ -28,6 +28,11 @@ class Product extends Model
         'is_popular',
     ];
 
+    public function avatar()
+    {
+        return $this->hasMany(Media::class, 'item_id');
+    }
+
     /**
      * Scope active status.
      *
