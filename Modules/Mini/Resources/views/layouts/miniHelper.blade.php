@@ -33,7 +33,7 @@
     }
 
     function item_update(item_id, new_count, successCallback = null){
-        var url = shopId + `/cart-add/${item_id}/${new_count}`;
+        var url = 'mini/' + shopId + `/cart-add/${item_id}/${new_count}`;
         const data = {
             new_count: new_count
         }
@@ -42,13 +42,13 @@
     }
 
     function item_delete(item_id){
-        var url = shopId + "/cart/" + item_id + "/delete";
+        var url = 'mini/' + shopId + "/cart/" + item_id + "/delete";
 
         do_request(item_id, url);
     }
 
     function item_add(item_id, successCallback = null){
-        var url = shopId + "/cart-add/" + item_id;
+        var url = 'mini/' + shopId + "/cart-add/" + item_id;
 
         do_request(item_id, url, successCallback);
     }
