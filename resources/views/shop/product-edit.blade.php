@@ -38,7 +38,13 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div class="d-flex overflow-auto" style="height: 150px;">
-
+                                                        <img src="
+                                                            @if (isset($item['avatar']))
+                                                                {{ asset('storage/' . $shopId . '/' . $item['avatar']) }}
+                                                            @else
+                                                                {{ asset('home/images/default_item_img.jpg') }}
+                                                            @endif
+                                                            " class="img-fluid blur-up lazyload" alt="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -89,7 +95,7 @@
                         imagePanel.innerHTML = '';
 
                         const imgElement = document.createElement('img');
-                        imgElement.src = response;
+                        imgElement.src = response.path;
                         imgElement.classList.add('mr-2');
 
                         imagePanel.appendChild(imgElement);

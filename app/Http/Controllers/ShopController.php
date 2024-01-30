@@ -106,18 +106,25 @@ class ShopController extends Controller {
         $data = array();
         $data['shopId'] = $shopId;
         if ($itemId) {
-            $data['item'] = Shop::fetchProduct($shopId, $itemId)[0];
+            $data['item'] = Shop::fetchProduct($shopId, $itemId);
         }
 
         return view('shop.product-edit', $data);
     }
 
-    function productUpdateAvatar($shopId, $itemId, Request $request) {
+    function productUpdateAvatar($shopId, Request $request) {
+        $itemId = $request->get('itemId');
         $path = $request->file('file')->store($shopId, 'public');
         $filename = basename($path);
 
-        Shop::updateProductAvatar($shopId, $itemId, $filename, $path);
-        return asset(Storage::url($path));
+        if ($itemId) {
+            Shop::updateProductAvatar($shopId, $itemId, $filename, $path);
+        }
+
+        return response()->json(array(
+            'file_name' => $filename,
+            'url' => asset(Storage::url($path))
+        ));
     }
 
     function productUpdateImage($shopId, $itemId, Request $request) {

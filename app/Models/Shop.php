@@ -133,12 +133,17 @@ class Shop extends Model
         $config = config('database.connections.shop_connection');
         $config['database'] = $dbName;
         config(['database.connections.shop_connection' => $config]);
-        $products = DB::connection('shop_connection')->table('products')->where('id', $item_id)->get()->map(function ($item) {
-            return (array) $item;
-        })->all();
+
+        $product = DB::connection('shop_connection')
+            ->table('products')
+            ->select('products.*', 'medias.filename as avatar')
+            ->where('products.id', $item_id)
+            ->join('medias', 'products.first_media_id', '=', 'medias.id')
+            ->first();
+
         DB::disconnect('shop_connection');
 
-        return $products;
+        return (array) $product;
     }
 
     public static function updateProductAvatar($shop_id, $item_id, $media_url, $path) {
