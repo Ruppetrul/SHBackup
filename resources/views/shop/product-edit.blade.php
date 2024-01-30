@@ -28,46 +28,48 @@
                                               inputmode="numeric" oninput="formatDecimal(this)" pattern="[0-9]+([.][0-9]{0,2})?"
                                 />
 
-                                <label for="images">{{ __('shop.item_avatar') }}</label> <br>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <input data-item-id="{{ isset($item) ? $item['id'] : null }}" id="imagePanelAvatar" type="file" name="file" multiple>
-                                    </div>
-                                    <div class="col-md-12 mt-3">
-                                        <div id="imagePanel" class="container">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="d-flex overflow-auto" style="height: 150px;">
-                                                        <img src="
-                                                            @if (isset($item['avatar']))
-                                                                {{ asset('storage/' . $shopId . '/' . $item['avatar']) }}
-                                                            @else
-                                                                {{ asset('home/images/default_item_img.jpg') }}
-                                                            @endif
-                                                            " class="img-fluid blur-up lazyload" alt="">
+                                @if(isset($item))
+                                    <label for="images">{{ __('shop.item_avatar') }}</label> <br>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input data-item-id="{{ isset($item) ? $item['id'] : null }}" id="imagePanelAvatar" type="file" name="file" multiple>
+                                        </div>
+                                        <div class="col-md-12 mt-3">
+                                            <div id="imagePanel" class="container">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="d-flex overflow-auto" style="height: 150px;">
+                                                            <img src="
+                                                                @if (isset($item['avatar']))
+                                                                    {{ asset('storage/' . $shopId . '/' . $item['avatar']) }}
+                                                                @else
+                                                                    {{ asset('home/images/default_item_img.jpg') }}
+                                                                @endif
+                                                                " class="img-fluid blur-up lazyload" alt="">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <label for="images">{{ __('shop.item_images') }}</label> <br>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <input data-item-id="{{ isset($item) ? $item['id'] : null }}" id="imagePanelAdditional" type="file" name="file" multiple>
-                                    </div>
-                                    <div class="col-md-12 mt-3">
-                                        <div id="imagePanel" class="container">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="d-flex overflow-auto" style="height: 150px;">
+                                    <label for="images">{{ __('shop.item_images') }}</label> <br>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <input data-item-id="{{ isset($item) ? $item['id'] : null }}" id="imagePanelAdditional" type="file" name="file" multiple>
+                                        </div>
+                                        <div class="col-md-12 mt-3">
+                                            <div id="imagePanel" class="container">
+                                                <div class="row">
+                                                    <div class="col-md-12">
+                                                        <div class="d-flex overflow-auto" style="height: 150px;">
 
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                @endif
                             </div>
                             <button type="submit" class="btn">{{ isset($item) ? __('general.update') : __('general.create') }}</button>
                         </form>
@@ -85,7 +87,7 @@
 
                 const item_id = $(this).data('item-id');
                 $.ajax({
-                    url: '/shops/{{ $shopId }}/product/update-avatar/' + item_id,  // Замените на ваш роут для загрузки файлов
+                    url: '/shops/{{ $shopId }}/product/update-avatar/',
                     type: 'POST',
                     data: formData,
                     contentType: false,

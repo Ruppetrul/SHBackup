@@ -78,9 +78,9 @@ class ShopController extends Controller {
             'title' => $title,
             'price' => $price,
         );
-        Shop::createProduct($shop_id, $data);
+        $itemId = Shop::createProduct($shop_id, $data);
 
-        return Redirect::route('shop.details', ['shopId' => $shop_id]);
+        return Redirect::route('product.edit.view', ['shopId' => $shop_id, 'itemId' => $itemId]);
     }
 
     function productDelete($shop_id, Request $request) {

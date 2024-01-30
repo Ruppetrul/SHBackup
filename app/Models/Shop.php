@@ -82,8 +82,8 @@ class Shop extends Model
 
     public static function createProduct($shop_id, $data)
     {
-        self::executeShopAction($shop_id, function ($connection) use ($data) {
-            $connection->table('products')->insert($data);
+        return self::executeShopAction($shop_id, function ($connection) use ($data) {
+            return $connection->table('products')->insertGetId($data);
         }, 'Shop error case 1');
     }
 
@@ -138,9 +138,8 @@ class Shop extends Model
             ->table('products')
             ->select('products.*', 'medias.filename as avatar')
             ->where('products.id', $item_id)
-            ->join('medias', 'products.first_media_id', '=', 'medias.id')
+            ->leftJoin('medias', 'products.first_media_id', '=', 'medias.id')
             ->first();
-
         DB::disconnect('shop_connection');
 
         return (array) $product;
