@@ -4,6 +4,7 @@ namespace Modules\Mini\Providers;
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
+use Modules\Mini\Console\Commands\PrepareDefaultDB;
 
 class MiniServiceProvider extends ServiceProvider
 {
@@ -73,6 +74,12 @@ class MiniServiceProvider extends ServiceProvider
         $this->loadViewFiles();
         $this->loadMigrationFiles();
         $this->loadRouteFiles();
+        $this->loadCommandFiles();
+    }
+
+    public function boot()
+    {
+        $this->loadCommandFiles();
     }
 
     /**
@@ -105,5 +112,17 @@ class MiniServiceProvider extends ServiceProvider
         Route::middleware($this->middlewareRoute)
             ->namespace($this->namespace)
             ->group(__DIR__ . $this->routePath);
+    }
+
+    /**
+     * Load commands.
+     *
+     * @return void
+     */
+    private function loadCommandFiles(): void
+    {
+        $this->commands([
+            PrepareDefaultDB::class,
+        ]);
     }
 }
