@@ -85,15 +85,41 @@
                     contentType: false,
                     processData: false,
                     success: function (response) {
-                        console.log('Файл успешно загружен', response);
+                        const imagePanel = document.getElementById('imagePanel');
+                        imagePanel.innerHTML = '';
+
                         const imgElement = document.createElement('img');
                         imgElement.src = response;
                         imgElement.classList.add('mr-2');
 
+                        imagePanel.appendChild(imgElement);
+                    },
+                    error: function (error) {
+                        console.error('File error', error);
+                    }
+                });
+            });
+
+            $('#imagePanelAdditional').on('change', function () {
+                var formData = new FormData();
+                formData.append('file', $(this)[0].files[0]);
+                formData.append('_token', '{{ csrf_token() }}');
+
+                const item_id = $(this).data('item-id');
+                $.ajax({
+                    url: '/shops/{{ $shopId }}/product/update-image/' + item_id,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = response;
+                        imgElement.classList.add('mr-2');
                         document.getElementById('imagePanel').appendChild(imgElement);
                     },
                     error: function (error) {
-                        console.error('Ошибка при загрузке файла', error);
+                        console.error('File error', error);
                     }
                 });
             });
