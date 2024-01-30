@@ -17,7 +17,7 @@ class ProductRepoEloquent implements ProductRepoEloquentInterface
     public function findProductById($id)
     {
         return Product::query()
-            ->with(['categories'])
+//            ->with(['categories'])
             ->active()
             ->where('id', (int) $id)
             ->firstOrFail();

@@ -106,9 +106,11 @@
                                                 <a href="javascript:void(0)"> {{ $product->count }} шт</a>
                                             </li>
                                             <li>Категория :
-                                                @foreach ($product->categories as $category)
-                                                    <a href="{{ $category->path() }}">{{ $category->title }},</a>
-                                                @endforeach
+{{--                                                @if (isset($product->categories))--}}
+{{--                                                    @foreach ($product->categories as $category)--}}
+{{--                                                        <a href="{{ $category->path() }}">{{ $category->title }},</a>--}}
+{{--                                                    @endforeach--}}
+{{--                                                @endif--}}
                                             </li>
                                             <li>Описание :
                                                 <a>{{ $product->body }}</a>
