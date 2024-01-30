@@ -86,8 +86,9 @@
                 formData.append('_token', '{{ csrf_token() }}');
 
                 const item_id = $(this).data('item-id');
+                formData.append('itemId', item_id);
                 $.ajax({
-                    url: '/shops/{{ $shopId }}/product/update-avatar/',
+                    url: '/shops/{{ $shopId }}/product/update-avatar',
                     type: 'POST',
                     data: formData,
                     contentType: false,
@@ -97,7 +98,7 @@
                         imagePanel.innerHTML = '';
 
                         const imgElement = document.createElement('img');
-                        imgElement.src = response.path;
+                        imgElement.src = response.url;
                         imgElement.classList.add('mr-2');
 
                         imagePanel.appendChild(imgElement);

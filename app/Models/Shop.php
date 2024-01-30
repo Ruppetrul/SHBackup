@@ -82,9 +82,12 @@ class Shop extends Model
 
     public static function createProduct($shop_id, $data)
     {
-        return self::executeShopAction($shop_id, function ($connection) use ($data) {
-            return $connection->table('products')->insertGetId($data);
+        $itemId = null;
+        self::executeShopAction($shop_id, function ($connection) use ($data, &$itemId) {
+            $itemId = $connection->table('products')->insertGetId($data);
         }, 'Shop error case 1');
+
+        return $itemId;
     }
 
     public static function updateProduct($shop_id, $product_id, $data)
