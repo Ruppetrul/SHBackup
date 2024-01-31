@@ -32,7 +32,11 @@
                                     <label for="images">{{ __('shop.item_avatar') }}</label> <br>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <input data-item-id="{{ isset($item) ? $item['id'] : null }}" id="imagePanelAvatar" type="file" name="file" multiple>
+                                            <input
+                                                @if (isset($item['avatar']))
+                                                    disabled
+                                                @endif
+                                                data-item-id="{{ isset($item) ? $item['id'] : null }}" id="imagePanelAvatar" type="file" name="file" multiple>
                                         </div>
                                         <div class="col-md-12 mt-3">
                                             <div class="container">
@@ -147,6 +151,9 @@
                         imageContainer.appendChild(closeIcon);
 
                         imagePanel.appendChild(imageContainer);
+
+                        const fileInput = document.getElementById('imagePanelAvatar');
+                        fileInput.disabled = true;
                     },
                     error: function (error) {
                         console.error('File error', error);
@@ -227,6 +234,9 @@
                 success: function (response) {
                     const imagePanel = document.getElementById('avatarImagePanel');
                     imagePanel.innerHTML = '';
+
+                    const fileInput = document.getElementById('imagePanelAvatar');
+                    fileInput.disabled = false;
                 },
                 error: function (error) {
                     console.error('File error', error);
