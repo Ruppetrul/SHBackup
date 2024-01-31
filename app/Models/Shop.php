@@ -45,25 +45,19 @@ class Shop extends Model
     {
         $destinationDatabase = 'shop_' . $id;
 
-        $sql = "CREATE DATABASE $destinationDatabase;";
+        DB::statement("CREATE DATABASE $destinationDatabase;");
 
-        DB::statement($sql);
+        self::performShopQuery($destinationDatabase,  function () {
+            $dumpPath = Storage::path('dump/default_db.sql');
 
-        DB::purge('shop_connection');
-        $config = config('database.connections.shop_connection');
-        $config['database'] = $destinationDatabase;
-        config(['database.connections.shop_connection' => $config]);
+            $dumpPath = str_replace('/', '\\', $dumpPath);
 
-        $dumpPath = Storage::path('dump/default_db.sql');
+            if (!file_exists($dumpPath)) {
+                //TODO handle
+            }
 
-        $dumpPath = str_replace('/', '\\', $dumpPath);
-
-        if (!file_exists($dumpPath)) {
-            //TODO handle
-        }
-
-        DB::connection('shop_connection')->unprepared(file_get_contents($dumpPath));
-        DB::disconnect('shop_connection');
+            DB::connection('shop_connection')->unprepared(file_get_contents($dumpPath));
+        });
 
         return $destinationDatabase;
     }
@@ -71,11 +65,11 @@ class Shop extends Model
     public static function fetchProducts($shop_id)
     {
         $products = [];
-        $success = self::executeShopAction($shop_id, function () use (&$products) {
+        $success = self::executeWithShopConnection($shop_id, function () use (&$products) {
             $products = DB::connection('shop_connection')->table('products')->get()->map(function ($item) {
                 return (array) $item;
             })->all();
-        }, 'Shop error case 4');
+        });
 
         return array($success, $products);
     }
@@ -83,73 +77,68 @@ class Shop extends Model
     public static function createProduct($shop_id, $data)
     {
         $itemId = null;
-        self::executeShopAction($shop_id, function ($connection) use ($data, &$itemId) {
+        self::executeWithShopConnection($shop_id, function ($connection) use ($data, &$itemId) {
             $itemId = $connection->table('products')->insertGetId($data);
-        }, 'Shop error case 1');
+        });
 
         return $itemId;
     }
 
     public static function updateProduct($shop_id, $product_id, $data)
     {
-        self::executeShopAction($shop_id, function ($connection) use ($product_id, $data) {
+        self::executeWithShopConnection($shop_id, function ($connection) use ($product_id, $data) {
             $connection->table('products')->where('id', $product_id)->update($data);
-        }, 'Shop error case 3');
+        });
     }
 
     public static function deleteProduct($shop_id, $product_id)
     {
-        self::executeShopAction($shop_id, function ($connection) use ($product_id) {
+        self::executeWithShopConnection($shop_id, function ($connection) use ($product_id) {
             $connection->table('products')->where('id', $product_id)->delete();
-        }, 'Shop error case 2');
+        });
     }
 
-    private static function executeShopAction($shop_id, $callback, $error_message_prefix)
+    private static function executeWithShopConnection($shop_id, $callback)
     {
         $shop = Shop::where('id', $shop_id)->first();
-        $dbName = $shop->db_name;
+        return self::performShopQuery($shop->db_name, $callback);
+    }
 
-        DB::purge('shop_connection');
-        $config = config('database.connections.shop_connection');
-        $config['database'] = $dbName;
-        config(['database.connections.shop_connection' => $config]);
-
+    private static function performShopQuery(string $db_name, $callback)
+    {
         $success = true;
         try {
+            DB::purge('shop_connection');
+            config(['database.connections.shop_connection.database' => $db_name]);
+
             $callback(DB::connection('shop_connection'));
         } catch (\Exception $exception) {
-            Log::error($error_message_prefix . ': ' . $exception->getMessage());
+            Log::error('Query error: ' . $exception->getMessage());
             $success = false;
             //TODO report exception
+        } finally {
+            DB::disconnect('shop_connection');
         }
 
-        DB::disconnect('shop_connection');
         return $success;
     }
 
     public static function fetchProduct($shop_id, $item_id)
     {
-        $shop = Shop::where('id', $shop_id)->first();
-        $dbName = $shop->db_name;
-
-        DB::purge('shop_connection');
-        $config = config('database.connections.shop_connection');
-        $config['database'] = $dbName;
-        config(['database.connections.shop_connection' => $config]);
-
-        $product = DB::connection('shop_connection')
-            ->table('products')
-            ->select('products.*', 'medias.filename as avatar')
-            ->where('products.id', $item_id)
-            ->leftJoin('medias', 'products.first_media_id', '=', 'medias.id')
-            ->first();
-        DB::disconnect('shop_connection');
-
-        return (array) $product;
+        $item = null;
+        self::executeWithShopConnection($shop_id, function ($connection) use ($item_id, &$item) {
+            $item = (array) $connection
+                ->table('products')
+                ->select('products.*', 'medias.filename as avatar')
+                ->where('products.id', $item_id)
+                ->leftJoin('medias', 'products.first_media_id', '=', 'medias.id')
+                ->first();
+        });
+        return $item;
     }
 
     public static function updateProductAvatar($shop_id, $item_id, $media_url, $path) {
-        self::executeShopAction($shop_id, function ($connection) use ($item_id, $media_url, $shop_id, $path) {
+        self::executeWithShopConnection($shop_id, function ($connection) use ($item_id, $media_url, $shop_id, $path) {
             $avatarMediaId = $connection->table('products')->where('id', $item_id)->value('first_media_id');
             Log::debug($avatarMediaId);
             if ($avatarMediaId) {
@@ -166,6 +155,6 @@ class Shop extends Model
             ]);
 
             $connection->table('products')->where('id', $item_id)->update(['first_media_id' => $mediaId]);
-        }, 'Shop error case 4');
+        });
     }
 }
