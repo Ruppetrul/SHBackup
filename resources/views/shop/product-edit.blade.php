@@ -49,7 +49,7 @@
                                                                         <img style="height: 150px;" src="
                                                                             {{ asset('storage/' . $shopId . '/' . $item['avatar']) }}
                                                                         " class="img-fluid blur-up lazyload" alt="">
-                                                                        <div class="product-close-icon" data-media-id="{{ $item['first_media_id'] }}" onclick="deleteImage(this)">✖</div>
+                                                                        <div class="product-close-icon" data-media-id="{{ $item['first_media_id'] }}" onclick="deleteAvatar(this)">✖</div>
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -62,14 +62,14 @@
                                     <label for="images">{{ __('shop.item_images') }}</label> <br>
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <input data-item-id="{{ isset($item) ? $item['id'] : null }}" id="imagePanelAdditional" type="file" name="file" multiple>
+                                            <input disabled data-item-id="{{ isset($item) ? $item['id'] : null }}" id="imagePanelAdditional" type="file" name="file" multiple>
                                         </div>
                                         <div class="col-md-12 mt-3">
                                             <ul id="imagePanel" class="sortable-container">
                                                 @foreach($item['medias'] ?? [] as $media)
                                                     <li class="sortable-item">
                                                         <img src="{{ $media->url }}" alt="Image"  style="height: 150px;">
-                                                        <div class="delete-icon" data-media-id="{{ $media->id }}" onclick="removeImage(this)">✖</div>
+                                                        <div class="delete-icon" data-media-id="{{ $media->id }}" onclick="deleteImage(this)">✖</div>
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -91,7 +91,15 @@
             }
         });
 
-        function removeImage(element) {
+        function updateImagePanel() {
+            const additionalInput = document.getElementById('imagePanelAdditional');
+            const mediasCount = document.querySelectorAll('#imagePanel .sortable-item').length;
+
+            if (mediasCount <= 2) {
+                additionalInput.disabled = false;
+            }
+        }
+        function deleteImage(element) {
             const mediaId = element.getAttribute('data-media-id');
 
             $.ajax({
@@ -105,6 +113,8 @@
                     console.log(element);
                     const item = element.closest('.sortable-item');
                     item.remove();
+
+                    updateImagePanel();
                 },
                 error: function (error) {
                     console.error('File error', error);
@@ -114,6 +124,8 @@
     </script>
     <script>
         $(document).ready(function () {
+            updateImagePanel();
+
             $('#imagePanelAvatar').on('change', function () {
                 var formData = new FormData();
                 formData.append('file', $(this)[0].files[0]);
@@ -144,7 +156,7 @@
                         closeIcon.setAttribute('data-media-id', response.media_id);
                         closeIcon.textContent = '✖';
                         closeIcon.onclick = function () {
-                            deleteImage(this);
+                            deleteAvatar(this);
                         };
 
                         imageContainer.appendChild(imgElement);
@@ -190,13 +202,15 @@
                         closeIcon.setAttribute('data-media-id', response.media_id);
                         closeIcon.textContent = '✖';
                         closeIcon.onclick = function () {
-                            removeImage(this);
+                            deleteImage(this);
                         };
 
                         imageContainer.appendChild(imgElement);
                         imageContainer.appendChild(closeIcon);
 
                         imagePanel.appendChild(imageContainer);
+
+                        updateImagePanel();
                     },
                     error: function (error) {
                         console.error('File error', error);
@@ -221,7 +235,7 @@
             }
         }
 
-        function deleteImage(element) {
+        function deleteAvatar(element) {
             const mediaId = element.getAttribute('data-media-id');
 
             $.ajax({
