@@ -126,13 +126,45 @@ class Shop extends Model
     public static function fetchProduct($shop_id, $item_id)
     {
         $item = null;
-        self::executeWithShopConnection($shop_id, function ($connection) use ($item_id, &$item) {
+        self::executeWithShopConnection($shop_id, function ($connection) use ($shop_id, $item_id, &$item) {
             $item = (array) $connection
                 ->table('products')
                 ->select('products.*', 'medias.filename as avatar')
                 ->where('products.id', $item_id)
                 ->leftJoin('medias', 'products.first_media_id', '=', 'medias.id')
                 ->first();
+
+            $v = $connection
+                ->table('medias')
+                ->select('medias.*')
+                ->where('medias.item_id', $item_id);
+
+            if (!empty($item['first_media_id'])) {
+                $v->whereNotIn('medias.id', [$item['first_media_id']]);
+            }
+
+            $v = $v->get();
+
+            // Перебор и мутация элементов
+            $v = $v->map(function ($media) use ($shop_id) {
+                $filename = $media->filename;
+                $media->url = asset(Storage::url('/')) . '/' . $shop_id . '/' . $filename;
+//                var_dump($media);
+//                die();
+//                // Здесь вы можете изменить одно из значений
+//                $media->exampleField = 'новое значение'; // Пример мутации
+
+                return $media;
+            });
+
+//            var_dump($v);
+//            die();
+
+//            var_dump($v);
+//            var_dump($item['first_media_id']);
+//            var_dump($item_id);
+//            die();
+            $item['medias'] = $v;
         });
         return $item;
     }
@@ -156,6 +188,17 @@ class Shop extends Model
             ]);
 
             $connection->table('products')->where('id', $item_id)->update(['first_media_id' => $mediaId]);
+        });
+        return $mediaId;
+    }
+
+    public static function saveProductImage($shop_id, $item_id, $media_url) {
+        $mediaId = null;
+        self::executeWithShopConnection($shop_id, function ($connection) use ($item_id, $media_url, &$mediaId) {
+            $mediaId = $connection->table('medias')->insertGetId([
+                'item_id' => $item_id,
+                'filename' => $media_url
+            ]);
         });
         return $mediaId;
     }

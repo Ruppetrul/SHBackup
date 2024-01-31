@@ -61,15 +61,14 @@
                                             <input data-item-id="{{ isset($item) ? $item['id'] : null }}" id="imagePanelAdditional" type="file" name="file" multiple>
                                         </div>
                                         <div class="col-md-12 mt-3">
-                                            <div id="imagePanel" class="container">
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="d-flex overflow-auto" style="height: 150px;">
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <ul id="imagePanel" class="sortable-container">
+                                                @foreach($item['medias'] ?? [] as $media)
+                                                    <li class="sortable-item">
+                                                        <img src="{{ $media->url }}" alt="Image"  style="height: 150px;">
+                                                        <div class="delete-icon" data-media-id="{{ $media->id }}" onclick="removeImage(this)">✖</div>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
                                         </div>
                                     </div>
                                 @endif
@@ -81,6 +80,34 @@
             </div>
         </div>
     </div>
+    <script>
+        const sortableList = new Sortable(document.getElementById('imagePanel'), {
+            animation: 150,
+            onEnd: function (evt) {
+            }
+        });
+
+        function removeImage(element) {
+            const mediaId = element.getAttribute('data-media-id');
+
+            $.ajax({
+                url: '/shops/{{ $shopId }}/product/delete-media',
+                type: 'DELETE',
+                data: {
+                    media_id : mediaId,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    console.log(element);
+                    const item = element.closest('.sortable-item');
+                    item.remove();
+                },
+                error: function (error) {
+                    console.error('File error', error);
+                }
+            });
+        }
+    </script>
     <script>
         $(document).ready(function () {
             $('#imagePanelAvatar').on('change', function () {
@@ -133,17 +160,36 @@
                 formData.append('_token', '{{ csrf_token() }}');
 
                 const item_id = $(this).data('item-id');
+                formData.append('itemId', item_id);
                 $.ajax({
-                    url: '/shops/{{ $shopId }}/product/update-image/' + item_id,
+                    url: '/shops/{{ $shopId }}/product/update-image',
                     type: 'POST',
                     data: formData,
                     contentType: false,
                     processData: false,
                     success: function (response) {
+                        const imagePanel = document.getElementById('imagePanel');
+
+                        const imageContainer = document.createElement('li');
+                        imageContainer.classList.add('sortable-item');
+
                         const imgElement = document.createElement('img');
-                        imgElement.src = response;
-                        imgElement.classList.add('mr-2');
-                        document.getElementById('imagePanel').appendChild(imgElement);
+                        imgElement.src = response.url;
+                        imgElement.style.height = '150px';
+                        imgElement.alt = 'Image';
+
+                        const closeIcon = document.createElement('div');
+                        closeIcon.classList.add('delete-icon');
+                        closeIcon.setAttribute('data-media-id', response.media_id);
+                        closeIcon.textContent = '✖';
+                        closeIcon.onclick = function () {
+                            removeImage(this);
+                        };
+
+                        imageContainer.appendChild(imgElement);
+                        imageContainer.appendChild(closeIcon);
+
+                        imagePanel.appendChild(imageContainer);
                     },
                     error: function (error) {
                         console.error('File error', error);

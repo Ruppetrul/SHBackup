@@ -21,3 +21,42 @@
 .product-image-container:hover .product-close-icon {
     visibility: visible;
 }
+
+#sortable-list {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+}
+
+.sortable-item {
+    margin-right: 10px;
+    position: relative;
+}
+
+.sortable-item img {
+    width: 100px;
+    height: auto;
+    cursor: move;
+}
+
+.delete-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    display: none;
+}
+
+.sortable-item:hover .delete-icon {
+    display: block;
+}
+
+.sortable-container {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+}
+
+.sortable-item {
+    margin-right: 10px;
+}

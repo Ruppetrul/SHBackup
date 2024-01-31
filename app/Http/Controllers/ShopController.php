@@ -128,12 +128,24 @@ class ShopController extends Controller {
         ));
     }
 
-    function productUpdateImage($shopId, $itemId, Request $request) {
-        $path = $request->file('file')->store($shopId, 'public');
-        $url = asset(Storage::url($path));
+    function productUpdateImage($shopId, Request $request) {
+        if (!$request->has('itemId')) {
+            return response()->json(array(
+                'message' => "'itemId' parameter is missing"
+            ), 400);
+        }
 
-//TODO process on shop
-        return $url;
+        $itemId = $request->get('itemId');
+
+        $path = $request->file('file')->store($shopId, 'public');
+        $filename = basename($path);
+        $mediaId = Shop::saveProductImage($shopId, $itemId, $filename);
+
+        return response()->json(array(
+            'file_name' => $filename,
+            'url' => asset(Storage::url($path)),
+            'media_id' => $mediaId
+        ));
     }
 
     function productDeleteMedia($shop_id, Request $request) {
