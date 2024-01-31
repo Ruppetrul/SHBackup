@@ -138,7 +138,8 @@ class Shop extends Model
     }
 
     public static function updateProductAvatar($shop_id, $item_id, $media_url, $path) {
-        self::executeWithShopConnection($shop_id, function ($connection) use ($item_id, $media_url, $shop_id, $path) {
+        $mediaId = null;
+        self::executeWithShopConnection($shop_id, function ($connection) use ($item_id, $media_url, $shop_id, $path, &$mediaId) {
             $avatarMediaId = $connection->table('products')->where('id', $item_id)->value('first_media_id');
             Log::debug($avatarMediaId);
             if ($avatarMediaId) {
@@ -155,6 +156,15 @@ class Shop extends Model
             ]);
 
             $connection->table('products')->where('id', $item_id)->update(['first_media_id' => $mediaId]);
+        });
+        return $mediaId;
+    }
+
+    public static function deleteProductMedia($shop_id, mixed $mediaId)
+    {
+        return self::executeWithShopConnection($shop_id, function ($connection) use ($mediaId) {
+            $connection->table('medias')->where('id', $mediaId)->delete();
+            $connection->table('products')->where('first_media_id', $mediaId)->update(['first_media_id' => null]);
         });
     }
 }

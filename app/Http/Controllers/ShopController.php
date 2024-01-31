@@ -118,12 +118,13 @@ class ShopController extends Controller {
         $filename = basename($path);
 
         if ($itemId) {
-            Shop::updateProductAvatar($shopId, $itemId, $filename, $path);
+            $mediaId = Shop::updateProductAvatar($shopId, $itemId, $filename, $path);
         }
 
         return response()->json(array(
             'file_name' => $filename,
-            'url' => asset(Storage::url($path))
+            'url' => asset(Storage::url($path)),
+            'media_id' => $mediaId
         ));
     }
 
@@ -133,5 +134,10 @@ class ShopController extends Controller {
 
 //TODO process on shop
         return $url;
+    }
+
+    function productDeleteMedia($shop_id, Request $request) {
+        $mediaId = $request->get('media_id');
+        return Shop::deleteProductMedia($shop_id, $mediaId);
     }
 }

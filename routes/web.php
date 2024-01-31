@@ -37,6 +37,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::post('/create', [ShopController::class, 'productCreate'])->name('product.create');
                 Route::put('/update/{itemId}', [ShopController::class, 'productUpdate'])->name('product.update');
                 Route::post('/update-avatar/', [ShopController::class, 'productUpdateAvatar'])->name('product.update.avatar');
+                Route::delete('/delete-media', [ShopController::class, 'productDeleteMedia'])->name('product.delete.media');
                 Route::post('/delete', [ShopController::class, 'productDelete'])->name('product.delete');
             });
         });

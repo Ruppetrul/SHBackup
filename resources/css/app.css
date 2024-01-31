@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.product-image-container {
+    position: relative;
+    display: inline-block;
+}
+
+.product-close-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 20px;
+    color: red;
+    cursor: pointer;
+    visibility: hidden;
+    transition: visibility 0.3s;
+}
+
+.product-image-container:hover .product-close-icon {
+    visibility: visible;
+}

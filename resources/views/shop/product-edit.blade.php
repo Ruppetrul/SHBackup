@@ -35,17 +35,20 @@
                                             <input data-item-id="{{ isset($item) ? $item['id'] : null }}" id="imagePanelAvatar" type="file" name="file" multiple>
                                         </div>
                                         <div class="col-md-12 mt-3">
-                                            <div id="imagePanel" class="container">
+                                            <div class="container">
                                                 <div class="row">
                                                     <div class="col-md-12">
-                                                        <div class="d-flex overflow-auto" style="height: 150px;">
-                                                            <img src="
-                                                                @if (isset($item['avatar']))
-                                                                    {{ asset('storage/' . $shopId . '/' . $item['avatar']) }}
-                                                                @else
-                                                                    {{ asset('home/images/default_item_img.jpg') }}
-                                                                @endif
-                                                                " class="img-fluid blur-up lazyload" alt="">
+                                                        <div class="d-flex overflow-auto">
+                                                            <div id="avatarImagePanel" >
+                                                                <div class="product-image-container" >
+                                                                    @if (isset($item['avatar']))
+                                                                        <img style="height: 150px;" src="
+                                                                            {{ asset('storage/' . $shopId . '/' . $item['avatar']) }}
+                                                                        " class="img-fluid blur-up lazyload" alt="">
+                                                                        <div class="product-close-icon" data-media-id="{{ $item['first_media_id'] }}" onclick="deleteImage(this)">✖</div>
+                                                                    @endif
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -94,14 +97,29 @@
                     contentType: false,
                     processData: false,
                     success: function (response) {
-                        const imagePanel = document.getElementById('imagePanel');
-                        imagePanel.innerHTML = '';
+                        const imagePanel = document.getElementById('avatarImagePanel');
+
+                        const imageContainer = document.createElement('div');
+                        imageContainer.classList.add('product-image-container');
 
                         const imgElement = document.createElement('img');
                         imgElement.src = response.url;
-                        imgElement.classList.add('mr-2');
+                        imgElement.style.height = '150px';
+                        imgElement.classList.add('img-fluid', 'blur-up', 'lazyload');
+                        imgElement.alt = '';
 
-                        imagePanel.appendChild(imgElement);
+                        const closeIcon = document.createElement('div');
+                        closeIcon.classList.add('product-close-icon');
+                        closeIcon.setAttribute('data-media-id', response.media_id);
+                        closeIcon.textContent = '✖';
+                        closeIcon.onclick = function () {
+                            deleteImage(this);
+                        };
+
+                        imageContainer.appendChild(imgElement);
+                        imageContainer.appendChild(closeIcon);
+
+                        imagePanel.appendChild(imageContainer);
                     },
                     error: function (error) {
                         console.error('File error', error);
@@ -148,6 +166,26 @@
             if (parts.length > 2) {
                 input.value = parts.slice(0, 1).join('.') + '.' + parts.slice(1).join('').slice(0, 2);
             }
+        }
+
+        function deleteImage(element) {
+            const mediaId = element.getAttribute('data-media-id');
+
+            $.ajax({
+                url: '/shops/{{ $shopId }}/product/delete-media',
+                type: 'DELETE',
+                data: {
+                    media_id : mediaId,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function (response) {
+                    const imagePanel = document.getElementById('avatarImagePanel');
+                    imagePanel.innerHTML = '';
+                },
+                error: function (error) {
+                    console.error('File error', error);
+                }
+            });
         }
     </script>
 </x-app-layout>
