@@ -34,6 +34,26 @@ function customer_do_request(options) {
     });
 }
 
+function create_shop(data, token, url, successCallback, errorCallback) {
+
+    const options = {
+        method: 'POST',
+        url: url,
+        data: data,
+        headers: {},
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            successCallback(response);
+        },
+        error: function (error) {
+            errorCallback(error);
+        }
+    }
+
+    options.csrfToken = token;
+    customer_do_request(options, token);
+}
 
 function test() {
     console.log('test');

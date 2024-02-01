@@ -86,14 +86,12 @@
             const formData = new FormData();
             formData.append('name', shop_name);
 
-            customer_do_request({
-                method: 'POST',
-                url: "{{ route('shops.create') }}",
-                data: formData,
-                contentType: false,
-                processData: false,
-                csrfToken: document.querySelector('meta[name="csrf-token"]').content,
-                success: function (response) {
+            const token = document.querySelector('meta[name="csrf-token"]').content;
+            create_shop(
+                formData,
+                token,
+                "{{ route('shops.create') }}",
+                function (response) {
                     if (response.success) {
                         $('#createShopModal').on('hidden.bs.modal', function () {
                             alert('Магазин успешно создан');
@@ -107,7 +105,7 @@
                 function (error) {
                     console.error('File error', error);
                 }
-            });
+            );
         });
     });
 </script>
