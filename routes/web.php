@@ -36,10 +36,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::prefix('/product')->group(function () {
                 Route::post('/create', [ShopController::class, 'productCreate'])->name('product.create');
                 Route::put('/update/{itemId}', [ShopController::class, 'productUpdate'])->name('product.update');
-                Route::post('/update-avatar/', [ShopController::class, 'productUpdateAvatar'])->name('product.update.avatar');
-                Route::post('/update-image/', [ShopController::class, 'productUpdateImage'])->name('product.update.image');
+                Route::post('/update-avatar', [ShopController::class, 'productUpdateAvatar'])->name('product.update.avatar');
+                Route::post('/update-image', [ShopController::class, 'productUpdateImage'])->name('product.update.image');
                 Route::delete('/delete-media', [ShopController::class, 'productDeleteMedia'])->name('product.delete.media');
-                Route::post('/delete', [ShopController::class, 'productDelete'])->name('product.delete');
+                Route::delete('/delete', [ShopController::class, 'productDelete'])->name('product.delete');
             });
         });
 

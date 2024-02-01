@@ -99,18 +99,20 @@
                 additionalInput.disabled = false;
             }
         }
+
         function deleteImage(element) {
             const mediaId = element.getAttribute('data-media-id');
 
-            $.ajax({
+            customer_do_request({
+                method: 'DELETE',
                 url: '/shops/{{ $shopId }}/product/delete-media',
-                type: 'DELETE',
                 data: {
                     media_id : mediaId,
-                    _token: '{{ csrf_token() }}'
                 },
+                contentType: false,
+                processData: false,
                 success: function (response) {
-                    console.log(element);
+                     console.log(element);
                     const item = element.closest('.sortable-item');
                     item.remove();
 
@@ -121,105 +123,31 @@
                 }
             });
         }
-    </script>
-    <script>
-        $(document).ready(function () {
-            updateImagePanel();
 
-            $('#imagePanelAvatar').on('change', function () {
-                var formData = new FormData();
-                formData.append('file', $(this)[0].files[0]);
-                formData.append('_token', '{{ csrf_token() }}');
+        function deleteAvatar(element) {
+            const mediaId = element.getAttribute('data-media-id');
 
-                const item_id = $(this).data('item-id');
-                formData.append('itemId', item_id);
-                $.ajax({
-                    url: '/shops/{{ $shopId }}/product/update-avatar',
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        const imagePanel = document.getElementById('avatarImagePanel');
+            customer_do_request({
+                method: 'DELETE',
+                url: '/shops/{{ $shopId }}/product/delete-media',
+                data: {
+                    media_id : mediaId,
+                },
+                contentType: false,
+                processData: false,
+                success: function (response) {
+                    const imagePanel = document.getElementById('avatarImagePanel');
+                    imagePanel.innerHTML = '';
 
-                        const imageContainer = document.createElement('div');
-                        imageContainer.classList.add('product-image-container');
-
-                        const imgElement = document.createElement('img');
-                        imgElement.src = response.url;
-                        imgElement.style.height = '150px';
-                        imgElement.classList.add('img-fluid', 'blur-up', 'lazyload');
-                        imgElement.alt = '';
-
-                        const closeIcon = document.createElement('div');
-                        closeIcon.classList.add('product-close-icon');
-                        closeIcon.setAttribute('data-media-id', response.media_id);
-                        closeIcon.textContent = '✖';
-                        closeIcon.onclick = function () {
-                            deleteAvatar(this);
-                        };
-
-                        imageContainer.appendChild(imgElement);
-                        imageContainer.appendChild(closeIcon);
-
-                        imagePanel.appendChild(imageContainer);
-
-                        const fileInput = document.getElementById('imagePanelAvatar');
-                        fileInput.disabled = true;
-                    },
-                    error: function (error) {
-                        console.error('File error', error);
-                    }
-                });
+                    const fileInput = document.getElementById('imagePanelAvatar');
+                    fileInput.disabled = false;
+                },
+                error: function (error) {
+                    console.error('File error', error);
+                }
             });
+        }
 
-            $('#imagePanelAdditional').on('change', function () {
-                var formData = new FormData();
-                formData.append('file', $(this)[0].files[0]);
-                formData.append('_token', '{{ csrf_token() }}');
-
-                const item_id = $(this).data('item-id');
-                formData.append('itemId', item_id);
-                $.ajax({
-                    url: '/shops/{{ $shopId }}/product/update-image',
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        const imagePanel = document.getElementById('imagePanel');
-
-                        const imageContainer = document.createElement('li');
-                        imageContainer.classList.add('sortable-item');
-
-                        const imgElement = document.createElement('img');
-                        imgElement.src = response.url;
-                        imgElement.style.height = '150px';
-                        imgElement.alt = 'Image';
-
-                        const closeIcon = document.createElement('div');
-                        closeIcon.classList.add('delete-icon');
-                        closeIcon.setAttribute('data-media-id', response.media_id);
-                        closeIcon.textContent = '✖';
-                        closeIcon.onclick = function () {
-                            deleteImage(this);
-                        };
-
-                        imageContainer.appendChild(imgElement);
-                        imageContainer.appendChild(closeIcon);
-
-                        imagePanel.appendChild(imageContainer);
-
-                        updateImagePanel();
-                    },
-                    error: function (error) {
-                        console.error('File error', error);
-                    }
-                });
-            });
-        });
-    </script>
-    <script>
         function formatDecimal(input) {
             input.value = input.value.replace(/[^0-9.]/g, '');
 
@@ -235,27 +163,105 @@
             }
         }
 
-        function deleteAvatar(element) {
-            const mediaId = element.getAttribute('data-media-id');
+        $(document).ready(function () {
+            updateImagePanel();
 
-            $.ajax({
-                url: '/shops/{{ $shopId }}/product/delete-media',
-                type: 'DELETE',
-                data: {
-                    media_id : mediaId,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function (response) {
-                    const imagePanel = document.getElementById('avatarImagePanel');
-                    imagePanel.innerHTML = '';
+            $('#imagePanelAvatar').on('change', function () {
+                var formData = new FormData();
+                formData.append('file', $(this)[0].files[0]);
 
-                    const fileInput = document.getElementById('imagePanelAvatar');
-                    fileInput.disabled = false;
-                },
-                error: function (error) {
-                    console.error('File error', error);
-                }
+                const item_id = $(this).data('item-id');
+                formData.append('itemId', item_id);
+
+                customer_do_request({
+                    method: 'POST',
+                    url: '{{ route('product.update.avatar', ['shopId' => $shopId]) }}',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response.url) {
+                            const imagePanel = document.getElementById('avatarImagePanel');
+
+                            const imageContainer = document.createElement('div');
+                            imageContainer.classList.add('product-image-container');
+
+                            const imgElement = document.createElement('img');
+                            imgElement.src = response.url;
+                            imgElement.style.height = '150px';
+                            imgElement.classList.add('img-fluid', 'blur-up', 'lazyload');
+                            imgElement.alt = '';
+
+                            const closeIcon = document.createElement('div');
+                            closeIcon.classList.add('product-close-icon');
+                            closeIcon.setAttribute('data-media-id', response.media_id);
+                            closeIcon.textContent = '✖';
+                            closeIcon.onclick = function () {
+                                deleteAvatar(this);
+                            };
+
+                            imageContainer.appendChild(imgElement);
+                            imageContainer.appendChild(closeIcon);
+
+                            imagePanel.appendChild(imageContainer);
+
+                            const fileInput = document.getElementById('imagePanelAvatar');
+                            fileInput.disabled = true;
+                        } else {
+                            alert(message || "{{ __('shop.unknown_error') }}");
+                        }
+                    },
+                    error: function (error) {
+                        console.error('File error', error);
+                    }
+                });
             });
-        }
+            $('#imagePanelAdditional').on('change', function () {
+                var formData = new FormData();
+                formData.append('file', $(this)[0].files[0]);
+
+                const item_id = $(this).data('item-id');
+                formData.append('itemId', item_id);
+
+                customer_do_request({
+                    method: 'POST',
+                    url: '{{ route('product.update.image', ['shopId' => $shopId]) }}',
+                    data: formData,
+                    contentType: true,
+                    processData: true,
+                    success: function (response) {
+                        if (response.url) {
+                            const imagePanel = document.getElementById('imagePanel');
+
+                            const imageContainer = document.createElement('li');
+                            imageContainer.classList.add('sortable-item');
+
+                            const imgElement = document.createElement('img');
+                            imgElement.src = response.url;
+                            imgElement.style.height = '150px';
+                            imgElement.alt = 'Image';
+
+                            const closeIcon = document.createElement('div');
+                            closeIcon.classList.add('delete-icon');
+                            closeIcon.setAttribute('data-media-id', response.media_id);
+                            closeIcon.textContent = '✖';
+                            closeIcon.onclick = function () {
+                                deleteImage(this);
+                            };
+
+                            imageContainer.appendChild(imgElement);
+                            imageContainer.appendChild(closeIcon);
+
+                            imagePanel.appendChild(imageContainer);
+
+                            updateImagePanel();
+                        }
+                    },
+                    error: function (error) {
+                        console.error('File error', error);
+                    }
+                });
+            });
+        });
     </script>
 </x-app-layout>

@@ -74,19 +74,26 @@
 
         $('#createShopBtn').click(function() {
             const shop_name = $('#shop_name').val();
-            if (shop_name == '') {
-                alert('Введите название магазина');
+            if (shop_name === '') {
+                alert("{{ __('shop.input_shop_name') }}");
                 return false;
             }
 
-            $.ajax({
+            const data = {
+                name: shop_name,
+            }
+
+            const formData = new FormData();
+            formData.append('name', shop_name);
+
+            customer_do_request({
+                method: 'POST',
                 url: "{{ route('shops.create') }}",
-                type: "POST",
-                data: {
-                    name: shop_name,
-                    _token : document.querySelector('meta[name="csrf-token"]').content
-                },
-                success: function(response) {
+                data: formData,
+                contentType: false,
+                processData: false,
+                csrfToken: document.querySelector('meta[name="csrf-token"]').content,
+                success: function (response) {
                     if (response.success) {
                         $('#createShopModal').on('hidden.bs.modal', function () {
                             alert('Магазин успешно создан');
@@ -96,6 +103,9 @@
                     } else {
                         alert(response.message || 'Неизвестная ошибка');
                     }
+                },
+                function (error) {
+                    console.error('File error', error);
                 }
             });
         });

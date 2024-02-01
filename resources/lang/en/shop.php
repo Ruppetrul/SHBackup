@@ -14,4 +14,6 @@ return [
     'unknown_error' => "Something's gone wrong. Contact the administrator.",
     'item_avatar' => "Avatar",
     'item_images' => "Images",
+    'create_success' => "Shop created successfully",
+    'input_shop_name' => "Input shop name",
 ];
