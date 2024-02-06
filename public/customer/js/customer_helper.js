@@ -55,6 +55,28 @@ function create_shop(data, token, url, successCallback, errorCallback) {
     customer_do_request(options, token);
 }
 
+function delete_shop(url, token, successCallback, errorCallback) {
+    const options = {
+        method: 'POST',
+        url: url,
+        headers: {
+            'X-CSRF-TOKEN': token,
+            'X-HTTP-Method-Override': 'DELETE',
+            // 'Content-Type': 'application/json',
+        },
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            successCallback(response);
+        },
+        error: function (error) {
+            errorCallback(error);
+        }
+    }
+
+    customer_do_request(options);
+}
+
 function update_media(data, url, successCallback, errorCallback) {
     const options = {
         method: 'POST',

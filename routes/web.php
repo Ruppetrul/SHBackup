@@ -32,6 +32,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/', [ShopController::class, 'showDetails'])->name('shop.details');
             Route::get('/product-create', [ShopController::class, 'productEdit'])->name('product.create.view');
             Route::get('/product-edit/{itemId}', [ShopController::class, 'productEdit'])->name('product.edit.view');
+            Route::delete('/delete', [ShopController::class, 'shopDelete'])->name('shop.delete');
 
             Route::prefix('/product')->group(function () {
                 Route::post('/create', [ShopController::class, 'productCreate'])->name('product.create');

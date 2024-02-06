@@ -18,4 +18,9 @@ return [
     'input_shop_name' => "Input shop name",
     'back_to_shops' => "Back to shops",
     'back_to_products' => "Back to products",
+    'shop_deleted' => "Shop was deleleted",
+    'delete' => "Delete shop",
+    'delete_confirm' => "Delete",
+    'delete_cancel' => "Cancel",
+    'delete_info' => "Are you sure you want to delete the store? The data will be irretrievably deleted.",
 ];

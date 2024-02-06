@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 class ShopController extends Controller {
 
     public function showDetails($id) {
-        $shop = Shop::find($id);
+        $shop = Shop::where('owner_id', auth()->id())->find($id);
 
         $success = false;
         if ($shop) {
@@ -24,11 +24,10 @@ class ShopController extends Controller {
                     //TODO log and report it
                 }
             }
+        } else {
+            return redirect()->route('shops.view');
         }
 
-//        var_dump($shop->db_name);
-//        var_dump($products);
-//        die();
         return view('shop.details', ['shop' => $shop, 'products' => $products, 'success' => $success]);
     }
 
@@ -67,7 +66,7 @@ class ShopController extends Controller {
     }
 
     function index() {
-        $shops = Shop::where('owner_id', Auth::id())->get();
+        $shops = Shop::where('owner_id', Auth::id())->whereNotIn('state', ['deleted'])->get();
         return view('shops', ['shops' => $shops]);
     }
 
@@ -140,5 +139,29 @@ class ShopController extends Controller {
     function productDeleteMedia($shop_id, Request $request) {
         $mediaId = $request->get('media_id');
         return Shop::deleteProductMedia($shop_id, $mediaId);
+    }
+
+    function shopDelete($shop_id, Request $request) {
+        $shop = Shop::where('owner_id', Auth::id())->where('id', $shop_id)->first();
+
+        if (!$shop) {
+            return response()->json(array(
+                'message' => 'Shop does not exist'
+            ), 400);
+        }
+
+        $shop->state = 'deleted';
+
+        $updated = $shop->update();
+
+        if ($updated) {
+            return response()->json(array(
+                'message' => 'Shop deleted'
+            ));
+        } else {
+            return response()->json(array(
+                'message' => 'Unknown error'
+            ), 400);
+        }
     }
 }
