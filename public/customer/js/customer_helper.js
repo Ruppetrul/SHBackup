@@ -55,8 +55,64 @@ function create_shop(data, token, url, successCallback, errorCallback) {
     customer_do_request(options, token);
 }
 
-function test() {
-    console.log('test');
+function update_media(data, url, successCallback, errorCallback) {
+    const options = {
+        method: 'POST',
+        url: url,
+        data: data,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            successCallback(response);
+        },
+        error: function (error) {
+            errorCallback(error);
+        }
+    }
+
+    customer_do_request(options);
 }
 
+function delete_media(formData, url, token, successCallback, errorCallback) {
+    const options = {
+        method: 'POST',
+        url: url,
+        data: formData,
+        headers: {
+            'X-CSRF-TOKEN': token,
+            'X-HTTP-Method-Override': 'DELETE',
+            // 'Content-Type': 'application/json',
+        },
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            successCallback(response);
+        },
+        error: function (error) {
+            errorCallback(error);
+        }
+    }
+
+    customer_do_request(options);
+}
+
+function delete_item(formData, url, token, successCallback, errorCallback) {
+    customer_do_request({
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': token,
+            'X-HTTP-Method-Override': 'DELETE',
+        },
+        url: url,
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            successCallback(response);
+        },
+        error: function (error) {
+            errorCallback(error);
+        }
+    });
+}
 console.log('include');

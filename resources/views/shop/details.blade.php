@@ -110,27 +110,18 @@
             $('.deleteButton').on('click', function() {
                 const productId = $(this).data('product-id');
 
-                const data = {
-                    id: productId,
-                };
-
                 const formData = new FormData();
                 formData.append('id', productId);
 
-                customer_do_request({
-                    method: 'DELETE',
-                    url: '{{ route('product.delete', ['shopId' => $shop['id']]) }}',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        alert(response);
-                        location.reload();
+                delete_item(
+                    formData,
+                    '{{ route('product.delete', ['shopId' => $shop['id']]) }}',
+                    document.querySelector('meta[name="csrf-token"]').content,
+                    function (response) {
                     },
-                    error: function (error) {
-                        console.error('Error:', error);
+                    function (error) {
                     }
-                });
+                );
             });
         });
     </script>

@@ -112,22 +112,6 @@ class ShopController extends Controller {
         return view('shop.product-edit', $data);
     }
 
-    function productUpdateAvatar($shopId, Request $request) {
-        $itemId = $request->get('itemId');
-        $path = $request->file('file')->store($shopId, 'public');
-        $filename = basename($path);
-
-        if ($itemId) {
-            $mediaId = Shop::updateProductAvatar($shopId, $itemId, $filename, $path);
-        }
-
-        return response()->json(array(
-            'file_name' => $filename,
-            'url' => asset(Storage::url($path)),
-            'media_id' => $mediaId
-        ));
-    }
-
     function productUpdateImage($shopId, Request $request) {
         if (!$request->has('itemId')) {
             return response()->json(array(
@@ -139,7 +123,12 @@ class ShopController extends Controller {
 
         $path = $request->file('file')->store($shopId, 'public');
         $filename = basename($path);
-        $mediaId = Shop::saveProductImage($shopId, $itemId, $filename);
+
+        if ($request->has('mediaType') && $request->get('mediaType') === 'avatar') {
+            $mediaId = Shop::updateProductAvatar($shopId, $itemId, $filename, $path);
+        } else {
+            $mediaId = Shop::saveProductImage($shopId, $itemId, $filename);
+        }
 
         return response()->json(array(
             'file_name' => $filename,

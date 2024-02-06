@@ -43,15 +43,17 @@
                                                 <div class="row">
                                                     <div class="col-md-12">
                                                         <div class="d-flex overflow-auto">
-                                                            <div id="avatarImagePanel" >
-                                                                <div class="product-image-container" >
-                                                                    @if (isset($item['avatar']))
-                                                                        <img style="height: 150px;" src="
-                                                                            {{ asset('storage/' . $shopId . '/' . $item['avatar']) }}
-                                                                        " class="img-fluid blur-up lazyload" alt="">
-                                                                        <div class="product-close-icon" data-media-id="{{ $item['first_media_id'] }}" onclick="deleteAvatar(this)">✖</div>
-                                                                    @endif
-                                                                </div>
+                                                            <div class="product-image-container" >
+                                                                <ul id="avatarPanel" class="sortable-container">
+                                                                    <li class="sortable-item">
+                                                                        @if (isset($item['avatar']))
+                                                                            <img style="height: 150px;" src="
+                                                                                {{ asset('storage/' . $shopId . '/' . $item['avatar']) }}
+                                                                            " class="img-fluid blur-up lazyload" alt="">
+                                                                            <div class="product-close-icon deleteMedia" data-media-type="avatar" data-media-id="{{ $item['first_media_id'] }}">✖</div>
+                                                                        @endif
+                                                                    </li>
+                                                                </ul>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -69,7 +71,7 @@
                                                 @foreach($item['medias'] ?? [] as $media)
                                                     <li class="sortable-item">
                                                         <img src="{{ $media->url }}" alt="Image"  style="height: 150px;">
-                                                        <div class="delete-icon" data-media-id="{{ $media->id }}" onclick="deleteImage(this)">✖</div>
+                                                        <div class="delete-icon deleteMedia" data-media-type="image" data-media-id="{{ $media->id }}">✖</div>
                                                     </li>
                                                 @endforeach
                                             </ul>
@@ -85,12 +87,6 @@
         </div>
     </div>
     <script>
-        const sortableList = new Sortable(document.getElementById('imagePanel'), {
-            animation: 150,
-            onEnd: function (evt) {
-            }
-        });
-
         function updateImagePanel() {
             const additionalInput = document.getElementById('imagePanelAdditional');
             const mediasCount = document.querySelectorAll('#imagePanel .sortable-item').length;
@@ -100,53 +96,19 @@
             }
         }
 
-        function deleteImage(element) {
-            const mediaId = element.getAttribute('data-media-id');
+        updateImagePanel();
 
-            customer_do_request({
-                method: 'DELETE',
-                url: '/shops/{{ $shopId }}/product/delete-media',
-                data: {
-                    media_id : mediaId,
-                },
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                     console.log(element);
-                    const item = element.closest('.sortable-item');
-                    item.remove();
+        const sortableList = new Sortable(document.getElementById('imagePanel'), {
+            animation: 150,
+            onEnd: function (evt) {
+            }
+        });
 
-                    updateImagePanel();
-                },
-                error: function (error) {
-                    console.error('File error', error);
-                }
-            });
-        }
-
-        function deleteAvatar(element) {
-            const mediaId = element.getAttribute('data-media-id');
-
-            customer_do_request({
-                method: 'DELETE',
-                url: '/shops/{{ $shopId }}/product/delete-media',
-                data: {
-                    media_id : mediaId,
-                },
-                contentType: false,
-                processData: false,
-                success: function (response) {
-                    const imagePanel = document.getElementById('avatarImagePanel');
-                    imagePanel.innerHTML = '';
-
-                    const fileInput = document.getElementById('imagePanelAvatar');
-                    fileInput.disabled = false;
-                },
-                error: function (error) {
-                    console.error('File error', error);
-                }
-            });
-        }
+        const avatarSortableList = new Sortable(document.getElementById('avatarPanel'), {
+            animation: 150,
+            onEnd: function (evt) {
+            }
+        });
 
         function formatDecimal(input) {
             input.value = input.value.replace(/[^0-9.]/g, '');
@@ -164,74 +126,61 @@
         }
 
         $(document).ready(function () {
-            updateImagePanel();
+            $(document).on('click', '.deleteMedia', function (event) {
+                const element = $(event.target);
+                const formData = new FormData();
+                const mediaType =  this.getAttribute('data-media-type');
+                formData.append('media_id',  this.getAttribute('data-media-id'));
+                delete_media(
+                    formData,
+                    '{{ route('product.delete.media', ['shopId' => $shopId]) }}',
+                    document.querySelector('meta[name="csrf-token"]').content,
+                    function (response) {
+                        const item = event.currentTarget.closest('.sortable-item');
+                        console.log(item);
+                        item.remove();
 
-            $('#imagePanelAvatar').on('change', function () {
-                var formData = new FormData();
-                formData.append('file', $(this)[0].files[0]);
-
-                const item_id = $(this).data('item-id');
-                formData.append('itemId', item_id);
-
-                customer_do_request({
-                    method: 'POST',
-                    url: '{{ route('product.update.avatar', ['shopId' => $shopId]) }}',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        if (response.url) {
-                            const imagePanel = document.getElementById('avatarImagePanel');
-
-                            const imageContainer = document.createElement('div');
-                            imageContainer.classList.add('product-image-container');
-
-                            const imgElement = document.createElement('img');
-                            imgElement.src = response.url;
-                            imgElement.style.height = '150px';
-                            imgElement.classList.add('img-fluid', 'blur-up', 'lazyload');
-                            imgElement.alt = '';
-
-                            const closeIcon = document.createElement('div');
-                            closeIcon.classList.add('product-close-icon');
-                            closeIcon.setAttribute('data-media-id', response.media_id);
-                            closeIcon.textContent = '✖';
-                            closeIcon.onclick = function () {
-                                deleteAvatar(this);
-                            };
-
-                            imageContainer.appendChild(imgElement);
-                            imageContainer.appendChild(closeIcon);
-
-                            imagePanel.appendChild(imageContainer);
-
-                            const fileInput = document.getElementById('imagePanelAvatar');
-                            fileInput.disabled = true;
+                        if (mediaType === 'avatar') {
+                            updateAvatarSuccess()
                         } else {
-                            alert(message || "{{ __('shop.unknown_error') }}");
+                            updateImagePanel();
                         }
                     },
-                    error: function (error) {
+                    function (error) {
                         console.error('File error', error);
                     }
-                });
+                );
+
+                function updateAvatarSuccess() {
+                    const fileInput = document.getElementById('imagePanelAvatar');
+                    fileInput.disabled = false;
+                }
             });
-            $('#imagePanelAdditional').on('change', function () {
-                var formData = new FormData();
+
+            $('#imagePanelAdditional, #imagePanelAvatar').on('change', function (element) {
+                const  formData = new FormData();
                 formData.append('file', $(this)[0].files[0]);
+                formData.append('itemId', $(this).data('item-id'));
+                formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
 
-                const item_id = $(this).data('item-id');
-                formData.append('itemId', item_id);
+                const elementId = element.currentTarget.getAttribute('id');
 
-                customer_do_request({
-                    method: 'POST',
-                    url: '{{ route('product.update.image', ['shopId' => $shopId]) }}',
-                    data: formData,
-                    contentType: true,
-                    processData: true,
-                    success: function (response) {
+                if (elementId === 'imagePanelAvatar') {
+                    formData.append('mediaType', 'avatar');
+                }
+
+                update_media(
+                    formData,
+                    '{{ route('product.update.image', ['shopId' => $shopId]) }}',
+                    function (response) {
                         if (response.url) {
-                            const imagePanel = document.getElementById('imagePanel');
+                            let imagePanel = null;
+
+                            if (elementId === 'imagePanelAvatar') {
+                                imagePanel = document.getElementById('avatarPanel');
+                            } else if (elementId === 'imagePanelAdditional') {
+                                imagePanel = document.getElementById('imagePanel');
+                            }
 
                             const imageContainer = document.createElement('li');
                             imageContainer.classList.add('sortable-item');
@@ -242,25 +191,30 @@
                             imgElement.alt = 'Image';
 
                             const closeIcon = document.createElement('div');
-                            closeIcon.classList.add('delete-icon');
+                            closeIcon.classList.add('delete-icon', 'deleteMedia');
                             closeIcon.setAttribute('data-media-id', response.media_id);
+                            closeIcon.setAttribute('data-media-type', elementId === 'imagePanelAvatar' ? 'avatar' : 'image');
                             closeIcon.textContent = '✖';
-                            closeIcon.onclick = function () {
-                                deleteImage(this);
-                            };
 
                             imageContainer.appendChild(imgElement);
                             imageContainer.appendChild(closeIcon);
 
                             imagePanel.appendChild(imageContainer);
 
-                            updateImagePanel();
+                            if (elementId === 'imagePanelAvatar') {
+                                const fileInput = document.getElementById('imagePanelAvatar');
+                                fileInput.disabled = true;
+                            } else if (elementId === 'imagePanelAdditional') {
+                                updateImagePanel();
+                            }
+                        } else {
+                            alert(message || "{{ __('shop.unknown_error') }}");
                         }
                     },
-                    error: function (error) {
+                    function (error) {
                         console.error('File error', error);
                     }
-                });
+                );
             });
         });
     </script>
