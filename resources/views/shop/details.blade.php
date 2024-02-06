@@ -1,7 +1,12 @@
 <x-app-layout>
-    <div class="py-6">
+    <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+            <button class="btn btn-primary " id="openModalBtn" onclick="window.location='{{ route('shops.view') }}'">{{__('shop.back_to_shops')}}</button>
+        </div>
+    </div>
+    <div class="py-3">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <h3><strong> @if($shop['name']) {{ $shop['name'] }} @endif</strong> (@if ($shop['state']) {{__('states.' . $shop['state'])}} @endif)</h3>
                     <br>
@@ -10,7 +15,7 @@
             </div>
         </div>
     </div>
-    <div class="py-6">
+    <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">

@@ -16,4 +16,6 @@ return [
     'item_images' => "Images",
     'create_success' => "Shop created successfully",
     'input_shop_name' => "Input shop name",
+    'back_to_shops' => "Back to shops",
+    'back_to_products' => "Back to products",
 ];

@@ -1,5 +1,10 @@
 <x-app-layout>
-    <div class="container py-6">
+    <div class="py-3">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <button class="btn btn-primary " id="openModalBtn" onclick="window.location='{{ route('shop.details',  ['shopId' => $shopId]) }}'">{{__('shop.back_to_products')}}</button>
+        </div>
+    </div>
+    <div class="container py-3">
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
