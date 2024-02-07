@@ -104,7 +104,11 @@
                                             @foreach ($products as $product)
                                                 <div class="col mb-4">
                                                     <div class="card">
-                                                        <img src="https://placekitten.com/300/200" class="card-img-top" alt="{{ $product['title'] }}">
+                                                        @if (isset($product['avatar_url']))
+                                                            <img src="{{ $product['avatar_url'] }}" class="card-img-top" alt="{{ $product['title'] }}">
+                                                        @else
+                                                            <img src="https://placekitten.com/300/200" class="card-img-top" alt="{{ $product['title'] }}">
+                                                        @endif
                                                         <div class="card-body">
                                                             <h5 class="card-title">{{ $product['title'] }}</h5>
                                                             <p class="card-text">{{__('general.created_at')}} {{ $product['created_at'] }}</p>

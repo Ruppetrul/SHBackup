@@ -65,9 +65,18 @@ class Shop extends Model
     public static function fetchProducts($shop_id)
     {
         $products = [];
-        $success = self::executeWithShopConnection($shop_id, function () use (&$products) {
-            $products = DB::connection('shop_connection')->table('products')->get()->map(function ($item) {
-                return (array) $item;
+        $success = self::executeWithShopConnection($shop_id, function () use (&$products, $shop_id) {
+            $products = DB::connection('shop_connection')->table('products')->get()->map(function ($item) use ($shop_id) {
+                $product = (array) $item;
+
+                if ($product['first_media_id']) {
+                    $media = DB::connection('shop_connection')->table('medias')->where('id', $product['first_media_id'])->first();
+                    if ($media) {
+                        $product['avatar_url'] = asset(Storage::url('/')) . '/' . $shop_id . '/' . $media->filename; ;
+                    }
+                }
+
+                return $product;
             })->all();
         });
 
