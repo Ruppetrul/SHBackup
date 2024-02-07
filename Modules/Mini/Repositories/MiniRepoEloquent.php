@@ -56,10 +56,25 @@ class MiniRepoEloquent implements MiniRepoEloquentInterface
 
             $cart_detail_res = array();
 
+            $productIds = [];
             foreach ($cart_detail as $cd) {
-                $product_id = $cd->product_id;
-                $product_d = Product::query()->where('id', '=', $product_id)->with('avatar')->first();
-                $cart_detail_res[$product_id] = $product_d;
+                $productIds[] = $cd->product_id;
+            }
+
+            $products = Product::query()
+                ->whereIn('id', $productIds)
+                ->with('avatar')
+                ->get();
+
+            $cart_detail_res = [];
+            foreach ($products as $product) {
+                foreach ($cart_detail as $cd) {
+                    if ($cd->product_id === $product->id) {
+                        $product->quantity = $cd->quantity;
+                        $cart_detail_res[$product->id] = $product;
+                        break;
+                    }
+                }
             }
 
             $cart_detail = $cart_detail_res;

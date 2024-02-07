@@ -7,6 +7,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Mini\Models\Product;
+use Modules\Mini\Repositories\MiniRepoEloquent;
 use Modules\Mini\Services\CartService;
 
 class CartController extends Controller
@@ -37,36 +38,24 @@ class CartController extends Controller
      */
     public function add($shopId, $productId, Request $request)
     {
-        $cart_id = null;
+        list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
 
-        list ($cart_detail, $cart_total, $cart_id) = self::getCartData();
+        $data = [
+            'cart_id' => $cart_id,
+            'product_id' => $productId,
+            'quantity' => 1
+        ];
 
-        $prod = DB::table('cart_details')
-            ->where('cart_id', '=', $cart_id, 'AND')
-            ->where('product_id', '=', $productId)
-            ->first();
-        $cart_detail_id = $prod->id ?? null;
-
-        if ($cart_detail_id) {
-            DB::table('cart_details')->where('id', '=', $cart_detail_id)->update(
-                [
-                    'cart_id' => $cart_id,
-                    'product_id' => $productId,
-                    'count' => 1
-                ]
-            );
-        } else {
-            DB::table('cart_details')->insert(
-                [
-                    'cart_id' => $cart_id,
-                    'product_id' => $productId,
-                    'count' => 1
-                ]
-            );
-        }
+        DB::table('cart_details')->updateOrInsert(
+            [
+                'cart_id' => $cart_id,
+                'product_id' => $productId
+            ],
+            $data
+        );
 
         if ($request->ajax()) {
-            list ($cart_detail, $cart_total, $cart_id) = self::getCartData();
+            list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
             return response()->json([
                 'success' => true,
                 'total' => $cart_total,
@@ -80,49 +69,43 @@ class CartController extends Controller
      * Add product into session by product id & show success messag with redirect.
      *
      * @param $productId
-     * @param $count
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
+     * @param $quantity
      *
      * @return \Illuminate\Http\RedirectResponse
+     *@throws \Psr\Container\NotFoundExceptionInterface
+     *
+     * @throws \Psr\Container\ContainerExceptionInterface
      */
-    public function addWithCount($shopId, $productId, $count, Request $request)
+    public function addWithCount($shopId, $productId, $quantity, Request $request)
     {
         $cart_id = null;
-        list ($cart_detail, $cart_total, $cart_id) = self::getCartData();
+        list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
 
         $prod = DB::table('cart_details')
-            ->where('cart_id', '=', $cart_id, 'AND')
+            ->where('cart_id', '=', $cart_id)
             ->where('product_id', '=', $productId)
             ->first();
 
-        $cart_detail_id = $prod->id ?? null;
+        $cart_detail_id = $prod ? $prod->id : null;
 
-        if ($count > 0){
+        if ($quantity > 0) {
+            $data = [
+                'cart_id' => $cart_id,
+                'product_id' => $productId,
+                'quantity' => $quantity
+            ];
+
             if ($cart_detail_id) {
-                DB::table('cart_details')->where('id', '=', $cart_detail_id)->update(
-                    [
-                        'cart_id' => $cart_id,
-                        'product_id' => $productId,
-                        'count' => $count ?? 1
-                    ]
-                );
+                DB::table('cart_details')->where('id', '=', $cart_detail_id)->update($data);
             } else {
-                DB::table('cart_details')->insert(
-                    [
-                        'cart_id' => $cart_id,
-                        'product_id' => $productId,
-                        'count' => $count ?? 1
-                    ]
-                );
+                DB::table('cart_details')->insert($data);
             }
-        } else {
+        } elseif ($cart_detail_id) {
             DB::table('cart_details')->where('id', '=', $cart_detail_id)->delete();
         }
 
         if ($request->ajax()) {
-            list ($cart_detail, $cart_total, $cart_id) = self::getCartData();
+            list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
             return response()->json([
                 'success' => true,
                 'total' => $cart_total,
@@ -146,7 +129,7 @@ class CartController extends Controller
     {
         $cart_id = null;
 
-        list ($cart_detail, $cart_total, $cart_id) = self::getCartData();
+        list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
 
         $prod = DB::table('cart_details')
             ->where('cart_id', '=', $cart_id, 'AND')
@@ -174,7 +157,7 @@ class CartController extends Controller
     public function deleteAll()
     {
         $cart_id = null;
-        list ($cart_detail, $cart_total, $cart_id) = self::getCartData();
+        list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
         if ($cart_id) {
             DB::table('cart_details')
                 ->where('cart_id', '=', $cart_id)
@@ -186,69 +169,5 @@ class CartController extends Controller
         $params = array('title', 'All item deleted from cart successfully');
 
         return $params;
-    }
-
-    public static function getCartData() {
-        $cart_id = null;
-
-        $cart = DB::table('cart')
-            ->where('ip_address', '=', $_SERVER['REMOTE_ADDR'], 'AND')
-            ->where('status', '=', 0)
-            ->first();
-
-        if ($cart) {
-            $cart_id = $cart->id;
-        }
-
-        $cart_detail = array();
-        $cart_total = 0;
-
-        if ($cart_id === null) {
-            $cart_id = DB::table('cart')->insertGetId(
-                [
-                    'ip_address' => $_SERVER['REMOTE_ADDR'],
-                    'status' => 0,
-                ]
-            );
-        }
-
-        $cart_detail = array();
-        if ($cart_id) {
-            $cart_detail = DB::table('cart_details')
-                ->where('cart_id', '=', $cart_id, 'AND')
-                ->select()->get();
-
-            $cart_detail_res = array();
-
-            foreach ($cart_detail as $cd) {
-                $product_id = $cd->product_id;
-
-                $product_d = Product::query()->where('id', '=', $product_id)->first();
-
-                $cart_item = array(
-                    'id'       => $product_id,
-                    'title'    => $product_d->title,
-                    'quantity' => $cd->count,
-                    'price'    => $product_d->price,
-                    'sku'      => $product_d->sku,
-                    'slug'     => $product_d->slug,
-                );
-
-                if (isset($product_d->first_media)) {
-                    $cart_item['first_media'] = $product_d->first_media->thumb;
-                }
-                $product_d->quantity = $cd->count;
-                $cart_detail_res[$product_id] = $cart_item;
-            }
-
-            $cart_detail = $cart_detail_res;
-
-            $cart_total = 0;
-            foreach ($cart_detail as $product_c) {
-                $cart_total +=  $product_c['price'] * $product_c['quantity'];
-            }
-        }
-
-        return array($cart_detail, $cart_total, $cart_id);
     }
 }

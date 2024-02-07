@@ -20,7 +20,7 @@ class Product extends Model
         'slug',
         'sku',
         'price',
-        'count',
+        'quantity',
         'type',
         'short_description',
         'body',
