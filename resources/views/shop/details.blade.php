@@ -145,8 +145,8 @@
                         {{__('shop.delete_info')}}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" id="cancelDeleteShopBtn">{{__('shop.delete_confirm')}}</button>
-                        <button type="button" class="btn" id="confirmDeleteBtn">{{__('shop.delete_cancel')}}</button>
+                        <button type="button" class="btn" data-dismiss="modal" id="confirmDeleteBtn">{{__('shop.delete_confirm')}}</button>
+                        <button type="button" class="btn" id="cancelDeleteShopBtn">{{__('shop.delete_cancel')}}</button>
                     </div>
                 </div>
             </div>
