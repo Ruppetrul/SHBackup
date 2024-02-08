@@ -50,7 +50,7 @@
         function loadMoreProducts() {
             $.ajax({
                 type: "GET",
-                url: "/mini/ajax/products?page=" + (loadedPages + 1),
+                url: "/mini/{{ $shopId }}/ajax/products?page=" + (loadedPages + 1),
                 success: function(data) {
                     if (data.success) {
                         if (data.total) {

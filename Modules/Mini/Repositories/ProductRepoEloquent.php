@@ -22,4 +22,18 @@ class ProductRepoEloquent implements ProductRepoEloquentInterface
             ->where('id', (int) $id)
             ->firstOrFail();
     }
+
+    /**
+     * Get active products.
+     *
+     * @param int $pageSize
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getActive(int $pageSize)
+    {
+        return Product::query()
+            ->active()
+            ->latest()
+            ->paginate($pageSize);
+    }
 }

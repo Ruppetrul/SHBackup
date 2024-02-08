@@ -2,9 +2,11 @@
 
 namespace Modules\Mini\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
 use Modules\Mini\Repositories\MiniRepoEloquentInterface;
 use Modules\Mini\Repositories\ProductRepoEloquent;
+use Modules\Mini\Repositories\ProductRepoEloquentInterface;
 
 class MiniController extends Controller
 {
@@ -53,5 +55,38 @@ class MiniController extends Controller
         );
 
         return view('Mini::Pages.mini.details.index', $data);
+    }
+
+    public function getActiveProducts($shopId, ProductRepoEloquentInterface $productRepoEloquent, MiniRepoEloquentInterface $miniRepo)
+    {
+        list ($cart_detail) = $miniRepo::getCartData();
+
+        $pageSize = 10;
+
+        $result = [
+            'success'  => true,
+            'total'    => 0,
+            'view'     => null,
+            'has_more' => false
+        ];
+
+        try {
+            $activeProducts = $productRepoEloquent->getActive($pageSize);
+
+            $result['total'] = count($activeProducts);
+            if ($result['total']) {
+                $result['view'] = view('Mini::Pages.mini.section.products',
+                    [
+                        'products' => $activeProducts,
+                        'cart_detail' => $cart_detail,
+                        'shopId' => $shopId
+                    ])->render();
+                $result['has_more'] = ($result['total'] >= $pageSize);
+            }
+        } catch (Exception $exception) {
+            $result['success'] = false;
+        }
+
+        return new JsonResponse($result);
     }
 }
