@@ -105,10 +105,13 @@ class CartController extends Controller
         }
 
         if ($request->ajax()) {
-            list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
+            list($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
+            $line = $cart_detail[$productId] ?? null;
+
             return response()->json([
-                'success' => true,
+                'success' => (bool) $line,
                 'total' => $cart_total,
+                'new_line_total' => $line ? $line['price'] * $line['quantity'] : null,
             ]);
         }
 

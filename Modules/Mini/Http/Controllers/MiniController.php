@@ -26,6 +26,9 @@ class MiniController extends Controller
 
     public function prepareBaseData($shopId, MiniRepoEloquentInterface $miniRepo) : array{
         list ($cart_detail, $cart_total) = $miniRepo::getCartData();
+        foreach ($cart_detail as $line) {
+            $line['total'] = $line['price'] * $line['quantity'];
+        }
 
         return array(
             'shopId' => $shopId,
