@@ -4,7 +4,7 @@
 <section class="section-b-space shop-section mini-infinite-scroll-container">
     <div class="container-fluid-lg">
         <div class="input-group">
-            <input name="search" type="search" class="form-control" placeholder="Что ищем?" aria-label="Recipient's username" aria-describedby="button-addon2">
+            <input id="search_text" name="search" type="search" class="form-control" placeholder="Что ищем?" aria-label="Recipient's username" aria-describedby="button-addon2">
             <button class="btn" >
                 <svg class="w-6 h-6 text-gray-800 dark:text-white" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
                     <path d="M18.85 1.1A1.99 1.99 0 0 0 17.063 0H2.937a2 2 0 0 0-1.566 3.242L6.99 9.868 7 14a1 1 0 0 0 .4.8l4 3A1 1 0 0 0 13 17l.01-7.134 5.66-6.676a1.99 1.99 0 0 0 .18-2.09Z"/>
@@ -42,23 +42,50 @@
             }
         });
 
+        function clearProductsContainer() {
+            const container = document.querySelector('.product-list-section');
+            container.innerHTML = "";
+        }
+
         function appendProducts(data) {
             const container = document.querySelector('.product-list-section');
             container.insertAdjacentHTML('beforeend', data);
         }
 
-        function loadMoreProducts() {
+        function loadMoreProducts(changedFilters = false) {
+            if (changedFilters) {
+                loadedPages = 0;
+            }
+
+            let params = {
+                page: loadedPages + 1
+            };
+
+            const search_text = document.getElementById("search_text").value;
+            if (search_text) {
+                params.search = encodeURIComponent(search_text);
+            }
+
+            const queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+            let url = `/mini/{{ $shopId }}/ajax/products?${queryString}`;
+
             $.ajax({
                 type: "GET",
-                url: "/mini/{{ $shopId }}/ajax/products?page=" + (loadedPages + 1),
+                url: url,
                 success: function(data) {
                     if (data.success) {
                         if (data.total) {
+                            if (changedFilters) {
+                                clearProductsContainer();
+                            }
+
                             loadedPages++;
                             appendProducts(data.view);
                         }
                         if (!data.has_more) {
                             isEnd = true;
+                        } else {
+                            isEnd = false;
                         }
                         loading = false;
                     }
@@ -70,6 +97,15 @@
                 }
             });
         }
+
+        let searchInputDebounceTimer;
+        document.getElementById("search_text").addEventListener("input", function() {
+            clearTimeout(searchInputDebounceTimer);
+
+            searchInputDebounceTimer = setTimeout(async () => {
+                loadMoreProducts(true);
+            }, 300);
+        });
     });
 </script>
 @endsection

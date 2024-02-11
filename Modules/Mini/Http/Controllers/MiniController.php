@@ -3,6 +3,7 @@
 namespace Modules\Mini\Http\Controllers;
 
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Mini\Repositories\MiniRepoEloquentInterface;
 use Modules\Mini\Repositories\ProductRepoEloquent;
@@ -60,11 +61,20 @@ class MiniController extends Controller
         return view('Mini::Pages.mini.details.index', $data);
     }
 
-    public function getActiveProducts($shopId, ProductRepoEloquentInterface $productRepoEloquent, MiniRepoEloquentInterface $miniRepo)
-    {
+    /**
+     * @param string|int $shopId
+     * @param ProductRepoEloquentInterface $productRepoEloquent
+     * @param MiniRepoEloquentInterface $miniRepo
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getActiveProducts(
+        $shopId,
+        ProductRepoEloquentInterface $productRepoEloquent,
+        MiniRepoEloquentInterface $miniRepo,
+        Request $request
+    ) {
         list ($cart_detail) = $miniRepo::getCartData();
-
-        $pageSize = 10;
 
         $result = [
             'success'  => true,
@@ -74,7 +84,7 @@ class MiniController extends Controller
         ];
 
         try {
-            $activeProducts = $productRepoEloquent->getActive($pageSize);
+            $activeProducts = $productRepoEloquent->getActive($request);
 
             $result['total'] = count($activeProducts);
             if ($result['total']) {
@@ -84,7 +94,7 @@ class MiniController extends Controller
                         'cart_detail' => $cart_detail,
                         'shopId' => $shopId
                     ])->render();
-                $result['has_more'] = ($result['total'] >= $pageSize);
+                $result['has_more'] = ($result['total'] >= 10); //TODO get from ENV
             }
         } catch (Exception $exception) {
             $result['success'] = false;

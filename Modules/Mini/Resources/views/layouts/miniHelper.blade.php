@@ -115,4 +115,25 @@
         tg.MainButton.setText(title);
         tg.MainButton.show();
     }
+
+/* User actions */
+    function search(url, search, successCallback) {
+        $.ajax({
+            type: "GET",
+            url: url,
+            data: {
+                search: search,
+                "_token": document.querySelector('meta[name="csrf-token"]').content,
+            },
+            success: function (data) {
+                console.log("Success:", data);
+                if (successCallback && typeof successCallback === 'function') {
+                    successCallback(data);
+                }
+            },
+            error: function (data) {
+                console.log('Error:', data);
+            }
+        });
+    }
 </script>

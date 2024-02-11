@@ -29,11 +29,17 @@ class ProductRepoEloquent implements ProductRepoEloquentInterface
      * @param int $pageSize
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function getActive(int $pageSize)
+    public function getActive($filter)
     {
-        return Product::query()
-            ->active()
-            ->latest()
+        $pageSize = 10; //TODO move to env
+        $query = Product::query()->active();
+
+        if (isset($filter['search'])) {
+            $search = $filter['search'];
+            $query->where('title', 'like', "%$search%");
+        }
+
+        return $query->latest()
             ->paginate($pageSize);
     }
 }
