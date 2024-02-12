@@ -3,7 +3,7 @@
 @section('content')
     <section class="product-section">
         <div class="container-fluid-lg">
-            <div class="row">
+            <div class="row justify-content-center">
                 <div class="col-xxl-9 col-xl-8 col-lg-7 wow fadeInUp">
                     <div class="row g-4">
                         <div class="col-xl-6 wow fadeInUp">
@@ -42,22 +42,6 @@
                                     <h3 class="theme-color price">
                                         {{ $product->getPrice() }} ₽
                                     </h3>
-                                    <div class="product-rating custom-rate">
-                                        <ul class="rating">
-                                            @if ((int) $product->rates_count === 0)
-                                                <li>
-                                                    <i data-feather="star" class="fill"></i>
-                                                </li>
-                                            @else
-                                                @for ($i = 0; $i < $product->rates_count; $i++)
-                                                    <li>
-                                                        <i data-feather="star" class="fill"></i>
-                                                    </li>
-                                                @endfor
-                                            @endif
-                                        </ul>
-                                        <span>({{ $product->rates_count }}) Оценка пользователей</span>
-                                    </div>
                                 </div>
                                 <div class="procuct-contain">
                                     <p>
