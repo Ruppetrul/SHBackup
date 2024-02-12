@@ -19,7 +19,15 @@ class ShopMiddleware
     {
         $shopId = $request->shopId;
 
-        $instance = DB::table('shops')->where('id', $shopId)->first();
+        $instance = DB::table('shops')
+            ->where(function ($query) use ($shopId) {
+                if (is_numeric($shopId)) {
+                    $query->where('id', $shopId);
+                } else {
+                    $query->where('name', $shopId);
+                }
+            })
+            ->first();
 
         if ($instance) {
             Config::set('database.connections.shop', [

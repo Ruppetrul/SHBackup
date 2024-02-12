@@ -12,7 +12,7 @@ use Modules\Mini\Http\Controllers\MiniController;
 |
 */
 
-Route::prefix('/mini/{shopId}')->where(['shopId' => '[1-9][0-9]*'])->middleware('shop')->group(function () {
+Route::prefix('/mini/{shopId}')->middleware('shop')->group(function () {
     Route::get('/', [MiniController::class, 'mini'])->name('mini.mini');
     $controller = 'MiniController@';
     Route::get('/carts', ['uses' => $controller . 'carts'])->name('home.carts');
