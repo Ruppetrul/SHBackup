@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Drivers\Gd\Driver;
+use Intervention\Image\ImageManager;
 
 class ShopController extends Controller {
 
@@ -120,8 +122,25 @@ class ShopController extends Controller {
 
         $itemId = $request->get('itemId');
 
-        $path = $request->file('file')->store($shopId, 'public');
+        $file = $request->file('file');
+
+        $path = $file->store($shopId, 'public');
         $filename = basename($path);
+
+        $storagePath = storage_path('app/public/' . $path);
+
+        $manager = new ImageManager(
+            new Driver()
+        );
+        list($width, $height) = getimagesize($storagePath);
+
+        $scale = $width / 1500;
+
+        if ($width > 1500) {
+            $image = $manager->read($storagePath);
+            $image->resize(1500, $height / $scale);
+            $image->save();
+        }
 
         if ($request->has('mediaType') && $request->get('mediaType') === 'avatar') {
             $mediaId = Shop::updateProductAvatar($shopId, $itemId, $filename, $path);
