@@ -1,3 +1,4 @@
+<link rel="stylesheet" type="text/css" href="{{ asset('home/css/custom.css') }}">
 <x-app-layout>
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -105,9 +106,9 @@
                                                 <div class="col mb-4">
                                                     <div class="card">
                                                         @if (isset($product['avatar_url']))
-                                                            <img src="{{ $product['avatar_url'] }}" class="card-img-top" alt="{{ $product['title'] }}">
+                                                            <img src="{{ $product['avatar_url'] }}" class="item-card-img" alt="{{ $product['title'] }}">
                                                         @else
-                                                            <img src="https://placekitten.com/300/200" class="card-img-top" alt="{{ $product['title'] }}">
+                                                            <img src="https://placekitten.com/300/200" class="item-card-img" alt="{{ $product['title'] }}">
                                                         @endif
                                                         <div class="card-body">
                                                             <h5 class="card-title">{{ $product['title'] }}</h5>
