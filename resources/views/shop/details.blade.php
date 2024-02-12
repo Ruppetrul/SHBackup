@@ -51,25 +51,6 @@
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link"
-                                            id="profile-tab"
-                                            data-bs-toggle="tab"
-                                            data-bs-target="#profile"
-                                            type="button" role="tab"
-                                            aria-controls="profile"
-                                            aria-selected="false">{{__('shop.order_history')}}</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link"
-                                            id="contact-tab"
-                                            data-bs-toggle="tab"
-                                            data-bs-target="#contact"
-                                            type="button"
-                                            role="tab"
-                                            aria-controls="contact"
-                                            aria-selected="false">{{__('shop.analytics')}}</button>
-                                </li>
-                                <li class="nav-item" role="presentation">
-                                    <button class="nav-link"
                                             id="options-tab"
                                             data-bs-toggle="tab"
                                             data-bs-target="#options"
@@ -127,7 +108,6 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">...</div>
                                 <div class="tab-pane fade" id="options" role="tabpanel" aria-labelledby="options-tab">
                                     <div class="py-6">
                                         <button class="btn btn-danger btn-block" id="deleteShop">{{__('shop.delete')}}</button>
