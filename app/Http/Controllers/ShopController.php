@@ -98,7 +98,7 @@ class ShopController extends Controller {
             'price' => $price,
         );
         Shop::updateProduct($shopId, $itemId, $data);
-        return Redirect::route('shop.details', ['shopId' => $shopId]);
+        return Redirect::route('shop.details', ['shopIdOrName' => $shopId]);
     }
 
     function productEdit($shopId, $itemId = null) {

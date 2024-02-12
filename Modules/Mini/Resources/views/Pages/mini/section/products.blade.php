@@ -3,7 +3,7 @@
         <div class="product-box-3 h-100 wow fadeInUp">
             <div class="product-header">
                 <div class="product-image">
-                    <a href="{{ route('home.details', ['shopId' => $shopId, 'itemId' => $product->id]) }}">
+                    <a href="{{ route('home.details', ['shopIdOrName' => $shopName, 'itemId' => $product->id]) }}">
                         <img src="
                         @if (isset($product->avatar[0]->filename))
                             {{ asset('storage/' . $shopId . '/' . $product->avatar[0]->filename) }}
@@ -16,7 +16,7 @@
             </div>
             <div class="product-body">
                 <div class="product-detail">
-                    <a href="{{ route('home.details', ['shopId' => $shopId, 'itemId' => $product->id]) }}">
+                    <a href="{{ route('home.details', ['shopIdOrName' => $shopName, 'itemId' => $product->id]) }}">
                         <h5 class="name">{{ $product->title }}</h5>
                     </a>
                     <p class="text-content mt-1 mb-2 product-content">

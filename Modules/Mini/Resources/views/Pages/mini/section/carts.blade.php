@@ -31,7 +31,7 @@
                                     <div class="card">
                                         <div class="row no-gutters">
                                             <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 col-xl-2">
-                                                <a href="{{ route('home.details', ['shopId' => $shopId, 'itemId' => $line['id']]) }}">
+                                                <a href="{{ route('home.details', ['shopIdOrName' => $shopName, 'itemId' => $line['id']]) }}">
                                                     <img src="
                                                         @if (isset($line->avatar[0]->filename))
                                                             {{ asset('storage/' . $shopId . '/' . $line->avatar[0]->filename) }}
@@ -46,7 +46,7 @@
                                                     <div class="card-body d-flex flex-column">
                                                         <div class="h-50">
                                                             <h5 class="card-title">
-                                                                <a href="{{ route('home.details', ['shopId' => $shopId, 'itemId' => $line['id']]) }}">{{ $line['title'] }}</a>
+                                                                <a href="{{ route('home.details', ['shopIdOrName' => $shopName, 'itemId' => $line['id']]) }}">{{ $line['title'] }}</a>
                                                             </h5>
                                                         </div>
                                                         <div class="h-50">

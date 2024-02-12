@@ -17,14 +17,14 @@ class ShopMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $shopId = $request->shopId;
+        $shopIdOrName = $request->shopIdOrName;
 
         $instance = DB::table('shops')
-            ->where(function ($query) use ($shopId) {
-                if (is_numeric($shopId)) {
-                    $query->where('id', $shopId);
+            ->where(function ($query) use ($shopIdOrName) {
+                if (is_numeric($shopIdOrName)) {
+                    $query->where('id', $shopIdOrName);
                 } else {
-                    $query->where('name', $shopId);
+                    $query->where('name', $shopIdOrName);
                 }
             })
             ->first();
@@ -42,6 +42,9 @@ class ShopMiddleware
             ]);
 
             DB::setDefaultConnection('shop');
+
+            app()->instance('current_shop_id', $instance->id);
+            app()->instance('current_shop_name', $instance->name);
         }
 
         $response = $next($request);

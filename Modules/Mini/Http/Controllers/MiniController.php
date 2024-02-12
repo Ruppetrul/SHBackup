@@ -11,50 +11,52 @@ use Modules\Mini\Repositories\ProductRepoEloquentInterface;
 
 class MiniController extends Controller
 {
-    public function mini($shopId, MiniRepoEloquentInterface $miniRepo)
+    public function mini($shopIdOrName, MiniRepoEloquentInterface $miniRepo)
     {
         $data = array_merge(
-            $this->prepareBaseData($shopId, $miniRepo),
+            $this->prepareBaseData($miniRepo),
             [
-//                'categories' => Category::all(),
                 'categories' => array(),
-                'shopId' => $shopId,
             ],
         );
 
         return view('Mini::index', $data);
     }
 
-    public function prepareBaseData($shopId, MiniRepoEloquentInterface $miniRepo) : array{
+    public function prepareBaseData(MiniRepoEloquentInterface $miniRepo) : array{
+
+        $currentShopId = app('current_shop_id');
+        $currentShopName = app('current_shop_name');
+
         list ($cart_detail, $cart_total) = $miniRepo::getCartData();
         foreach ($cart_detail as $line) {
             $line['total'] = $line['price'] * $line['quantity'];
         }
 
         return array(
-            'shopId' => $shopId,
+            'shopId' => $currentShopId,
+            'shopName' => $currentShopName,
             'miniRepo' => $miniRepo,
             'cart_detail' => $cart_detail,
             'cart_total' => $cart_total,
-//            'cart_detail' => array(),
         );
     }
 
-    public function carts($shopId, MiniRepoEloquentInterface $miniRepo)
+    public function carts($shopIdOrName, MiniRepoEloquentInterface $miniRepo)
     {
-        return view('Mini::Pages.mini.carts.index', $this->prepareBaseData($shopId, $miniRepo));
+        return view('Mini::Pages.mini.carts.index', $this->prepareBaseData($miniRepo));
     }
-    public function order($shopId, MiniRepoEloquentInterface $miniRepo)
+    public function order($shopIdOrName, MiniRepoEloquentInterface $miniRepo)
     {
-        return view('Mini::Pages.mini.order.index', $this->prepareBaseData($shopId, $miniRepo));
+        return view('Mini::Pages.mini.order.index', $this->prepareBaseData($miniRepo));
     }
 
-    public function details($shopId, $itemId, ProductRepoEloquent $productRepoEloquent, MiniRepoEloquentInterface $miniRepo)
+    public function details($shopIdOrName, $itemId, ProductRepoEloquent $productRepoEloquent, MiniRepoEloquentInterface $miniRepo)
     {
         $product = $productRepoEloquent->findProductById($itemId);
 
         $data = array_merge(
-            $this->prepareBaseData($shopId, $miniRepo),
+            $this->prepareBaseData($miniRepo),
             ['product' => $product],
         );
 
@@ -62,14 +64,14 @@ class MiniController extends Controller
     }
 
     /**
-     * @param string|int $shopId
+     * @param string|int $shopIdOrName
      * @param ProductRepoEloquentInterface $productRepoEloquent
      * @param MiniRepoEloquentInterface $miniRepo
      * @param Request $request
      * @return JsonResponse
      */
     public function getActiveProducts(
-        $shopId,
+        $shopIdOrName,
         ProductRepoEloquentInterface $productRepoEloquent,
         MiniRepoEloquentInterface $miniRepo,
         Request $request
@@ -88,11 +90,12 @@ class MiniController extends Controller
 
             $result['total'] = count($activeProducts);
             if ($result['total']) {
+                $currentShopId = app('current_shop_id');
                 $result['view'] = view('Mini::Pages.mini.section.products',
                     [
                         'products' => $activeProducts,
                         'cart_detail' => $cart_detail,
-                        'shopId' => $shopId
+                        'shopId' => $currentShopId
                     ])->render();
                 $result['has_more'] = ($result['total'] >= 10); //TODO get from ENV
             }
