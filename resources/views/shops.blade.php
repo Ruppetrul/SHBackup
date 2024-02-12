@@ -21,20 +21,22 @@
                 </div>
             @endif
             @foreach ($shops as $shop)
-                <div class="col mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $shop['name'] }}</h5>
-                            <p class="card-text">{{__('general.created_at')}} {{ $shop['created_at'] }}</p>{{--/*->format('Y-m-d') */--}}
-                            <p class="card-text">{{__('general.status')}} {{__('states.' . $shop['state'])}}</p>
+                <div class="col mb-4 d-flex flex-column">
+                    <div class="card h-100">
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <h5 class="card-title align-self-start">{{ $shop['name'] }}</h5>
+                            <div>
+                                <p class="card-text">{{__('general.created_at')}} {{ $shop['created_at'] }}</p>
+                                <p class="card-text">{{__('general.status')}} {{__('states.' . $shop['state'])}}</p>
+                                <a href="{{ route('shop.details', ['shopId' => $shop['id']]) }}"
+                                   class="btn btn-primary btn-sm edit-button w-100"> <!-- Добавляем класс w-100 -->
+                                    {{__('general.management')}}
+                                </a>
+                            </div>
                         </div>
-                        <a href="{{ route('shop.details', ['shopId' => $shop['id']]) }}"
-                           class="btn btn-primary btn-sm edit-button">
-                            {{__('general.management')}}
-                        </a>
                     </div>
                 </div>
-            @endforeach
+                @endforeach
         </div>
     </div>
 </x-app-layout>
