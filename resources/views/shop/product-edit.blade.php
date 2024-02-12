@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <button class="btn btn-primary " id="openModalBtn" onclick="window.location='{{ route('shop.details',  ['shopIdOrName' => $shopIdOrName]) }}'">{{__('shop.back_to_products')}}</button>
+            <button class="btn btn-primary " id="openModalBtn" onclick="window.location='{{ route('shop.details',  ['shopId' => $shopId]) }}'">{{__('shop.back_to_products')}}</button>
         </div>
     </div>
     <div class="container py-3">
@@ -12,9 +12,9 @@
                     <div class="card-body">
                         <form method="POST"
                               @if(isset($item))
-                                  action="{{route('product.update',  ['shopIdOrName' => $shopIdOrName, 'itemId' => $item['id']] )}}"
+                                  action="{{route('product.update',  ['shopId' => $shopId, 'itemId' => $item['id']] )}}"
                               @else
-                                  action="{{route('product.create',  ['shopIdOrName' => $shopIdOrName])}}"
+                                  action="{{route('product.create',  ['shopId' => $shopId])}}"
                               @endif
                         >
                             @csrf
@@ -138,7 +138,7 @@
                 formData.append('media_id',  this.getAttribute('data-media-id'));
                 delete_media(
                     formData,
-                    '{{ route('product.delete.media', ['shopIdOrName' => $shopId]) }}',
+                    '{{ route('product.delete.media', ['shopId' => $shopId]) }}',
                     document.querySelector('meta[name="csrf-token"]').content,
                     function (response) {
                         const item = event.currentTarget.closest('.sortable-item');
@@ -176,7 +176,7 @@
 
                 update_media(
                     formData,
-                    '{{ route('product.update.image', ['shopIdOrName' => $shopId]) }}',
+                    '{{ route('product.update.image', ['shopId' => $shopId]) }}',
                     function (response) {
                         if (response.url) {
                             let imagePanel = null;
