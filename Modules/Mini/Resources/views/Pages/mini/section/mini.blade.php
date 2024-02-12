@@ -2,6 +2,16 @@
     <div class="show-button">
         <link href="https://use.fontawesome.com/releases/v5.0.8/css/all.css" rel="stylesheet">
         <div class="top-filter-menu">
+            <div class="dropdown">
+                <select class="custom-select" id="filterSelect">
+                    {{--TODO move to transltations--}}
+                    <option selected value="default">По умолчанию</option>
+                    <option value="new">Сначала новые</option>
+                    <option value="old">Сначала старые</option>
+                    <option value="expensive">Сначала дорогие</option>
+                    <option value="cheap">Сначала дешевые</option>
+                </select>
+            </div>
             <div class="grid-option">
                 <ul>
                     <li class="three-grid d-xxl-inline-block d-none">

@@ -5,11 +5,6 @@
     <div class="container-fluid-lg">
         <div class="input-group">
             <input id="search_text" name="search" type="search" class="form-control" placeholder="Что ищем?" aria-label="Recipient's username" aria-describedby="button-addon2">
-            <button class="btn" >
-                <svg class="w-6 h-6 text-gray-800 dark:text-white" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                    <path d="M18.85 1.1A1.99 1.99 0 0 0 17.063 0H2.937a2 2 0 0 0-1.566 3.242L6.99 9.868 7 14a1 1 0 0 0 .4.8l4 3A1 1 0 0 0 13 17l.01-7.134 5.66-6.676a1.99 1.99 0 0 0 .18-2.09Z"/>
-                  </svg>
-            </button>
         </div>
         <div class="row">
             @include('Mini::Pages.mini.section.mini', ['products' => $miniRepo->getLatestActiveProducts()])
@@ -22,6 +17,7 @@
         let loading = false;
         let isEnd = false;
         let isError = false;
+        let priorityFilter = false;
 
         function isScrollPastElementBottom(element) {
             var elementBottom = element.offset().top + element.height();
@@ -66,6 +62,10 @@
                 params.search = encodeURIComponent(search_text);
             }
 
+            if (priorityFilter) {
+                params.priority_filter = encodeURIComponent(priorityFilter);
+            }
+
             const queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
             let url = `/mini/{{ $shopId }}/ajax/products?${queryString}`;
 
@@ -105,6 +105,13 @@
             searchInputDebounceTimer = setTimeout(async () => {
                 loadMoreProducts(true);
             }, 300);
+        });
+
+        let selectElement = document.getElementById("filterSelect");
+
+        selectElement.addEventListener("change", function() {
+            priorityFilter = selectElement.value;
+            loadMoreProducts(true);
         });
     });
 </script>
