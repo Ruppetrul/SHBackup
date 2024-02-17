@@ -33,6 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/product-create', [ShopController::class, 'productEdit'])->name('product.create.view');
             Route::get('/product-edit/{itemId}', [ShopController::class, 'productEdit'])->name('product.edit.view');
             Route::delete('/delete', [ShopController::class, 'shopDelete'])->name('shop.delete');
+            Route::post('/add-telegram-token', [ShopController::class, 'addTelegramToken'])->name('shop.add_telegram_token');
 
             Route::prefix('/product')->group(function () {
                 Route::post('/create', [ShopController::class, 'productCreate'])->name('product.create');

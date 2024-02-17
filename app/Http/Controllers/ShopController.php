@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Shop;
+use App\Services\TelegramService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -182,5 +183,37 @@ class ShopController extends Controller {
                 'message' => 'Unknown error'
             ), 400);
         }
+    }
+
+    /**
+     * @param string|int $shop_id
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function addTelegramToken($shop_id, Request $request) {
+        $new_telegram_token = $request->get('telegram_token');
+
+        if (empty($new_telegram_token)) {
+            return response()->json(array(
+                'message' => 'Telegram token is empty'
+            ), 400);
+        }
+        $telegramService = new TelegramService($new_telegram_token);
+
+        $result = $telegramService->addLink($shop_id);
+
+        $return = 'false';
+        if ($result['ok'] && $result['description'] == 'Webhook is already set') {
+            $shop = Shop::find($shop_id);
+            $shop->is_attachment_tg = 1;
+
+            $getMeResult = $telegramService->updateGetMe();
+            $shop['tg_name'] = $getMeResult['result']['username'];
+            $shop->save();
+            $return = true;
+        }
+        return response()->json(array(
+            'result' => $return
+        ));
     }
 }

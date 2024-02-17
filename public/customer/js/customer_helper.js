@@ -137,4 +137,26 @@ function delete_item(formData, url, token, successCallback, errorCallback) {
         }
     });
 }
+
+function add_telegram_token(telegram_token, token, url, successCallback, errorCallback) {
+    const formData = new FormData();
+    formData.append('telegram_token', telegram_token);
+    customer_do_request({
+        method: 'POST',
+        url: url,
+        headers: {
+            'X-CSRF-TOKEN': token,
+        },
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            successCallback(response);
+        },
+        error: function (error) {
+            errorCallback(error);
+        }
+    });
+}
+
 console.log('include');

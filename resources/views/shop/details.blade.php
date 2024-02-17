@@ -14,6 +14,28 @@
             </div>
         </div>
     @else
+    <div class="py-3">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    @if ($shop->is_attachment_tg !== 1)
+                        <h3><strong>Ваш магазин ещё не привязан к телеграм боту.</strong></h3>
+                    @elseif ($shop->tg_name != '')
+                        Привязан к Telegram боту <span>@</span>{{$shop->tg_name}}
+                    @endif
+
+                    <br><br>
+                    <button id="showAddTelegramButton" class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                        @if ($shop->is_attachment_tg !== 1)
+                            Привязать к боту
+                        @else
+                            Сменить бота
+                        @endif
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
         <div class="py-3">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -136,9 +158,56 @@
                 </div>
             </div>
         </div>
+        <!-- Модальное окно -->
+        <div class="modal fade" id="addTelegramModal" tabindex="-1" role="dialog" aria-labelledby="createShopModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createShopModalLabel">Подключить магазин к Telegram</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>Создайте бота в Telegram с помощью Telegram Father.</p>
+                        <p>Скопируйте ваш токен и вставте сюда.</p>
+                        <br>
+                        <label for="telegram_token">Telegram token:</label>
+                        <input type="text" id="telegram_token" class="form-control" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" id="cancelAddTelegramBtn" data-dismiss="modal">Отмена</button>
+                        <button type="button" class="btn" id="addTelegramBtn">Подключить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     @endif
     <script>
         $(document).ready(function() {
+            $('#showAddTelegramButton, #cancelAddTelegramBtn').click(function() {
+                $('#addTelegramModal').modal('toggle');
+            });
+
+            $('#addTelegramBtn').click(function() {
+                const telegram_token = $('#telegram_token').val();
+                if (telegram_token === '') {
+                    alert("{{ __('shop.input_telegram_token') }}");
+                    return false;
+                }
+
+                const csrf_token = document.querySelector('meta[name="csrf-token"]').content;
+
+                console.log({{ $shop['id'] }});
+                add_telegram_token(
+                    telegram_token,
+                    csrf_token,
+                    "{{ route('shop.add_telegram_token', ['shopId' => $shop['id']]) }}",
+                    function (response) {
+                        $('#addTelegramModal').modal('toggle');
+                    },
+                    function (error) {
+                    }
+                );
+            });
+
             $('.deleteButton').on('click', function() {
                 const productId = $(this).data('product-id');
 

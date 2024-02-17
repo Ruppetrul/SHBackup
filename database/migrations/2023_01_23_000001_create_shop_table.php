@@ -19,6 +19,8 @@ return new class extends Migration
             $table->enum('payment_status', ['active', 'inactive', 'trial'])->default('active');
             $table->enum('state', ['not_created', 'created', 'deleted'])->default('not_created');
             $table->timestamp('last_used_at')->nullable();
+            $table->tinyInteger('is_attachment_tg')->default(0);
+            $table->string('tg_name', 100)->default(0);
             $table->timestamps();
 
             $table->foreign('owner_id')->references('id')->on('users');

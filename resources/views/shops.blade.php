@@ -51,6 +51,8 @@
             <div class="modal-body">
                 <label for="shop_name">Название магазина:</label>
                 <input type="text" id="shop_name" class="form-control" />
+                <label for="shop_name">Telegram token:</label>
+                <input type="text" id="shop_name" class="form-control" />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn" id="cancelShopBtn" data-dismiss="modal">Отмена</button>
