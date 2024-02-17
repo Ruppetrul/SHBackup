@@ -6,7 +6,7 @@
     </div>
     <div class="container py-3">
         <div class="row justify-content-center">
-            <div class="col-md-8">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="card">
                     <div class="card-header">{{ isset($item) ? __('shop.edit_item') : __('shop.new_item') }}</div>
                     <div class="card-body">

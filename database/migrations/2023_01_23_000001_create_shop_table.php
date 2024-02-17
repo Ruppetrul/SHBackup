@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('state', ['not_created', 'created', 'deleted'])->default('not_created');
             $table->timestamp('last_used_at')->nullable();
             $table->tinyInteger('is_attachment_tg')->default(0);
-            $table->string('tg_name', 100)->default(0);
+            $table->string('tg_name', 100)->default('')->nullable();
             $table->timestamps();
 
             $table->foreign('owner_id')->references('id')->on('users');
