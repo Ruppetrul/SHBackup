@@ -17,7 +17,7 @@ use Modules\Mini\Http\Controllers\MiniController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/login');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
