@@ -89,16 +89,16 @@ class MiniController extends Controller
             $activeProducts = $productRepoEloquent->getActive($request);
 
             $result['total'] = count($activeProducts);
-            if ($result['total']) {
-                $currentShopId = app('current_shop_id');
-                $result['view'] = view('Mini::Pages.mini.section.products',
-                    [
-                        'products' => $activeProducts,
-                        'cart_detail' => $cart_detail,
-                        'shopId' => $currentShopId
-                    ])->render();
-                $result['has_more'] = ($result['total'] >= 10); //TODO get from ENV
-            }
+            $currentShopId = app('current_shop_id');
+            $currentShopName = app('current_shop_name');
+            $result['view'] = view('Mini::Pages.mini.section.products',
+                [
+                    'products' => $activeProducts,
+                    'cart_detail' => $cart_detail,
+                    'shopId' => $currentShopId,
+                    'shopName' => $currentShopName,
+                ])->render();
+            $result['has_more'] = ($result['total'] >= 10); //TODO get from ENV
         } catch (Exception $exception) {
             $result['success'] = false;
         }

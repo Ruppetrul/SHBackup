@@ -75,13 +75,11 @@
                 success: function(data) {
                     if (data.success) {
                         if (data.total) {
-                            if (changedFilters) {
-                                clearProductsContainer();
-                            }
-
                             loadedPages++;
-                            appendProducts(data.view);
                         }
+                        clearProductsContainer();
+                        appendProducts(data.view);
+
                         if (!data.has_more) {
                             isEnd = true;
                         } else {

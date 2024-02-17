@@ -1,3 +1,9 @@
+@if (count($products) == 0)
+    <div class="container-fluid">
+        <h2>Измените параметры поиска или обратитесь к автору магазина.</h2>
+    </div>
+@endif
+
 @foreach ($products as $product)
     <div>
         <div class="product-box-3 h-100 wow fadeInUp">
