@@ -9,6 +9,7 @@ For development
 0) First, you need to deploy project. See 'Install'.
 1) php artisan migrate
 2) php artisan db:seed --class=DevSeeder
+3) `npm run build` or `npm run dev`
 
 Login user: admin 
 password: adminadmin
