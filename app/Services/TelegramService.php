@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Illuminate\Support\Facades\Log;
+
 class TelegramService
 {
     protected $token;
@@ -32,7 +34,12 @@ class TelegramService
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
         $result = curl_exec($ch);
         curl_close($ch);
-
+        Log::ingo(
+            'Shop: ' . $shop_id . PHP_EOL
+            . ' url: ' . $url . PHP_EOL
+            . ' data: ' . json_encode($data) . PHP_EOL
+            . ' result: ' . $result
+        );
         $result = json_decode($result, true);
         return $result;
     }
