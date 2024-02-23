@@ -64,13 +64,13 @@ class TelegramService
         $url = 'https://api.telegram.org/bot'. $this->token. '/setChatMenuButton';
 
         $buttonData = [
-            'menu_button' => [
+            'menu_button' => json_encode([
                 'type' => 'web_app',
                 'text' => 'Каталог',
                 'web_app' => [
                     'url' => url('/') . '/mini/' . $shopName
                 ],
-            ]
+            ])
         ];
 
         $ch = curl_init();
