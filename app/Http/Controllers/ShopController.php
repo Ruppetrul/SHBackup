@@ -210,11 +210,12 @@ class ShopController extends Controller {
 
             $getMeResult = $telegramService->updateGetMe();
             $shop['tg_name'] = $getMeResult['result']['username'];
+
+            $result = $telegramService->setButton($shop_id);
+            if ($result['ok']) {
+                $shop['is_attachment_tg'] = 1;
+            }
             $shop->save();
-
-            $shopName = $shop->name;
-            $telegramService->setButton($shop_id);
-
             $return = true;
         }
         return response()->json(array(
