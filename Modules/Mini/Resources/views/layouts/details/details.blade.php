@@ -8,7 +8,7 @@
         <script>
             tg_init();
 
-            tg_init_main_button('/mini/{{ $shopid }}/carts', 'Оформить заказ');
+            tg_init_main_button('/mini/{{ $shopId }}/carts', 'Оформить заказ');
             tg_init_back_button();
         </script>
         <title>{{ config('app.name') }} - {{ env('APP_SHOP_DESCRIPTION') }}</title>

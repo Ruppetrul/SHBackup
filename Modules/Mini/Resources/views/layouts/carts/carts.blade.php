@@ -8,7 +8,7 @@
         <script>
             tg_init();
 
-            tg_init_main_button('/mini/{{ $shopid }}/order', 'Оформить заказ');
+            tg_init_main_button('/mini/{{ $shopId }}/order', 'Оформить заказ');
             tg_init_back_button();
 
             tg_update_main_button_total({{ $cart_total }});

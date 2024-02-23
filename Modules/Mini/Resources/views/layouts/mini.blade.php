@@ -7,7 +7,7 @@
         @include('Mini::layouts.miniHelper')
         <script>
             tg_init();
-            tg_init_main_button('/mini/{{ $shopid }}/carts', 'Корзина');
+            tg_init_main_button('/mini/{{ $shopId }}/carts', 'Корзина');
             tg_back_button_hide();
         </script>
 
