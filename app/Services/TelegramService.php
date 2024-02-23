@@ -58,4 +58,35 @@ class TelegramService
         $result = json_decode($result, true);
         return $result;
     }
+
+    public function setButton($shopName)
+    {
+        $url = 'https://api.telegram.org/bot'. $this->token. '/setChatMenuButton';
+
+        $buttonData = [
+            'type' => 'web_app',
+            'text' => 'Каталог',
+            'web_app' => array(
+                'url' => url('/') . 'mini/' . $shopName
+            ),
+        ];
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($buttonData));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        Log::info(
+            'TG::setButton Shop: ' . $shopName . PHP_EOL
+            . ' url: ' . $url . PHP_EOL
+            . ' data: ' . json_encode($buttonData) . PHP_EOL
+            . ' result: ' . $result
+        );
+        $result = json_decode($result, true);
+        return $result;
+    }
 }

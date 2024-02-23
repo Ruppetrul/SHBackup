@@ -203,13 +203,18 @@ class ShopController extends Controller {
         $result = $telegramService->addLink($shop_id);
 
         $return = 'false';
-        if ($result['ok'] && $result['description'] == 'Webhook is already set') {
+        // 'Webhook is already set' or 'Webhook was set'
+        if ($result['ok'] && in_array($result['description'], array('Webhook was set', 'Webhook was set'))) {
             $shop = Shop::find($shop_id);
             $shop->is_attachment_tg = 1;
 
             $getMeResult = $telegramService->updateGetMe();
             $shop['tg_name'] = $getMeResult['result']['username'];
             $shop->save();
+
+            $shopName = $shop->name;
+            $telegramService->setButton($shopName);
+
             $return = true;
         }
         return response()->json(array(
