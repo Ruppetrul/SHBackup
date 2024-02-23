@@ -213,7 +213,7 @@ class ShopController extends Controller {
             $shop->save();
 
             $shopName = $shop->name;
-            $telegramService->setButton($shopName);
+            $telegramService->setButton($shop_id);
 
             $return = true;
         }

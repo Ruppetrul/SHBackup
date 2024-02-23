@@ -59,7 +59,7 @@ class TelegramService
         return $result;
     }
 
-    public function setButton($shopName)
+    public function setButton($shop_id)
     {
         $url = 'https://api.telegram.org/bot'. $this->token. '/setChatMenuButton';
 
@@ -68,7 +68,7 @@ class TelegramService
                 'type' => 'web_app',
                 'text' => 'Каталог',
                 'web_app' => [
-                    'url' => url('/') . '/mini/' . $shopName
+                    'url' => url('/') . '/mini/' . $shop_id
                 ],
             ])
         ];
