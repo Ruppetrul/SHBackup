@@ -67,7 +67,7 @@ class TelegramService
             'type' => 'web_app',
             'text' => 'Каталог',
             'web_app' => array(
-                'url' => url('/') . 'mini/' . $shopName
+                'url' => url('/') . '/mini/' . $shopName
             ),
         ];
 
