@@ -29,8 +29,13 @@
                             <div class="cart-table mini-cart-table">
                                 <div class="table-responsive-xl">
                                     <div class="card">
-                                        <div class="row no-gutters">
-                                            <div class="col-xs-2 col-sm-3 col-md-3 col-lg-2 col-xl-2">
+                                        <div class="row" style="
+                                                height: 100%;
+                                                width: 100%;
+                                                overflow: hidden;
+                                            ">
+
+                                            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 col-xl-2">
                                                 <a href="{{ route('home.details', ['shopIdOrName' => $shopName, 'itemId' => $line['id']]) }}">
                                                     <img src="
                                                         @if (isset($line->avatar[0]->filename))
@@ -41,58 +46,44 @@
                                                     " class="card-img" alt="product image">
                                                 </a>
                                             </div>
-                                            <div class="col-xs-10 col-sm-9 col-md-9 col-lg-10">
-                                                <div class="card h-100">
-                                                    <div class="card-body d-flex flex-column">
-                                                        <div class="h-50">
-                                                            <h5 class="card-title">
-                                                                <a href="{{ route('home.details', ['shopIdOrName' => $shopName, 'itemId' => $line['id']]) }}">{{ $line['title'] }}</a>
-                                                            </h5>
-                                                        </div>
-                                                        <div class="h-50">
-                                                            <div class="row">
-                                                                <div class="col-md-3">
-                                                                    <div class="input-group">
-                                                                        <button
-                                                                            class="btn btn-outline-secondary cart-qty-left-minus"
-                                                                            type="button"
-                                                                            data-type="minus"
-                                                                            data-product="{{ $line['id'] }}">
-                                                                            <i class="fa fa-minus"
-                                                                               aria-hidden="true"></i>
-                                                                        </button>
-                                                                        <input id="quantity_{{ $line['id'] }}"
-                                                                               name=""
-                                                                               class="form-control input-number qty-input"
-                                                                               type="text"
-                                                                               value="{{ $line['quantity'] }}"
-                                                                               readonly>
-                                                                        <button
-                                                                            class="btn btn-outline-secondary cart-qty-right-plus"
-                                                                            type="button" data-type="plus"
-                                                                            data-product="{{ $line['id'] }}">
-                                                                            <i class="fa fa-plus"
-                                                                               aria-hidden="true"></i>
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-md-7"></div>
-                                                                <div class="col-md-2">
-                                                                    <div class="ml-auto mt-3">
-                                                                        <h6 class="card-subtitle mb-2 text-muted">
-                                                                            Всего</h6>
-                                                                        <div class="input-group">
-                                                                            <input name="" id="total_{{ $line['id'] }}"
-                                                                                   class=" form-control input-number qty-input"
-                                                                                   type="text"
-                                                                                   value="{{ $line['total'] }}"
-                                                                                   readonly>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10" style="padding: 20px;">
+                                                <h2 class="card-title">
+                                                    <a href="{{ route('home.details', ['shopIdOrName' => $shopName, 'itemId' => $line['id']]) }}">{{ $line['title'] }}</a>
+                                                </h2>
+                                                <br>
+                                                <div class="d-flex">
+                                                    <div class="input-group">
+                                                        <button
+                                                            class="btn btn-outline-secondary cart-qty-left-minus"
+                                                            type="button"
+                                                            data-type="minus"
+                                                            data-product="{{ $line['id'] }}">
+                                                            <i class="fa fa-minus"
+                                                               aria-hidden="true"></i>
+                                                        </button>
+                                                        <input id="quantity_{{ $line['id'] }}"
+                                                               name=""
+                                                               class=""
+                                                               type="text"
+                                                               value="{{ $line['quantity'] }}"
+                                                               readonly
+                                                               style="width: 10vw;
+                                                               min-width: 20px;">
+                                                        <button
+                                                            class="btn btn-outline-secondary cart-qty-right-plus"
+                                                            type="button" data-type="plus"
+                                                            data-product="{{ $line['id'] }}">
+                                                            <i class="fa fa-plus"
+                                                               aria-hidden="true"></i>
+                                                        </button>
                                                     </div>
+                                                    <input id="total_{{ $line['id'] }}"
+                                                           type="text"
+                                                           class=""
+                                                           readonly
+                                                           style="width: 10vw;
+                                                               min-width: 20px;"
+                                                           value="{{ $line['total'] }}">
                                                 </div>
                                             </div>
                                         </div>
