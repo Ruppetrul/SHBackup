@@ -83,7 +83,7 @@ class TelegramService
         $result = curl_exec($ch);
         curl_close($ch);
         Log::info(
-            'TG::setButton Shop: ' . $shopName . PHP_EOL
+            'TG::setButton Shop: ' . $shop_id . PHP_EOL
             . ' url: ' . $url . PHP_EOL
             . ' data: ' . json_encode($buttonData) . PHP_EOL
             . ' result: ' . $result
