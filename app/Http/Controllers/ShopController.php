@@ -204,7 +204,7 @@ class ShopController extends Controller {
 
         $return = 'false';
         // 'Webhook is already set' or 'Webhook was set'
-        if ($result['ok'] && in_array($result['description'], array('Webhook was set', 'Webhook was set'))) {
+        if ($result['ok'] && in_array($result['description'], array('Webhook is already set', 'Webhook was set'))) {
             $shop = Shop::find($shop_id);
             $shop->is_attachment_tg = 1;
 
