@@ -49,7 +49,6 @@ class Shop extends Model
 
         self::performShopQuery($destinationDatabase,  function () {
             $dumpPath = Storage::path('dump/' . env('DB_DATABASE_DEFAULT') . '.sql');
-            $dumpPath = str_replace('/', '\\', $dumpPath);
 
             if (!file_exists($dumpPath)) {
                 //TODO handle
