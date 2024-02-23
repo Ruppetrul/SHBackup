@@ -81,8 +81,8 @@
                                                            type="text"
                                                            class=""
                                                            readonly
-                                                           style="width: 10vw;
-                                                               min-width: 20px;"
+                                                           style="width: 20vw;
+                                                               min-width: 80px;"
                                                            value="{{ $line['total'] }}">
                                                 </div>
                                             </div>
