@@ -2,7 +2,9 @@ Install
 0) php81 composer.phar install --no-dev --optimize-autoloader
 1) configure .env
 2) php artisan storage:link
-3) php artisan mini:prepareDefaultDB
+3) configure DB_DATABASE_DEFAULT in ENV.
+4) create storage/app/dump
+5) php artisan mini:prepareDefaultDB
 
 For development
 

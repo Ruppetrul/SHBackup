@@ -63,7 +63,7 @@ class PrepareDefaultDB extends Command
 
     private function dump()
     {
-        $dumpPath = storage_path("app/dump/default_db.sql");
+        $dumpPath = storage_path("app/dump/" . env('DB_DATABASE_DEFAULT') . ".sql");
 
         $command =
             "mysqldump --user=".config('database.connections.mysql.username')
