@@ -48,7 +48,7 @@ class MiniServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    private string $viewPath = '/../Resources/Views/';
+    private string $viewPath = '/../Resources/views/';
 
     /**
      * Get middleware route.
