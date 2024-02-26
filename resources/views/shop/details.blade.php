@@ -17,7 +17,7 @@
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
+                <div class="p-6 text-gray-900 dark:text-gray-600">
                     @if ($shop->is_attachment_tg !== 1)
                         <h3><strong>Ваш магазин ещё не привязан к телеграм боту.</strong></h3>
                     @elseif ($shop->tg_name != '')
@@ -39,7 +39,7 @@
         <div class="py-3">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <div class="p-6 text-gray-900 dark:text-gray-600">
                         <h3><strong> @if($shop['name']) {{ $shop['name'] }} @endif</strong> (@if ($shop['state']) {{__('states.' . $shop['state'])}} @endif)</h3>
                         <br>
                         <p>{{__('general.created_at')}} @if($shop['created_at']) {{$shop['created_at']->format('Y-m-d')}} @endif</p>
@@ -50,7 +50,7 @@
         <div class="py-3">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-100">
+                    <div class="p-6 text-gray-900 dark:text-gray-600">
                         @if (!$success)
                             <div class="p-6 col d-flex align-items-center justify-content-center">
                                 <div class="card text-center p-4">

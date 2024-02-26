@@ -31,10 +31,10 @@
                         </div>
                     </div>
                     <div class="col flex flex-col">
-                        <h style="font-size: 20pt;">
+                        <h style="font-size: 20pt;" class="ms-2 text-sm text-gray-600 dark:text-gray-400">
                             {{ __('auth.simply_header') }}
                             </h>
-                        <p style="font-size: 16pt;">
+                        <p style="font-size: 16pt;" class="ms-2 text-sm text-gray-600 dark:text-gray-400">
                             {{ __('auth.simply_text') }}
                         </p>
                     </div>
