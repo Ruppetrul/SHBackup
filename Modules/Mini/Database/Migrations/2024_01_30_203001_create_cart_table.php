@@ -19,6 +19,7 @@ return new class() extends Migration {
             $table->string('ip_address')->nullable();
             $table->integer('user_id')->nullable();
             $table->integer('status');
+            $table->integer('order_id');
             $table->timestamps();
         });
     }

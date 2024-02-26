@@ -18,6 +18,7 @@ Route::prefix('/mini/{shopIdOrName}')->middleware('shop')->group(function () {
     Route::get('/carts', ['uses' => $controller . 'carts'])->name('home.carts');
     Route::get('/order', ['uses' => $controller . 'order'])->name('home.order');
     Route::get('/{itemId}/detail', ['uses' => $controller . 'details'])->name('home.details');
+    Route::get('/create-order', ['uses' => 'CartController@createOrder'])->name('home.create.order');
 
     Route::group(['prefix' => 'ajax'], function () use ($controller) {
         Route::get('/products', ['uses' => $controller . 'getActiveProducts'])->name('products.active');

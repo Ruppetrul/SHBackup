@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Modules\Mini\Models\Order;
 use Modules\Mini\Models\Product;
 use Modules\Mini\Repositories\MiniRepoEloquent;
 use Modules\Mini\Services\CartService;
@@ -172,5 +173,36 @@ class CartController extends Controller
         $params = array('title', 'All item deleted from cart successfully');
 
         return $params;
+    }
+
+
+    public function createOrder() {
+        list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
+
+        if ($cart_total == 0) {
+            return response()->json([
+              'success' => false,
+              'message' => 'Cart is empty'
+            ]);
+        }
+
+        $order = Order::create([
+            'total' => $cart_total,
+            'cart_id' => $cart_id,
+        ]);
+
+        DB::table('cart')
+            ->where('id', $cart_id)
+            ->update([
+                'status' => '1',
+                'order_id' => $order->id
+            ]);
+
+        //TODO notify user and client...
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Order created successfully'
+        ]);
     }
 }
