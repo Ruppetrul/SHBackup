@@ -39,13 +39,13 @@
     <div id="mini_content" class="row g-sm-4 g-3 row-cols-xxl-4 row-cols-xl-3 row-cols-lg-2 row-cols-md-3 row-cols-2 product-list-section">
         @include('Mini::Pages.mini.section.products', ['products' => $products])
     </div>
-    <div class="col-xxl-12 fixed-margin">
-        <div class="fixed-result">
-            <div class="summery-box">
-                <script>
-                    check_and_init_web_main_button('/mini/{{ $shopId }}/carts', 'Корзина');
-                </script>
-            </div>
+</div>
+<div class="col-xxl-12 fixed-margin">
+    <div class="fixed-result">
+        <div class="summery-box">
+            <script>
+                check_and_init_web_main_button('/mini/{{ $shopId }}/carts', 'Корзина');
+            </script>
         </div>
     </div>
 </div>
