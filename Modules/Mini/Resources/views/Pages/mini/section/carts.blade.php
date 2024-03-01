@@ -96,6 +96,15 @@
                     @endif
                 </div>
             </div>
+            <div class="col-xxl-12 fixed-margin">
+                <div class="fixed-result">
+                    <div class="summery-box">
+                        <script>
+                            check_and_init_web_main_button('/mini/{{ $shopId }}/order', 'Оформить заказ');
+                        </script>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 @endsection

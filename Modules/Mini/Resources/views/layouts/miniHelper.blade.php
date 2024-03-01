@@ -4,6 +4,7 @@
     const baseUrl = '{{ url('') }}';
 
     let tg_instance = null;
+    let is_tg = false;
 
 /* Api */
     function do_request(item_id, url, data = {}, successCallback){
@@ -54,10 +55,15 @@
     }
 
 /* Telegram */
-    function tg_get_instance(){
+    function tg_get_instance() {
         if (!tg_instance) {
             tg_instance = window.Telegram.WebApp;
         }
+
+        if (tg_instance.initData) {
+            is_tg = true;
+        }
+
         return tg_instance;
     }
 
@@ -135,5 +141,19 @@
                 console.log('Error:', data);
             }
         });
+    }
+
+    function check_and_init_web_main_button(url, text) {
+        if (!is_tg) {
+            const button = document.createElement('button');
+            button.classList.add('btn', 'btn-lg', 'btn-light', 'w-100');
+            button.textContent = text;
+
+            button.addEventListener('click', function() {
+                window.location.href = url;
+            });
+
+            document.body.appendChild(button);
+        }
     }
 </script>

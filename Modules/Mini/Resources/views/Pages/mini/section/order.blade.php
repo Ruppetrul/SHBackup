@@ -25,13 +25,13 @@
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="cash" id="bank">
+                                <input class="form-check-input" type="radio" name="cash" id="bank" disabled >
                                 <label class="form-check-label" for="bank">
                                 Оплата банковской картой
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="cash" id="crypto">
+                                <input class="form-check-input" type="radio" name="cash" id="crypto" disabled >
                                 <label class="form-check-label" for="crypto">
                                     Оплата криптовалютой USDT
                                 </label>
@@ -47,7 +47,7 @@
                                 <small id="emailHelp" style="display: block" class="form-text text-muted">Товар вы можете получить по прибытии в наш офис</small>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="delivery" id="courier">
+                                <input class="form-check-input" type="radio" name="delivery" id="courier" disabled>
                                 <label class="form-check-label" for="courier">
                                     Доставка курьером
                                 </label>
@@ -74,6 +74,9 @@
                                         <span class="text-muted">Доставка: Бесплатно</span>
                                     </li>
                                 </ul>
+                                <script>
+                                    check_and_init_web_main_button('', 'Оформить');
+                                </script>
                             </div>
                         </div>
                     </div>
