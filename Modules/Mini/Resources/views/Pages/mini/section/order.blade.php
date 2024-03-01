@@ -75,7 +75,7 @@
                                     </li>
                                 </ul>
                                 <script>
-                                    check_and_init_web_main_button('', 'Оформить');
+                                    check_and_init_web_main_button('{{ route("home.create.order", ['shopIdOrName' => $shopName]) }}', 'Оформить');
                                 </script>
                             </div>
                         </div>
