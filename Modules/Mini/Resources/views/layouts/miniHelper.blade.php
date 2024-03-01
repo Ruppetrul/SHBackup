@@ -153,7 +153,8 @@
                 window.location.href = url;
             });
 
-            document.body.appendChild(button);
+            const summeryBox = document.querySelector('.summery-box');
+            summeryBox.appendChild(button);
         }
     }
 </script>
