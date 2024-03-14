@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Shop;
 use App\Services\TelegramService;
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +16,7 @@ class ShopController extends Controller {
 
     public function showDetails($id) {
         $shop = Shop::where('owner_id', auth()->id())->find($id);
+        $orders = Order::fetchOrders($id);
 
         $success = false;
         if ($shop) {
@@ -31,7 +33,7 @@ class ShopController extends Controller {
             return redirect()->route('shops.view');
         }
 
-        return view('shop.details', ['shop' => $shop, 'products' => $products, 'success' => $success]);
+        return view('shop.details', compact('shop', 'products', 'success', 'orders'));
     }
 
     public function create(Request $request) {

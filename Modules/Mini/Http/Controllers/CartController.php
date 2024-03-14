@@ -2,12 +2,12 @@
 
 namespace Modules\Mini\Http\Controllers;
 
+use App\Jobs\SendEmail;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Modules\Mini\Models\Order;
-use Modules\Mini\Models\Product;
 use Modules\Mini\Repositories\MiniRepoEloquent;
 use Modules\Mini\Services\CartService;
 
@@ -178,6 +178,52 @@ class CartController extends Controller
 
     public function createOrder() {
         list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
+        $currentShopId = app('current_shop_id');
+
+        $orderArray = Order::create([
+            'total' => $cart_total,
+            'cart_id' => $cart_id,
+        ])->toArray();
+
+        DB::table('cart')
+            ->where('id', $cart_id)
+            ->update([
+                'status' => '1',
+                'order_id' => $orderArray['id']
+            ]);
+
+        $orderArray['lines'] = $cart_detail;
+
+        DB::setDefaultConnection('mysql');
+
+        $instance = DB::table('shops')->where(function ($query) use ($currentShopId) {
+            if (is_numeric($currentShopId)) {
+                $query->where('id', $currentShopId);
+            } else {
+                $query->where('name', $currentShopId);
+            }
+        })->first();
+
+        $user = DB::table('users')->where('id', '=', $instance->owner_id)->first();
+        SendEmail::dispatch($user->email, $orderArray);
+
+        if ($instance) {
+            Config::set('database.connections.shop', [
+                'driver' => 'mysql',
+                'host' => env('DB_HOST'),
+                'database' => $instance->db_name,
+                'username' => env('DB_USERNAME'),
+                'password' => env('DB_PASSWORD'),
+                'charset' => 'utf8mb4',
+                'collation' => 'utf8mb4_unicode_ci',
+                'prefix' => '',
+            ]);
+
+            DB::setDefaultConnection('shop');
+
+            app()->instance('current_shop_id', $instance->id);
+            app()->instance('current_shop_name', $instance->name);
+        }
 
         if ($cart_total == 0) {
             return response()->json([
@@ -185,20 +231,6 @@ class CartController extends Controller
               'message' => 'Cart is empty'
             ]);
         }
-
-        $order = Order::create([
-            'total' => $cart_total,
-            'cart_id' => $cart_id,
-        ]);
-
-        DB::table('cart')
-            ->where('id', $cart_id)
-            ->update([
-                'status' => '1',
-                'order_id' => $order->id
-            ]);
-
-        //TODO notify user and client...
 
         return response()->json([
             'success' => true,

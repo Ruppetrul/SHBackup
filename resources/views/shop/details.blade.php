@@ -73,6 +73,16 @@
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link"
+                                            id="order-history-tab"
+                                            data-bs-toggle="tab"
+                                            data-bs-target="#order_history"
+                                            type="button"
+                                            role="tab"
+                                            aria-controls="order_history"
+                                            aria-selected="true">{{__('shop.order_history')}}</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link"
                                             id="options-tab"
                                             data-bs-toggle="tab"
                                             data-bs-target="#options"
@@ -129,7 +139,31 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+                                <div class="tab-pane fade" id="order_history" role="tabpanel" aria-labelledby="order-history">
+                                    @if (isset($orders))
+                                        @foreach ($orders as $order)
+                                            <div class="list-group py-3">
+                                                <a href="#" class="list-group-item list-group-item-action">
+                                                    <div class="d-flex w-100 justify-content-between">
+                                                        <h5 class="mb-1"></h5>
+                                                        <small>{{ $order['created_at'] }}</small>
+                                                    </div>
+                                                    <p class="mb-1">{{ __('shop.order_total') }} {{ $order['total'] }}</p>
+                                                    <ul class="list-group">
+                                                        @foreach ($order['lines'] as $line)
+                                                            <li class="list-group-item">
+                                                                <div class="d-flex w-100 justify-content-between">
+                                                                    <h6 class="mb-1">{{ $line->title }}</h6>
+                                                                    <span>{{ __('shop.quantity') }}: {{ $line->quantity }}</span>
+                                                                </div>
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    @endif
+                                </div>
                                 <div class="tab-pane fade" id="options" role="tabpanel" aria-labelledby="options-tab">
                                     <div class="py-6">
                                         <button class="btn btn-danger btn-block" id="deleteShop">{{__('shop.delete')}}</button>

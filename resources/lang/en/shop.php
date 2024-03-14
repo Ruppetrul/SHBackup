@@ -24,4 +24,6 @@ return [
     'delete_confirm' => "Delete",
     'delete_cancel' => "Cancel",
     'delete_info' => "Are you sure you want to delete the store? The data will be irretrievably deleted.",
+    'order_total' => "Order total.",
+    'quantity' => "Quantity",
 ];
