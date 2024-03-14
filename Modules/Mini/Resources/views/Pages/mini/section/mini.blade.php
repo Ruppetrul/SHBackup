@@ -50,6 +50,23 @@
     </div>
 </div>
 
+@if(session()->has('success_message'))
+    <div id="notification" class="alert alert-success position-fixed top-0 start-50 translate-middle-x" role="alert">
+        {{ session('success_message') }}
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var notification = document.getElementById('notification');
+            notification.style.display = 'block';
+            document.body.style.paddingTop = notification.offsetHeight + 'px';
+            setTimeout(function() {
+                notification.style.display = 'none';
+                document.body.style.paddingTop = '0';
+            }, 3000);
+        });
+    </script>
+@endif
 <script src="https://yastatic.net/jquery/3.3.1/jquery.min.js"></script>
 @section('js')
     <script>
