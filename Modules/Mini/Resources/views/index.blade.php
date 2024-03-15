@@ -74,11 +74,14 @@
                 url: url,
                 success: function(data) {
                     if (data.success) {
+                        if (changedFilters) {
+                            clearProductsContainer();
+                        }
+
                         if (data.total) {
                             loadedPages++;
+                            appendProducts(data.view);
                         }
-                        clearProductsContainer();
-                        appendProducts(data.view);
 
                         if (!data.has_more) {
                             isEnd = true;
