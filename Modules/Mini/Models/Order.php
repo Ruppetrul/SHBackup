@@ -13,5 +13,7 @@ class Order extends Model {
     protected $fillable = [
         'total',
         'cart_id',
+        'communication',
+        'description',
     ];
 }

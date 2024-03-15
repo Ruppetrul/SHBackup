@@ -176,13 +176,18 @@ class CartController extends Controller
     }
 
 
-    public function createOrder() {
+    public function createOrder(Request $request) {
         list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
         $currentShopId = app('current_shop_id');
+
+        $description = $request->get('description');
+        $communication = $request->get('communication');
 
         $orderArray = Order::create([
             'total' => $cart_total,
             'cart_id' => $cart_id,
+            'description' => $description,
+            'communication' => $communication,
         ])->toArray();
 
         DB::table('cart')

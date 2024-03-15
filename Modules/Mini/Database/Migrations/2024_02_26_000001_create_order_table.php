@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->decimal('total', 12, 2);
             $table->integer('cart_id');
+            $table->text('description');
+            $table->string('communication', 255);
             $table->timestamps();
         });
     }

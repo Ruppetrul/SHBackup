@@ -9,6 +9,8 @@
 
 <p>Идентификатор корзины: {{ $orderData['id'] }}</p>
 <p>Сумма заказа: {{ $orderData['total'] }}</p>
+<p>Способ связи: {{ $orderData['communication'] }}</p>
+<p>Описание: {{ $orderData['description'] }}</p>
 
 <h2>Содержимое заказа:</h2>
 <ul>

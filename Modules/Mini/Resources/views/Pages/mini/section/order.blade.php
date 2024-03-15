@@ -15,7 +15,7 @@
             <div class="row g-sm-5 g-3">
                 <div class="col-xxl-12">
                     @if($cart_detail)
-                    <form>
+                    <form id="order"  action="{{ route("home.create.order", ['shopIdOrName' => $shopName]) }}" method="GET">
                         <div class="form-group mb-3">
                             <label for="cash" class="mb-2 fw-bold">Оплата</label>
                             <div class="form-check">
@@ -55,11 +55,11 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="phone" class="fw-bold mb-2">Контактный телефон <span style="color: red;">*</span>:</label>
-                            <input class="form-control" type="number" style="max-width: 800px" id="phone">
+                            <input class="form-control" type="text" name="communication" style="max-width: 800px" id="phone" required>
                         </div>
-                        <div class="form-group">
-                            <label for="adress" class="fw-bold mb-2">Адрес доставки <span style="color: red;">*</span>:</label>
-                            <input class="form-control" style="max-width: 800px" id="adress">
+                        <div class="form-group mb-3">
+                            <label for="description" class="fw-bold mb-2">Комментарий или пожелание:</label>
+                            <input class="form-control" type="text" name="description"  style="max-width: 800px" id="description">
                         </div>
                     </form>
 
@@ -75,7 +75,7 @@
                                     </li>
                                 </ul>
                                 <script>
-                                    check_and_init_web_main_button('{{ route("home.create.order", ['shopIdOrName' => $shopName]) }}', 'Оформить');
+                                    check_and_init_web_main_button('', 'Оформить');
                                 </script>
                             </div>
                         </div>

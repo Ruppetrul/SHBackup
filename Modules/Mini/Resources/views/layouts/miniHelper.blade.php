@@ -148,9 +148,14 @@
             const button = document.createElement('button');
             button.classList.add('btn', 'btn-lg', 'btn-light', 'w-100');
             button.textContent = text;
+            button.type = 'submit';
 
             button.addEventListener('click', function() {
-                window.location.href = url;
+                if (url) {
+                    window.location.href = url;
+                } else {
+                    document.getElementById("order").submit();
+                }
             });
 
             const summeryBox = document.querySelector('.summery-box');
