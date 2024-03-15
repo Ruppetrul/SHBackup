@@ -5,6 +5,7 @@ namespace Modules\Mini\Providers;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Modules\Mini\Console\Commands\PrepareDefaultDB;
+use Modules\Mini\Console\Commands\UpdateAllShops;
 
 class MiniServiceProvider extends ServiceProvider
 {
@@ -123,6 +124,7 @@ class MiniServiceProvider extends ServiceProvider
     {
         $this->commands([
             PrepareDefaultDB::class,
+            UpdateAllShops::class,
         ]);
     }
 }
