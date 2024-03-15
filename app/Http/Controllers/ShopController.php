@@ -16,7 +16,7 @@ class ShopController extends Controller {
 
     public function showDetails($id) {
         $shop = Shop::where('owner_id', auth()->id())->find($id);
-        $orders = Order::fetchOrders($id);
+        list($success, $orders) = Order::fetchOrders($id);
 
         $success = false;
         if ($shop) {
