@@ -9,27 +9,27 @@
                         <div class="col-xl-6 wow fadeInUp">
                             <div class="product-left-box">
                                 <div class="row g-2">
-                                    <div class="col-12">
-                                        <div class="product-main-1 no-arrow">
-                                            <img src="
-                                            @if (isset($product->avatar[0]->filename))
-                                               {{ asset('storage/' . $shopId . '/' . $product->avatar[0]->filename) }}
-                                            @else
-                                                {{ asset('home/images/default_item_img.jpg') }}
-                                            @endif
-                                             " class="img-fluid blur-up lazyload" alt="">
-                                        </div>
-                                    </div>
+{{--                                    <div class="col-12">--}}
+{{--                                        <div class="no-arrow product-main-1">--}}
+{{--                                            <img src="--}}
+{{--                                            @if (isset($product->avatar[0]->filename))--}}
+{{--                                               {{ asset('storage/' . $shopId . '/' . $product->avatar[0]->filename) }}--}}
+{{--                                            @else--}}
+{{--                                                {{ asset('home/images/default_item_img.jpg') }}--}}
+{{--                                            @endif--}}
+{{--                                             " class="img-fluid blur-up lazyload" alt="">--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
                                     <div class="col-12">
                                         <div class="bottom-slider-image left-slider no-arrow slick-top">
-{{--                                            @foreach ($product->galleries as $gallery)--}}
-{{--                                                <div>--}}
+                                            <div class="slider_navv">
+                                                @foreach ($product->medias as $media)
 {{--                                                    <div class="sidebar-image">--}}
-{{--                                                        <img src="{{ $gallery->thumb }}" alt="gallery"--}}
-{{--                                                        class="img-fluid blur-up lazyload">--}}
+                                                        <img src="{{ asset('storage/' . $shopId . '/' . $media->filename) }}" alt="gallery"
+                                                        class="img-fluid blur-up lazyload">
 {{--                                                    </div>--}}
-{{--                                                </div>--}}
-{{--                                            @endforeach--}}
+                                                @endforeach
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -80,28 +80,6 @@
 
                                 <div class="buy-box">
                                 </div>
-                                <div class="pickup-box">
-                                    <div class="product-title">
-                                        <h4>Информация о товаре</h4>
-                                    </div>
-                                    <div class="product-info">
-                                        <ul class="product-info-list product-info-list-2">
-                                            <li>Остаток :
-                                                <a href="javascript:void(0)"> {{ $product->count }} шт</a>
-                                            </li>
-                                            <li>Категория :
-{{--                                                @if (isset($product->categories))--}}
-{{--                                                    @foreach ($product->categories as $category)--}}
-{{--                                                        <a href="{{ $category->path() }}">{{ $category->title }},</a>--}}
-{{--                                                    @endforeach--}}
-{{--                                                @endif--}}
-                                            </li>
-                                            <li>Описание :
-                                                <a>{{ $product->body }}</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -123,7 +101,32 @@
 <script src="https://yastatic.net/jquery/3.3.1/jquery.min.js"></script>
 @section('js')
     <script>
-        $(document).ready(function() {
+       $(document).ready(function() {
+           $('.slider_navv').slick({
+               centerMode: true,
+               centerPadding: '40px',
+               slidesToShow: 1,
+               responsive: [
+                   {
+                       breakpoint: 768,
+                       settings: {
+                           arrows: false,
+                           centerMode: true,
+                           centerPadding: '140px',
+                           slidesToShow: 3
+                       }
+                   },
+                   {
+                       breakpoint: 480,
+                       settings: {
+                           arrows: false,
+                           centerMode: true,
+                           centerPadding: '40px',
+                           slidesToShow: 1
+                       }
+                   }
+               ]
+           });
 
             let debounceTimer;
             const debounceTime = 300;

@@ -19,7 +19,6 @@
 
 {{-- Slick js --}}
 <script src="{{ asset('home/js/slick/slick.js') }}"></script>
-<script src="{{ asset('home/js/slick/custom_slick.js') }}"></script>
 
 {{-- Auto Height Js --}}
 <script src="{{ asset('home/js/auto-height.js') }}"></script>

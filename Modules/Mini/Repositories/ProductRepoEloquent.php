@@ -2,6 +2,7 @@
 
 namespace Modules\Mini\Repositories;
 
+use Illuminate\Support\Facades\DB;
 use Modules\Mini\Models\Product;
 
 class ProductRepoEloquent implements ProductRepoEloquentInterface
@@ -16,11 +17,16 @@ class ProductRepoEloquent implements ProductRepoEloquentInterface
      */
     public function findProductById($id)
     {
-        return Product::query()
-//            ->with(['categories'])
+        $product = Product::query()
             ->active()
             ->where('id', (int) $id)
             ->firstOrFail();
+
+        $product->medias = DB::table('medias')
+            ->where('item_id', (int) $id)
+            ->get()->toArray();;
+
+        return $product;
     }
 
     /**
