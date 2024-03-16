@@ -18,6 +18,22 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-600">
+                    <h3><strong> @if($shop['name']) {{ $shop['name'] }} @endif</strong> (@if ($shop['state']) {{__('states.' . $shop['state'])}} @endif)</h3>
+                    <div class="flex items-center mt-2">
+                        Ваш магазин доступен тут:
+                        <a href="http://simply-shop-customer/mini/107" id="shopLink" class="mr-2 px-2 py-1 border-gray-300 rounded-md" target="_blank" rel="noopener noreferrer">http://simply-shop-customer/mini/107</a>
+                        <button onclick="copyShopLink(event)" class="px-4 py-2 bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Копировать ссылку</button>
+                    </div>
+                    <br>
+                    <p>{{__('general.created_at')}} @if($shop['created_at']) {{$shop['created_at']->format('Y-m-d')}} @endif</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="py-3">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-600">
                     @if ($shop->is_attachment_tg !== 1)
                         <h3><strong>Ваш магазин ещё не привязан к телеграм боту.</strong></h3>
                     @elseif ($shop->tg_name != '')
@@ -36,17 +52,6 @@
             </div>
         </div>
     </div>
-        <div class="py-3">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 text-gray-900 dark:text-gray-600">
-                        <h3><strong> @if($shop['name']) {{ $shop['name'] }} @endif</strong> (@if ($shop['state']) {{__('states.' . $shop['state'])}} @endif)</h3>
-                        <br>
-                        <p>{{__('general.created_at')}} @if($shop['created_at']) {{$shop['created_at']->format('Y-m-d')}} @endif</p>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="py-3">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -140,7 +145,7 @@
                                     </div>
                                 </div>
                                 <div class="tab-pane fade" id="order_history" role="tabpanel" aria-labelledby="order-history">
-                                    @if (isset($orders))
+                                    @if (isset($orders) && count($orders))
                                         @foreach ($orders as $order)
                                             <div class="list-group py-3">
                                                 <a href="#" class="list-group-item list-group-item-action">
@@ -162,6 +167,10 @@
                                                 </a>
                                             </div>
                                         @endforeach
+                                    @else
+                                        <div class="text-center py-5">
+                                            <p>{{ __('shop.no_orders_message') }}</p>
+                                        </div>
                                     @endif
                                 </div>
                                 <div class="tab-pane fade" id="options" role="tabpanel" aria-labelledby="options-tab">
@@ -214,6 +223,27 @@
             </div>
         </div>
     @endif
+    <script>
+        function copyShopLink(event) {
+            var shopLink = document.getElementById('shopLink');
+            shopLink.select();
+            document.execCommand('copy');
+
+            var copiedNotification = document.createElement('div');
+            copiedNotification.textContent = 'Ссылка скопирована!';
+            copiedNotification.classList.add('bg-green-500', 'px-4', 'py-2', 'rounded-md', 'absolute', 'z-10');
+
+            var buttonRect = event.target.getBoundingClientRect();
+            copiedNotification.style.top = buttonRect.top - 20 + 'px';
+            copiedNotification.style.left = buttonRect.left + 'px';
+
+            document.body.appendChild(copiedNotification);
+
+            setTimeout(function() {
+                copiedNotification.remove();
+            }, 2000);
+        }
+    </script>
     <script>
         $(document).ready(function() {
             $('#showAddTelegramButton, #cancelAddTelegramBtn').click(function() {

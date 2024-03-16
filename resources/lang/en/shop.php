@@ -26,4 +26,5 @@ return [
     'delete_info' => "Are you sure you want to delete the store? The data will be irretrievably deleted.",
     'order_total' => "Order total.",
     'quantity' => "Quantity",
+    'no_orders_message' => 'There are currently no orders in this shop.',
 ];
