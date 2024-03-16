@@ -30,7 +30,7 @@ class SimpleEmail extends Mailable
     public function build()
     {
         return $this->from('nautbek@gmail.com')
-            ->subject('Простое сообщение')
+            ->subject('Новый заказ!')
             ->view('emails.simple')
             ->with('orderData', $this->orderData);
     }

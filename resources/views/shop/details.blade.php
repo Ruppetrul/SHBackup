@@ -21,7 +21,7 @@
                     <h3><strong> @if($shop['name']) {{ $shop['name'] }} @endif</strong> (@if ($shop['state']) {{__('states.' . $shop['state'])}} @endif)</h3>
                     <div class="flex items-center mt-2">
                         Ваш магазин доступен тут:
-                        <a href="http://simply-shop-customer/mini/107" id="shopLink" class="mr-2 px-2 py-1 border-gray-300 rounded-md" target="_blank" rel="noopener noreferrer">http://simply-shop-customer/mini/107</a>
+                        <a href="{{ route('mini.mini', ['shopIdOrName' => $shop['id']]) }}" id="shopLink" class="mr-2 px-2 py-1 border-gray-300 rounded-md" target="_blank" rel="noopener noreferrer">{{ route('mini.mini', ['shopIdOrName' => $shop['id']]) }}</a>
                         <button onclick="copyShopLink(event)" class="px-4 py-2 bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Копировать ссылку</button>
                     </div>
                     <br>
@@ -283,6 +283,7 @@
                     '{{ route('product.delete', ['shopId' => $shop['id']]) }}',
                     document.querySelector('meta[name="csrf-token"]').content,
                     function (response) {
+                        window.location.reload();
                     },
                     function (error) {
                     }

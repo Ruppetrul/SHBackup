@@ -92,7 +92,7 @@ class ShopController extends Controller {
 
         Shop::deleteProduct($shop_id, $produtId);
 
-        return Redirect::route('shop.details', ['shopId' => $shop_id]);
+        return true;
     }
 
     function productUpdate(Request $request, $shopId, $itemId) {

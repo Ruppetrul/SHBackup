@@ -16,6 +16,10 @@
 2) php artisan db:seed --class=DevSeeder
 3) `npm run build` or `npm run dev`
 
+## For migration
+0) php artisan mini:prepareDefaultDB
+1) php artisan shops:update
+
 ## Admin user
 Login user: admin 
 password: adminadmin
