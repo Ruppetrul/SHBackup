@@ -126,7 +126,7 @@
                                                         @if (isset($product['avatar_url']))
                                                             <img src="{{ $product['avatar_url'] }}" class="item-card-img" alt="{{ $product['title'] }}">
                                                         @else
-                                                            <img src="https://placekitten.com/300/200" class="item-card-img" alt="{{ $product['title'] }}">
+                                                            <img src="{{ asset('home/images/default_item_img.jpg') }}" class="item-card-img" alt="{{ $product['title'] }}">
                                                         @endif
                                                         <div class="card-body">
                                                             <h5 class="card-title">{{ $product['title'] }}</h5>
