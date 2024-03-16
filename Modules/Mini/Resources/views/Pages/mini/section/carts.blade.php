@@ -43,19 +43,19 @@
                                                 </div>
                                                 <div class="w-100">
                                                     <div class="d-flex align-items-center mb-3">
-                                                        <button class="btn btn-outline-secondary cart-qty-left-minus me-3" type="button" data-type="minus" data-product="{{ $line['id'] }}">
+                                                        <button class="btn btn-outline-secondary cart-qty-left-minus" type="button" data-type="minus" data-product="{{ $line['id'] }}">
                                                             <i class="fa fa-minus" aria-hidden="true"></i>
                                                         </button>
-                                                        <div class="col-6 col-md-3 col-lg-2 px-0 me-3">
+                                                        <div class="col-3 col-md-2 col-lg-2 px-0">
                                                             <input id="quantity_{{ $line['id'] }}" name="" class="form-control text-center" type="text" value="{{ $line['quantity'] }}" readonly>
                                                         </div>
-                                                        <button class="btn btn-outline-secondary cart-qty-right-plus me-3" type="button" data-type="plus" data-product="{{ $line['id'] }}">
+                                                        <button class="btn btn-outline-secondary cart-qty-right-plus" type="button" data-type="plus" data-product="{{ $line['id'] }}">
                                                             <i class="fa fa-plus" aria-hidden="true"></i>
                                                         </button>
                                                         <div class="flex-grow-1">
                                                         </div>
-                                                        <div style="min-width: 150px;">
-                                                            <input id="total_{{ $line['id'] }}" type="text" class="form-control" readonly value="{{ $line['total'] }}">
+                                                        <div class="col-3 col-md-2 col-lg-2 px-0 me-3">
+                                                            <input id="total_{{ $line['id'] }}" type="text" class="form-control text-center" readonly value="{{ $line['total'] }}">
                                                         </div>
                                                     </div>
                                                 </div>
