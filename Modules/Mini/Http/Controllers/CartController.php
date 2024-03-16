@@ -237,7 +237,7 @@ class CartController extends Controller
             ]);
         }
 
-        session()->flash('success_message', 'Заказ №' . $orderArray['id'] . ' создан успешно!');
+        session()->flash('success_message', 'Заказ создан успешно!');
         return redirect()->route('mini.mini', ['shopIdOrName' => $currentShopId]);
     }
 }
