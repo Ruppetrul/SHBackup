@@ -6,8 +6,8 @@
                 <select class="custom-select" id="filterSelect">
                     {{--TODO move to transltations--}}
                     <option selected value="default">По умолчанию</option>
-                    <option value="new">Сначала новые</option>
-                    <option value="old">Сначала старые</option>
+{{--                    <option value="new">Сначала новые</option>--}}
+{{--                    <option value="old">Сначала старые</option>--}}
                     <option value="expensive">Сначала дорогие</option>
                     <option value="cheap">Сначала дешевые</option>
                 </select>
