@@ -56,7 +56,7 @@ class MiniServiceProvider extends ServiceProvider
      *
      * @var array|string[]
      */
-    private array $middlewareRoute = ['web', 'verify'];
+    private array $middlewareRoute = ['web'];
 
     /**
      * Get route path.
