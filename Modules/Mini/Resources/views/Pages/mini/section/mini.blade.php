@@ -51,7 +51,7 @@
 </div>
 
 @if(session()->has('success_message'))
-    <div id="notification" class="alert alert-success position-fixed top-0 start-50 translate-middle-x" role="alert">
+    <div id="notification" class="alert alert-success position-fixed top-0 start-50 translate-middle-x w-75" role="alert">
         {{ session('success_message') }}
     </div>
 
