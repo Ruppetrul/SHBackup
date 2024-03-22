@@ -14,7 +14,7 @@ use Intervention\Image\ImageManager;
 
 class ShopController extends Controller {
 
-    function index() {
+    public function index() {
         $shops = Shop::where('owner_id', Auth::id())->whereNotIn('state', ['deleted'])->get();
         return view('shops', ['shops' => $shops]);
     }
@@ -39,6 +39,10 @@ class ShopController extends Controller {
         return view('shop.details', compact('shop', 'products', 'success', 'orders'));
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function create(Request $request) {
         try {
             if (Shop::where('name', $request->name)->exists()) {
@@ -73,7 +77,12 @@ class ShopController extends Controller {
         }
     }
 
-    function productCreate($shop_id, Request $request) {
+    /**
+     * @param string|int $shop_id
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function productCreate($shop_id, Request $request) {
         $itemId = Shop::createProduct($shop_id, [
             'title' => $request->get('title'),
             'price' => $request->get('price'),
@@ -82,7 +91,13 @@ class ShopController extends Controller {
         return redirect()->route('product.edit.view', compact('shop_id', 'itemId'));
     }
 
-    function productUpdate(Request $request, $shopId, $itemId) {
+    /**
+     * @param Request $request
+     * @param string|int $shopId
+     * @param string|int $itemId
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function productUpdate(Request $request, $shopId, $itemId) {
         Shop::updateProduct($shopId, $itemId, [
             'title' => $request->get('title'),
             'price' => $request->get('price'),
@@ -90,12 +105,21 @@ class ShopController extends Controller {
         return redirect()->route('shop.details', ['shopIdOrName' => $shopId]);
     }
 
-    function productDelete($shop_id, Request $request) {
+    /**
+     * @param string|int $shop_id
+     * @param Request $request
+     * @return bool
+     */
+    public function productDelete($shop_id, Request $request) {
         Shop::deleteProduct($shop_id, $request->get('id'));
         return true;
     }
 
-    function productEditView($shopId, $itemId = null) {
+    /**
+     * @param string|int $shopId
+     * @param string|int $itemId
+     */
+    public function productEditView($shopId, $itemId = null) {
         $data = array();
         $data['shopId'] = $shopId;
         if ($itemId) {
@@ -105,7 +129,11 @@ class ShopController extends Controller {
         return view('shop.product-edit', $data);
     }
 
-    function productUpdateImage($shopId, Request $request) {
+    /**
+     * @param string|int $shopId
+     * @param Request $request
+     */
+    public function productUpdateImage($shopId, Request $request) {
         if (!$request->has('itemId')) {
             return response()->json(array(
                 'message' => "'itemId' parameter is missing"
@@ -146,12 +174,20 @@ class ShopController extends Controller {
         ));
     }
 
-    function productDeleteMedia($shop_id, Request $request) {
+    /**
+     * @param string|int $shop_id
+     * @param Request $request
+     * @return bool
+     */
+    public function productDeleteMedia($shop_id, Request $request) {
         $mediaId = $request->get('media_id');
         return Shop::deleteProductMedia($shop_id, $mediaId);
     }
 
-    function shopDelete($shop_id) {
+    /**
+     * @param string|int $shop_id
+     */
+    public function shopDelete($shop_id) {
         $shop = Shop::where('owner_id', Auth::id())->where('id', $shop_id)->first();
 
         if (!$shop) {
@@ -179,8 +215,7 @@ class ShopController extends Controller {
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function addTelegramToken($shop_id, Request $request)
-    {
+    public function addTelegramToken($shop_id, Request $request) {
         $new_telegram_token = $request->get('telegram_token');
 
         if (empty($new_telegram_token) || !is_string($new_telegram_token)) {
