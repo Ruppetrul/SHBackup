@@ -7,8 +7,8 @@
         <script src="{{ asset('home/js/modules/mini/tg_helper.js') }}?v=2"></script>
         <script>
             tg_init();
-            tg_init_main_button('', 'Корзина');
-            tg_back_button_hide();
+            tg_init_main_button('', 'Оформить заказ!');
+            tg_update_main_button_total({{ $cart_total }});
         </script>
 
         <title>{{ config('app.name') }} - {{ env('APP_SHOP_DESCRIPTION') }}</title>
@@ -19,6 +19,5 @@
         @yield('content') {{-- Yield content data --}}
         <div class="bg-overlay"></div>
         <div class="bg-overlay"></div>
-        @include('Mini::section.js') {{-- Include js files --}}
     </body>
 </html>
