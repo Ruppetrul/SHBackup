@@ -1,3 +1,6 @@
+let tg_instance = null;
+let is_tg = false;
+
 /* Telegram */
 function tg_get_instance() {
     if (!tg_instance) {

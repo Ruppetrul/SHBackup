@@ -3,9 +3,6 @@
     const shopId = {{ $shopId }};
     const baseUrl = '{{ url('') }}';
 
-    let tg_instance = null;
-    let is_tg = false;
-
 /* Api */
     function do_request(item_id, url, data = {}, successCallback){
 
