@@ -2,13 +2,14 @@
 <html lang="en">
     <head>
         @include('Mini::section.meta') {{-- Include meta tags --}}
-
+        <meta name="csrf-token" content="{{csrf_token()}}">
         <script src="https://telegram.org/js/telegram-web-app.js"></script>
+        @include('Mini::layouts.miniHelper')
+        <script src="{{ asset('home/js/modules/mini/tg_helper.js') }}?v={{ config('app.js_version') }}"></script>
         <script>
             tg_init();
-
-            tg_init_main_button('', 'Оформить');
-            tg_init_back_button();
+            tg_init_main_button('', 'Оформить заказ!');
+            tg_update_main_button_total({{ $cart_total }});
         </script>
 
         <title>{{ config('app.name') }} - {{ env('APP_SHOP_DESCRIPTION') }}</title>
@@ -19,6 +20,5 @@
         @yield('content') {{-- Yield content data --}}
         <div class="bg-overlay"></div>
         <div class="bg-overlay"></div>
-        @include('Mini::section.js') {{-- Include js files --}}
     </body>
 </html>

@@ -5,9 +5,9 @@
         <meta name="csrf-token" content="{{csrf_token()}}">
         <script src="https://telegram.org/js/telegram-web-app.js"></script>
         @include('Mini::layouts.miniHelper')
+        <script src="{{ asset('home/js/modules/mini/tg_helper.js') }}?v={{ config('app.js_version') }}"></script>
         <script>
             tg_init();
-
             tg_init_main_button('/mini/{{ $shopId }}/order', 'Оформить заказ');
             tg_init_back_button();
 
