@@ -16,6 +16,9 @@
 2) php artisan db:seed --class=DevSeeder
 3) `npm run build` or `npm run dev`
 
+## For live
+0) systemctl configure to queue demon
+
 ## For migration
 0) php artisan mini:prepareDefaultDB
 1) php artisan shops:update
