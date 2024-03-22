@@ -1,4 +1,4 @@
-@extends('Mini::layouts.carts.order')
+@extends('Mini::layouts.order.order')
 
 @section('content')
 <section class="section-b-space shop-section">
