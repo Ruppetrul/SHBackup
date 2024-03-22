@@ -14,7 +14,12 @@ use Intervention\Image\ImageManager;
 
 class ShopController extends Controller {
 
-    public function showDetails($id) {
+    function index() {
+        $shops = Shop::where('owner_id', Auth::id())->whereNotIn('state', ['deleted'])->get();
+        return view('shops', ['shops' => $shops]);
+    }
+
+    public function detailsView($id) {
         $shop = Shop::where('owner_id', auth()->id())->find($id);
         list($success, $orders) = Order::fetchOrders($id);
 
@@ -22,11 +27,9 @@ class ShopController extends Controller {
         if ($shop) {
             $products = [];
             if (!$shop->db_name) {
-                //TODO log and report it
             } else {
                 list ($success, $products) = Shop::fetchProducts($shop->id);
                 if (!$success) {
-                    //TODO log and report it
                 }
             }
         } else {
@@ -47,14 +50,14 @@ class ShopController extends Controller {
 
             $now = now();
             $shop = Shop::create([
-                'name' => $request->name,
-                'db_name' => 'unknown_' . $now->format('YmdHis'),
-                'owner_id' => Auth::id(),
+                'name'           => $request->name,
+                'db_name'        => 'unknown_' . $now->format('YmdHis'),
+                'owner_id'       => Auth::id(),
                 'payment_status' => 'trial',
-                'state' => 'not_created',
-                'last_used_at' => now(),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'state'          => 'not_created',
+                'last_used_at'   => now(),
+                'created_at'     => now(),
+                'updated_at'     => now(),
             ]);
 
             return response()->json([
@@ -62,7 +65,7 @@ class ShopController extends Controller {
             ]);
         } catch (\Exception $exception) {
             Log::error('ShopController error case 1: ' . $exception->getMessage());
-            //TODO log exception
+
             return response()->json([
                 'success' => false,
                 'message' => 'Unknown error.'
@@ -70,43 +73,29 @@ class ShopController extends Controller {
         }
     }
 
-    function index() {
-        $shops = Shop::where('owner_id', Auth::id())->whereNotIn('state', ['deleted'])->get();
-        return view('shops', ['shops' => $shops]);
-    }
-
     function productCreate($shop_id, Request $request) {
-        $title = $request->get('title');
-        $price = $request->get('price');
-        $data = array(
-            'title' => $title,
-            'price' => $price,
-        );
-        $itemId = Shop::createProduct($shop_id, $data);
+        $itemId = Shop::createProduct($shop_id, [
+            'title' => $request->get('title'),
+            'price' => $request->get('price'),
+        ]);
 
-        return Redirect::route('product.edit.view', ['shopId' => $shop_id, 'itemId' => $itemId]);
-    }
-
-    function productDelete($shop_id, Request $request) {
-        $produtId = $request->get('id');
-
-        Shop::deleteProduct($shop_id, $produtId);
-
-        return true;
+        return redirect()->route('product.edit.view', compact('shop_id', 'itemId'));
     }
 
     function productUpdate(Request $request, $shopId, $itemId) {
-        $title = $request->get('title');
-        $price = $request->get('price');
-        $data = array(
-            'title' => $title,
-            'price' => $price,
-        );
-        Shop::updateProduct($shopId, $itemId, $data);
-        return Redirect::route('shop.details', ['shopIdOrName' => $shopId]);
+        Shop::updateProduct($shopId, $itemId, [
+            'title' => $request->get('title'),
+            'price' => $request->get('price'),
+        ]);
+        return redirect()->route('shop.details', ['shopIdOrName' => $shopId]);
     }
 
-    function productEdit($shopId, $itemId = null) {
+    function productDelete($shop_id, Request $request) {
+        Shop::deleteProduct($shop_id, $request->get('id'));
+        return true;
+    }
+
+    function productEditView($shopId, $itemId = null) {
         $data = array();
         $data['shopId'] = $shopId;
         if ($itemId) {
@@ -126,7 +115,6 @@ class ShopController extends Controller {
         $itemId = $request->get('itemId');
 
         $file = $request->file('file');
-
         $path = $file->store($shopId, 'public');
         $filename = basename($path);
 
@@ -163,7 +151,7 @@ class ShopController extends Controller {
         return Shop::deleteProductMedia($shop_id, $mediaId);
     }
 
-    function shopDelete($shop_id, Request $request) {
+    function shopDelete($shop_id) {
         $shop = Shop::where('owner_id', Auth::id())->where('id', $shop_id)->first();
 
         if (!$shop) {
@@ -173,7 +161,6 @@ class ShopController extends Controller {
         }
 
         $shop->state = 'deleted';
-
         $updated = $shop->update();
 
         if ($updated) {
