@@ -70,6 +70,7 @@ function tg_init_main_button(link, title) {
     } else {
         console.log('not link!');
         tg.MainButton.onClick(function() {
+            tg.MainButton.showProgress();
             document.getElementById("order").submit();
         });
     }
