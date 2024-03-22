@@ -4,11 +4,11 @@
         @include('Mini::section.meta') {{-- Include meta tags --}}
 
         <script src="https://telegram.org/js/telegram-web-app.js"></script>
+        @include('Mini::layouts.miniHelper', ['version' => '1'])
         <script>
             tg_init();
-
-            tg_init_main_button('', 'Оформить');
-            tg_init_back_button();
+            tg_init_main_button('/mini/{{ $shopId }}/carts', 'Корзина');
+            tg_back_button_hide();
         </script>
 
         <title>{{ config('app.name') }} - {{ env('APP_SHOP_DESCRIPTION') }}</title>
