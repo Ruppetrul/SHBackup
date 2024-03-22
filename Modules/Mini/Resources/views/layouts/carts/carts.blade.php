@@ -4,7 +4,7 @@
         @include('Mini::section.meta') {{-- Include meta tags --}}
         <meta name="csrf-token" content="{{csrf_token()}}">
         <script src="https://telegram.org/js/telegram-web-app.js"></script>
-        <script src="{{ asset('js/modules/mini/tg_helper.js') }}?v=1"></script>
+        <script src="{{ asset('home/js/modules/mini/tg_helper.js') }}?v=1"></script>
         <script>
             tg_init();
 
