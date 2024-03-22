@@ -114,9 +114,13 @@
 
     function tg_init_main_button(link, title) {
         const tg = tg_get_instance();
-        tg.MainButton.onClick(function() {
-            window.location.href = link;
-        });
+        if (link) {
+            tg.MainButton.onClick(function() {
+                window.location.href = link;
+            });
+        } else {
+            document.getElementById("order").submit();
+        }
 
         tg.MainButton.setText(title);
         tg.MainButton.show();
