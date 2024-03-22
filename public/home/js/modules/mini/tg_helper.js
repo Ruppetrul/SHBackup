@@ -61,12 +61,17 @@ function tg_back_button_hide() {
 
 function tg_init_main_button(link, title) {
     const tg = tg_get_instance();
+    console.log('tg_init_main_button');
     if (link) {
+        console.log('link!');
         tg.MainButton.onClick(function() {
             window.location.href = link;
         });
     } else {
-        document.getElementById("order").submit();
+        console.log('not link!');
+        tg.MainButton.onClick(function() {
+            document.getElementById("order").submit();
+        });
     }
 
     tg.MainButton.setText(title);
