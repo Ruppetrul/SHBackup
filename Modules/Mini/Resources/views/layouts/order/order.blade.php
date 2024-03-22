@@ -7,7 +7,7 @@
         <script src="{{ asset('home/js/modules/mini/tg_helper.js') }}?v=2"></script>
         <script>
             tg_init();
-            tg_init_main_button('/mini/{{ $shopId }}/carts', 'Корзина');
+            tg_init_main_button('', 'Корзина');
             tg_back_button_hide();
         </script>
 
