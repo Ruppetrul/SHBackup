@@ -179,36 +179,18 @@ class ShopController extends Controller {
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    function addTelegramToken($shop_id, Request $request) {
+    public function addTelegramToken($shop_id, Request $request)
+    {
         $new_telegram_token = $request->get('telegram_token');
 
-        if (empty($new_telegram_token)) {
-            return response()->json(array(
-                'message' => 'Telegram token is empty'
-            ), 400);
+        if (empty($new_telegram_token) || !is_string($new_telegram_token)) {
+            return response()->json([
+                'message' => 'Telegram token is empty or is not a string'
+            ], 400);
         }
-        $telegramService = new TelegramService($new_telegram_token);
 
-        $result = $telegramService->addLink($shop_id);
+        $result = TelegramService::addTelegramToken((int)$shop_id, $new_telegram_token);
 
-        $return = 'false';
-        // 'Webhook is already set' or 'Webhook was set'
-        if ($result['ok'] && in_array($result['description'], array('Webhook is already set', 'Webhook was set'))) {
-            $shop = Shop::find($shop_id);
-            $shop->is_attachment_tg = 1;
-
-            $getMeResult = $telegramService->updateGetMe();
-            $shop['tg_name'] = $getMeResult['result']['username'];
-
-            $result = $telegramService->setButton($shop_id);
-            if ($result['ok']) {
-                $shop['is_attachment_tg'] = 1;
-            }
-            $shop->save();
-            $return = true;
-        }
-        return response()->json(array(
-            'result' => $return
-        ));
+        return response()->json(['result' => $result]);
     }
 }
