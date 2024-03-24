@@ -16,7 +16,7 @@ class ShopController extends Controller {
 
     public function index() {
         $shops = Shop::where('owner_id', Auth::id())->whereNotIn('state', ['deleted'])->get();
-        return view('shops', ['shops' => $shops]);
+        return view('shops', compact('shops'));
     }
 
     public function detailsView($id) {
@@ -88,7 +88,7 @@ class ShopController extends Controller {
             'price' => $request->get('price'),
         ]);
 
-        return redirect()->route('product.edit.view', compact('shop_id', 'itemId'));
+        return redirect()->route('product.edit.view', ['shopId' => $shop_id, 'itemId' => $itemId]);
     }
 
     /**
