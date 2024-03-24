@@ -10,6 +10,7 @@ use Modules\Mini\Models\Enums\ProductStatusEnum;
 class Order extends Model {
 
     use HasFactory;
+
     protected $fillable = [
         'total',
         'cart_id',
