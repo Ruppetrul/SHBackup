@@ -7,7 +7,7 @@ use Modules\Mini\Services\CartServiceInterface;
 
 class YookassaService
 {
-    public static function registerOrder($orderArray, $shopUrl): array
+    public static function registerOrder($orderArray): array
     {
         $url = 'https://api.yookassa.ru/v3/payments';
         $shopId = '356919';
@@ -20,9 +20,8 @@ class YookassaService
                 'currency' => 'RUB'
             ],
             'capture' => true,
-            'confirmation' => [
-                'type' => 'redirect',
-                'return_url' => $shopUrl
+            "confirmation" => [
+                "type" => "embedded"
             ],
             'description' => 'Заказ №1'
         ];

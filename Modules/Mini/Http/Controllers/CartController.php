@@ -91,15 +91,20 @@ class CartController extends Controller
         ];
 
         if ($request->get('bank') == 'on') {
-            $shopUrl = route('mini.mini', ['shopIdOrName' => $currentShopId]);
-            list ($success, $response) = YookassaService::registerOrder($orderArray, $shopUrl);
+            list ($success, $response) = YookassaService::registerOrder($orderArray);
             if ($success) {
                 $response = json_decode($response, true);
-                $data['redirect_url'] = $response['confirmation']['confirmation_url'];
+                $confirmation_token = $response['confirmation']['confirmation_token'];
+
+                return redirect()->route('yookassa.payment.page', ['token' => $confirmation_token]);
             }
         }
 
         session()->flash('success_message', 'Заказ создан успешно!');
         return response()->json($data);
+    }
+
+    public function payment($token) {
+        return view('Mini::Pages.mini.payments.yookassa.process', compact('token'));
     }
 }
