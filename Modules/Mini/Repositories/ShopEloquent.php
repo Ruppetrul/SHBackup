@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Mini\Models\Product;
 
-class ShopEloquent implements ShopEloquentInterface
+class ShopEloquent implements MiniRepoEloquentInterface
 {
     /**
      * Get latest active products.
