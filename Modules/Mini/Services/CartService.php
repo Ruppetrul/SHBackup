@@ -2,10 +2,12 @@
 
 namespace Modules\Mini\Services;
 
+use App\Jobs\SendEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
+use Modules\Mini\Models\Order;
 use Modules\Mini\Repositories\MiniRepoEloquent;
-use Modules\Mini\Repositories\ProductRepoEloquent;
 
 class CartService implements CartServiceInterface
 {
@@ -52,6 +54,55 @@ class CartService implements CartServiceInterface
 
         if ($prod->id) {
             DB::table('cart_details')->where('id', '=', $prod->id)->delete();
+        }
+    }
+
+    /**
+     * @param array $orderData
+     * @return void
+     */
+    public function createOrder(array $orderData, $cartDetail, $currentShopId)
+    {
+        $orderArray = Order::create($orderData)->toArray();
+
+        DB::table('cart')
+            ->where('id', $orderData['cart_id'])
+            ->update([
+                'status' => '1',
+                'order_id' => $orderArray['id']
+            ]);
+
+        $orderArray['lines'] = $cartDetail;
+
+        DB::setDefaultConnection('mysql');
+
+        $instance = DB::table('shops')->where(function ($query) use ($currentShopId) {
+            if (is_numeric($currentShopId)) {
+                $query->where('id', $currentShopId);
+            } else {
+                $query->where('name', $currentShopId);
+            }
+        })->first();
+
+        $user = DB::table('users')->where('id', '=', $instance->owner_id)->first();
+        SendEmail::dispatch($user->email, $orderArray);
+
+        if ($instance) {
+            Config::set('database.connections.shop', [
+                'driver' => 'mysql',
+                'host' => env('DB_HOST'),
+                'database' => $instance->db_name,
+                'username' => env('DB_USERNAME'),
+                'password' => env('DB_PASSWORD'),
+                'charset' => 'utf8mb4',
+                'collation' => 'utf8mb4_unicode_ci',
+                'prefix' => '',
+            ]);
+
+            DB::setDefaultConnection('shop');
+
+            app()->instance('current_shop_id', $instance->id);
+            app()->instance('current_shop_name', $instance->name);
         }
     }
 }
