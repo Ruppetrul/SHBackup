@@ -28,7 +28,6 @@ Route::prefix('/mini/{shopIdOrName}')->middleware('shop')->group(function () {
         $router->post('{itemId}/delete', ['uses' => 'CartController@delete', 'as' => 'cart.delete']);
     });
     Route::group(['prefix' => 'cart-add'], static function ($router) {
-        $router->post('{itemId}/{count}', ['uses' => 'CartController@addWithCount', 'as' => 'cart.addWithCount']);
-        $router->post('{itemId}/', ['uses' => 'CartController@add', 'as' => 'cart.add']);
+        $router->post('{itemId}/{count?}', ['uses' => 'CartController@addToCart', 'as' => 'cart.add']);
     });
 });

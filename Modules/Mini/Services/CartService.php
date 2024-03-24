@@ -13,56 +13,25 @@ class CartService implements CartServiceInterface
      * @param $productId
      * @return void
      */
-    public function add($productId)
+    public function add($productId, $quantity)
     {
         list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
+
+        $cart_detail_id = DB::table('cart_details')
+            ->where('cart_id', $cart_id)
+            ->where('product_id', $productId)
+            ->value('id');
 
         $data = [
-            'cart_id' => $cart_id,
+            'cart_id'    => $cart_id,
             'product_id' => $productId,
-            'quantity' => 1
+            'quantity'   => $quantity
         ];
 
-        DB::table('cart_details')->updateOrInsert(
-            [
-                'cart_id' => $cart_id,
-                'product_id' => $productId
-            ],
-            $data
-        );
-    }
-
-    /**
-     * @param $productId
-     * @param $quantity
-     * @return void
-     */
-    public function addWithCount($productId, $quantity)
-    {
-        $cart_id = null;
-        list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
-
-        $prod = DB::table('cart_details')
-            ->where('cart_id', '=', $cart_id)
-            ->where('product_id', '=', $productId)
-            ->first();
-
-        $cart_detail_id = $prod ? $prod->id : null;
-
-        if ($quantity > 0) {
-            $data = [
-                'cart_id' => $cart_id,
-                'product_id' => $productId,
-                'quantity' => $quantity
-            ];
-
-            if ($cart_detail_id) {
-                DB::table('cart_details')->where('id', '=', $cart_detail_id)->update($data);
-            } else {
-                DB::table('cart_details')->insert($data);
-            }
-        } elseif ($cart_detail_id) {
-            DB::table('cart_details')->where('id', '=', $cart_detail_id)->delete();
+        if ($cart_detail_id) {
+            DB::table('cart_details')->where('id', '=', $cart_detail_id)->update($data);
+        } else {
+            DB::table('cart_details')->insert($data);
         }
     }
 

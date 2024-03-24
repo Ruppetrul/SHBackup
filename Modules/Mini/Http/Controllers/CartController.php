@@ -20,49 +20,12 @@ class CartController extends Controller
         $this->service = $cartService;
     }
 
-    /**
-     * Add product into session by product id & show success messag with redirect.
-     *
-     * @param $productId
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     * @throws \Psr\Container\NotFoundExceptionInterface
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function add($shopId, $productId, Request $request)
-    {
-        $this->service->add($productId);
-
-        if ($request->ajax()) {
-            list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
-            return response()->json([
-                'success' => true,
-                'total' => $cart_total,
-            ]);
-        }
-
-        return $this->successMessageWithRedirect('Add to cart successfully');
-    }
-
-    /**
-     * Add product into session by product id & show success messag with redirect.
-     *
-     * @param $productId
-     * @param $quantity
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     *@throws \Psr\Container\NotFoundExceptionInterface
-     *
-     * @throws \Psr\Container\ContainerExceptionInterface
-     */
-    public function addWithCount($shopId, $productId, $quantity, Request $request)
-    {
-        $this->service->addWithCount($productId, $quantity);
+    public function addToCart(Request $request, $shopIdOrName, $itemId, $count = 1) {
+        $this->service->add($itemId, $count);
 
         if ($request->ajax()) {
             list($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
-            $line = $cart_detail[$productId] ?? null;
+            $line = $cart_detail[$itemId] ?? null;
 
             return response()->json([
                 'success' => (bool) $line,
