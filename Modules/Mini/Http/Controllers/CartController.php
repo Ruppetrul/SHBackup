@@ -106,8 +106,4 @@ class CartController extends Controller
         session()->flash('success_message', 'Заказ создан успешно!');
         return response()->json($data);
     }
-
-    public function payment($token) {
-        return view('Mini::Pages.mini.payments.yookassa.process', compact('token'));
-    }
 }

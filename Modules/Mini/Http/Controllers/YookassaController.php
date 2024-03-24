@@ -13,4 +13,8 @@ class YookassaController extends Controller
         $data = $request->json()->all();
         Log::debug(json_encode($data));
     }
+
+    public function payment($token) {
+        return view('Mini::Pages.mini.payments.yookassa.process', compact('token'));
+    }
 }
