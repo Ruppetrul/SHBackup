@@ -96,7 +96,10 @@ class CartController extends Controller
                 $response = json_decode($response, true);
                 $confirmation_token = $response['confirmation']['confirmation_token'];
 
-                return redirect()->route('yookassa.payment.page', ['token' => $confirmation_token]);
+                return redirect()->route('yookassa.payment.page', [
+                    'token' => $confirmation_token,
+                    'shopIdOrName' => $currentShopId
+                ]);
             }
         }
 
