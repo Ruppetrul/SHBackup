@@ -5,14 +5,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Modules\Mini\Models\Product;
 
-class ShopEloquent implements MiniRepoEloquentInterface
+class MiniRepoEloquent implements MiniRepoEloquentInterface
 {
     /**
      * Get latest active products.
      *
      * @return mixed
      */
-    public function getLatestActiveProducts()
+    public static function getLatestActiveProducts()
     {
         return Product::query()
             ->active()

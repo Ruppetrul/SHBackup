@@ -6,7 +6,7 @@ interface MiniRepoEloquentInterface
 {
     static function getCartData();
 
-    function getLatestActiveProducts();
+    static function getLatestActiveProducts();
 
     function findProductById($id);
 

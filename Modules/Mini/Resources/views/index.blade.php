@@ -7,7 +7,7 @@
             <input id="search_text" name="search" type="search" class="form-control" placeholder="Что ищем?" aria-label="Recipient's username" aria-describedby="button-addon2">
         </div>
         <div class="row">
-            @include('Mini::Pages.mini.section.mini', ['products' => ShopEloquent::etLatestActiveProducts()])
+            @include('Mini::Pages.mini.section.mini', ['products' => $miniRepo::getLatestActiveProducts()])
         </div>
     </div>
 </section>

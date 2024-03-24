@@ -7,34 +7,32 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Repositories\MiniEloquentInterface;
-use Modules\Mini\Repositories\ShopEloquent;
+use Modules\Mini\Repositories\MiniRepoEloquentInterface;
+use Modules\Mini\Repositories\MiniRepoEloquent;
 
 class MiniController extends Controller
 {
-    public function mini($shopIdOrName, MiniEloquentInterface $miniRepo)
+    public function mini($shopIdOrName, MiniRepoEloquentInterface $miniRepo)
     {
         $data = array_merge(
             $this->prepareBaseData($miniRepo),
-            [
-                'categories' => array(),
-            ],
         );
 
         return view('Mini::index', $data);
     }
 
-    public function prepareBaseData(MiniEloquentInterface $miniRepo) : array{
-        list ($cart_detail, $cart_total) = ShopEloquent::getCartData();
+    public function prepareBaseData(MiniRepoEloquentInterface $miniRepo) : array{
+        list ($cart_detail, $cart_total) = MiniRepoEloquent::getCartData();
         foreach ($cart_detail as $line) {
             $line['total'] = $line['price'] * $line['quantity'];
         }
 
         return array(
-            'shopId' => app('current_shop_id'),
-            'shopName' => app('current_shop_name'),
-            'miniRepo' => $miniRepo,
+            'shopId'      => app('current_shop_id'),
+            'shopName'    => app('current_shop_name'),
+            'miniRepo'    => $miniRepo,
             'cart_detail' => $cart_detail,
-            'cart_total' => $cart_total,
+            'cart_total'  => $cart_total,
         );
     }
 
