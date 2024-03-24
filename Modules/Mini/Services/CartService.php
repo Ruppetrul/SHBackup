@@ -61,7 +61,7 @@ class CartService implements CartServiceInterface
      * @param array $orderData
      * @return void
      */
-    public function createOrder(array $orderData, $cartDetail, $currentShopId)
+    public function createOrder(array $orderData, $cartDetail, $currentShopId) : array
     {
         $orderArray = Order::create($orderData)->toArray();
 
@@ -104,5 +104,7 @@ class CartService implements CartServiceInterface
             app()->instance('current_shop_id', $instance->id);
             app()->instance('current_shop_name', $instance->name);
         }
+
+        return $orderArray;
     }
 }

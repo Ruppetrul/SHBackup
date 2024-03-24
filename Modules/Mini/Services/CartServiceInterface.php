@@ -8,5 +8,5 @@ interface CartServiceInterface
 
     public function delete($productId);
 
-    public function createOrder(array $orderData, $cartDetail, $currentShopId);
+    public function createOrder(array $orderData, $cartDetail, $currentShopId) : array;
 }

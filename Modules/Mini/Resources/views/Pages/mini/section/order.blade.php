@@ -74,6 +74,7 @@
                                         <span class="text-muted">Доставка: Бесплатно</span>
                                     </li>
                                 </ul>
+                                <script src="https://yastatic.net/jquery/3.3.1/jquery.min.js"></script>
                                 <script>
                                     check_and_init_web_main_button('', 'Оформить');
                                 </script>

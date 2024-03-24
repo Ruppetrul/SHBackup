@@ -4,8 +4,10 @@ namespace Modules\Mini\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
 use Modules\Mini\Repositories\MiniRepoEloquent;
 use Modules\Mini\Services\CartService;
+use Modules\Mini\Services\YookassaService;
 
 class CartController extends Controller
 {
@@ -73,7 +75,7 @@ class CartController extends Controller
         $description = $request->get('description');
         $communication = $request->get('communication');
 
-        $this->service->createOrder(
+        $orderArray = $this->service->createOrder(
             [
                 'total' => $cart_total,
                 'cart_id' => $cart_id,
@@ -84,7 +86,20 @@ class CartController extends Controller
             $currentShopId
         );
 
+        $data = [
+            'redirect_url' => redirect()->route('mini.mini', ['shopIdOrName' => $currentShopId]),
+        ];
+
+        if ($request->get('bank') == 'on') {
+            $shopUrl = route('mini.mini', ['shopIdOrName' => $currentShopId]);
+            list ($success, $response) = YookassaService::registerOrder($orderArray, $shopUrl);
+            if ($success) {
+                $response = json_decode($response, true);
+                $data['redirect_url'] = $response['confirmation']['confirmation_url'];
+            }
+        }
+
         session()->flash('success_message', 'Заказ создан успешно!');
-        return redirect()->route('mini.mini', ['shopIdOrName' => $currentShopId]);
+        return response()->json($data);
     }
 }

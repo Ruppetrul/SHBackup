@@ -83,12 +83,31 @@
                 if (url) {
                     window.location.href = url;
                 } else {
-                    document.getElementById("order").submit();
+                    create_order_request();
                 }
             });
 
             const summeryBox = document.querySelector('.summery-box');
             summeryBox.appendChild(button);
         }
+    }
+
+    function create_order_request() {
+        const formData = new FormData(document.getElementById('order'));
+        const params = Object.fromEntries(formData);
+
+        params["_token"] = document.querySelector('meta[name="csrf-token"]').content;
+
+        $.ajax({
+            type: "POST",
+            url: '{{ route("home.create.order", ['shopIdOrName' => $shopName]) }}',
+            data: params,
+            success: function (data) {
+                window.location.href = data.redirect_url;
+            },
+            error: function (data) {
+                console.log('Error:', data);
+            }
+        });
     }
 </script>
