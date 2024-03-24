@@ -29,7 +29,7 @@ class SimpleEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('nautbek@gmail.com')
+        return $this->from('nautbek@gmail.com') //TODO move to ENV
             ->subject('Новый заказ!')
             ->view('emails.simple')
             ->with('orderData', $this->orderData);

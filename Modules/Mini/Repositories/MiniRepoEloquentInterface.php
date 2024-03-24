@@ -7,4 +7,5 @@ namespace Modules\Mini\Repositories;
  */
 interface MiniRepoEloquentInterface
 {
+    //TODO зачем вообще эти интерфейсы
 }

@@ -25,6 +25,7 @@ class MiniRepoEloquent implements MiniRepoEloquentInterface
      * @return void
      */
     public static function getCartData() {
+        //TODO refactor
         $cart_id = null;
 
         $cart = DB::table('cart')
