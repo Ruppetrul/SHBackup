@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Modules\Mini\Models\Order;
-use App\Repositories\ShopEloquent;
+use Modules\Mini\Repositories\MiniRepoEloquent;
 
 class CartService implements CartServiceInterface
 {
@@ -17,7 +17,7 @@ class CartService implements CartServiceInterface
      */
     public function add($productId, $quantity)
     {
-        list ($cart_detail, $cart_total, $cart_id) = ShopEloquent::getCartData();
+        list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
 
         $cart_detail_id = DB::table('cart_details')
             ->where('cart_id', $cart_id)
@@ -45,7 +45,7 @@ class CartService implements CartServiceInterface
     {
         $cart_id = null;
 
-        list ($cart_detail, $cart_total, $cart_id) = ShopEloquent::getCartData();
+        list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
 
         $prod = DB::table('cart_details')
             ->where('cart_id', '=', $cart_id, 'AND')

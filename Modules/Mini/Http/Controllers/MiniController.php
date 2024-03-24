@@ -22,7 +22,7 @@ class MiniController extends Controller
     }
 
     public function prepareBaseData(MiniRepoEloquentInterface $miniRepo) : array{
-        list ($cart_detail, $cart_total) = MiniRepoEloquent::getCartData();
+        list ($cart_detail, $cart_total) = $miniRepo::getCartData();
         foreach ($cart_detail as $line) {
             $line['total'] = $line['price'] * $line['quantity'];
         }
@@ -36,17 +36,17 @@ class MiniController extends Controller
         );
     }
 
-    public function carts($shopIdOrName, MiniEloquentInterface $miniRepo)
+    public function carts($shopIdOrName, MiniRepoEloquentInterface $miniRepo)
     {
         return view('Mini::Pages.mini.carts.index', $this->prepareBaseData($miniRepo));
     }
 
-    public function order($shopIdOrName, MiniEloquentInterface $miniRepo)
+    public function order($shopIdOrName, MiniRepoEloquentInterface $miniRepo)
     {
         return view('Mini::Pages.mini.order.index', $this->prepareBaseData($miniRepo));
     }
 
-    public function details($shopIdOrName, $itemId, MiniEloquentInterface $miniRepo)
+    public function details($shopIdOrName, $itemId, MiniRepoEloquentInterface $miniRepo)
     {
         $data = array_merge(
             $this->prepareBaseData($miniRepo),

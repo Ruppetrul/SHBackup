@@ -2,13 +2,9 @@
 
 namespace Modules\Mini\Http\Controllers;
 
-use App\Jobs\SendEmail;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
-use Modules\Mini\Models\Order;
-use App\Repositories\ShopEloquent;
+use Modules\Mini\Repositories\MiniRepoEloquent;
 use Modules\Mini\Services\CartService;
 
 class CartController extends Controller
@@ -24,7 +20,7 @@ class CartController extends Controller
         $this->service->add($itemId, $count);
 
         if ($request->ajax()) {
-            list($cart_detail, $cart_total, $cart_id) = ShopEloquent::getCartData();
+            list($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
             $line = $cart_detail[$itemId] ?? null;
 
             return response()->json([
@@ -63,7 +59,7 @@ class CartController extends Controller
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function createOrder(Request $request) {
-        list ($cart_detail, $cart_total, $cart_id) = ShopEloquent::getCartData();
+        list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
 
         if ($cart_total == 0) {
             return response()->json([
