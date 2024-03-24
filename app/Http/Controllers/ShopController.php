@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\Shop;
 use App\Services\TelegramService;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +29,7 @@ class ShopController extends Controller {
             $products = [];
             if (!$shop->db_name) {
             } else {
-                list ($success, $products) = Shop::fetchProducts($shop->id);
+                list ($success, $products) = Product::fetchProducts($shop->id);
                 if (!$success) {
                 }
             }
@@ -83,7 +84,7 @@ class ShopController extends Controller {
      * @return \Illuminate\Http\RedirectResponse
      */
     public function productCreate($shop_id, Request $request) {
-        $itemId = Shop::createProduct($shop_id, [
+        $itemId = Product::createProduct($shop_id, [
             'title' => $request->get('title'),
             'price' => $request->get('price'),
         ]);
@@ -98,7 +99,7 @@ class ShopController extends Controller {
      * @return \Illuminate\Http\RedirectResponse
      */
     public function productUpdate(Request $request, $shopId, $itemId) {
-        Shop::updateProduct($shopId, $itemId, [
+        Product::updateProduct($shopId, $itemId, [
             'title' => $request->get('title'),
             'price' => $request->get('price'),
         ]);
@@ -111,7 +112,7 @@ class ShopController extends Controller {
      * @return bool
      */
     public function productDelete($shop_id, Request $request) {
-        Shop::deleteProduct($shop_id, $request->get('id'));
+        Product::deleteProduct($shop_id, $request->get('id'));
         return true;
     }
 
@@ -123,7 +124,7 @@ class ShopController extends Controller {
         $data = array();
         $data['shopId'] = $shopId;
         if ($itemId) {
-            $data['item'] = Shop::fetchProduct($shopId, $itemId);
+            $data['item'] = Product::fetchProduct($shopId, $itemId);
         }
 
         return view('shop.product-edit', $data);
@@ -162,9 +163,9 @@ class ShopController extends Controller {
         }
 
         if ($request->has('mediaType') && $request->get('mediaType') === 'avatar') {
-            $mediaId = Shop::updateProductAvatar($shopId, $itemId, $filename, $path);
+            $mediaId = Product::updateProductAvatar($shopId, $itemId, $filename, $path);
         } else {
-            $mediaId = Shop::saveProductImage($shopId, $itemId, $filename);
+            $mediaId = Product::saveProductImage($shopId, $itemId, $filename);
         }
 
         return response()->json(array(
@@ -181,7 +182,7 @@ class ShopController extends Controller {
      */
     public function productDeleteMedia($shop_id, Request $request) {
         $mediaId = $request->get('media_id');
-        return Shop::deleteProductMedia($shop_id, $mediaId);
+        return Product::deleteProductMedia($shop_id, $mediaId);
     }
 
     /**

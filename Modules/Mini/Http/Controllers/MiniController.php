@@ -6,11 +6,11 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Modules\Mini\Repositories\MiniRepoEloquentInterface;
+use App\Repositories\MiniEloquentInterface;
 
 class MiniController extends Controller
 {
-    public function mini($shopIdOrName, MiniRepoEloquentInterface $miniRepo)
+    public function mini($shopIdOrName, MiniEloquentInterface $miniRepo)
     {
         $data = array_merge(
             $this->prepareBaseData($miniRepo),
@@ -22,7 +22,7 @@ class MiniController extends Controller
         return view('Mini::index', $data);
     }
 
-    public function prepareBaseData(MiniRepoEloquentInterface $miniRepo) : array{
+    public function prepareBaseData(MiniEloquentInterface $miniRepo) : array{
         list ($cart_detail, $cart_total) = $miniRepo::getCartData();
         foreach ($cart_detail as $line) {
             $line['total'] = $line['price'] * $line['quantity'];
@@ -37,17 +37,17 @@ class MiniController extends Controller
         );
     }
 
-    public function carts($shopIdOrName, MiniRepoEloquentInterface $miniRepo)
+    public function carts($shopIdOrName, MiniEloquentInterface $miniRepo)
     {
         return view('Mini::Pages.mini.carts.index', $this->prepareBaseData($miniRepo));
     }
 
-    public function order($shopIdOrName, MiniRepoEloquentInterface $miniRepo)
+    public function order($shopIdOrName, MiniEloquentInterface $miniRepo)
     {
         return view('Mini::Pages.mini.order.index', $this->prepareBaseData($miniRepo));
     }
 
-    public function details($shopIdOrName, $itemId, MiniRepoEloquentInterface $miniRepo)
+    public function details($shopIdOrName, $itemId, MiniEloquentInterface $miniRepo)
     {
         $data = array_merge(
             $this->prepareBaseData($miniRepo),
@@ -59,13 +59,13 @@ class MiniController extends Controller
 
     /**
      * @param string|int $shopIdOrName
-     * @param MiniRepoEloquentInterface $miniRepo
+     * @param MiniEloquentInterface $miniRepo
      * @param Request $request
      * @return JsonResponse
      */
     public function getActiveProducts(
         $shopIdOrName,
-        MiniRepoEloquentInterface $miniRepo,
+        MiniEloquentInterface $miniRepo,
         Request $request
     ) {
         list ($cart_detail) = $miniRepo::getCartData();

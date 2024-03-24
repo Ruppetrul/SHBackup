@@ -2,9 +2,10 @@
 
 namespace App\Providers;
 
+use App\Repositories\MiniEloquent;
 use Illuminate\Support\ServiceProvider;
-use Modules\Mini\Repositories\MiniRepoEloquent;
-use Modules\Mini\Repositories\MiniRepoEloquentInterface;
+use App\Repositories\ShopEloquent;
+use App\Repositories\MiniEloquentInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(MiniRepoEloquentInterface::class, MiniRepoEloquent::class);
+        $this->app->bind(MiniEloquentInterface::class, MiniEloquent::class);
     }
 
     /**

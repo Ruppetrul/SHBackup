@@ -2,16 +2,21 @@
 
 namespace App\Models;
 
+use App\Repositories\MiniEloquent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class Order extends Model
 {
-    public static function fetchOrders($shop_id)
+    /**
+     * @param $shop_id
+     * @return array
+     */
+    public static function fetchOrders($shop_id): array
     {
         $orders = [];
-        $success = self::executeWithShopConnection($shop_id, function () use (&$orders, $shop_id) {
+        $success = MiniEloquent::executeWithShopConnection($shop_id, function () use (&$orders, $shop_id) {
             $ordersCollection = DB::connection('shop_connection')->table('orders')->get();
 
             foreach ($ordersCollection as $order) {
@@ -28,29 +33,5 @@ class Order extends Model
         });
 
         return array($success, $orders);
-    }
-
-    private static function executeWithShopConnection($shop_id, $callback)
-    {
-        $shop = Shop::where('id', $shop_id)->first();
-        return self::performShopQuery($shop->db_name, $callback);
-    }
-
-    private static function performShopQuery(string $db_name, $callback)
-    {
-        $success = true;
-        try {
-            DB::purge('shop_connection');
-            config(['database.connections.shop_connection.database' => $db_name]);
-
-            $callback(DB::connection('shop_connection'));
-        } catch (\Exception $exception) {
-            Log::error('Query error: ' . $exception->getMessage());
-            $success = false;
-        } finally {
-            DB::disconnect('shop_connection');
-        }
-
-        return $success;
     }
 }
