@@ -64,4 +64,9 @@ class Product extends Model
     {
         return $this->belongsToMany(Category::class, 'product_category');
     }
+
+    public function medias()
+    {
+        return $this->hasMany(Media::class, 'item_id');
+    }
 }

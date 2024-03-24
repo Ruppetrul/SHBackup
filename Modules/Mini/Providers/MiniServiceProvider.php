@@ -90,7 +90,7 @@ class MiniServiceProvider extends ServiceProvider
      */
     private function loadMigrationFiles(): void
     {
-        $this->loadMigrationsFrom(__DIR__.$this->migrationPath);
+        $this->loadMigrationsFrom(__DIR__ . $this->migrationPath);
     }
 
     /**

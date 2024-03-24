@@ -2,12 +2,11 @@
 
 namespace Modules\Mini\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Mini\Repositories\MiniRepoEloquentInterface;
-use Modules\Mini\Repositories\ProductRepoEloquent;
-use Modules\Mini\Repositories\ProductRepoEloquentInterface;
 
 class MiniController extends Controller
 {
@@ -24,18 +23,14 @@ class MiniController extends Controller
     }
 
     public function prepareBaseData(MiniRepoEloquentInterface $miniRepo) : array{
-
-        $currentShopId = app('current_shop_id');
-        $currentShopName = app('current_shop_name');
-
         list ($cart_detail, $cart_total) = $miniRepo::getCartData();
         foreach ($cart_detail as $line) {
             $line['total'] = $line['price'] * $line['quantity'];
         }
 
         return array(
-            'shopId' => $currentShopId,
-            'shopName' => $currentShopName,
+            'shopId' => app('current_shop_id'),
+            'shopName' => app('current_shop_name'),
             'miniRepo' => $miniRepo,
             'cart_detail' => $cart_detail,
             'cart_total' => $cart_total,
@@ -52,13 +47,11 @@ class MiniController extends Controller
         return view('Mini::Pages.mini.order.index', $this->prepareBaseData($miniRepo));
     }
 
-    public function details($shopIdOrName, $itemId, ProductRepoEloquent $productRepoEloquent, MiniRepoEloquentInterface $miniRepo)
+    public function details($shopIdOrName, $itemId, MiniRepoEloquentInterface $miniRepo)
     {
-        $product = $productRepoEloquent->findProductById($itemId);
-
         $data = array_merge(
             $this->prepareBaseData($miniRepo),
-            ['product' => $product],
+            ['product' => $miniRepo->findProductById($itemId)],
         );
 
         return view('Mini::Pages.mini.details.index', $data);
@@ -66,14 +59,12 @@ class MiniController extends Controller
 
     /**
      * @param string|int $shopIdOrName
-     * @param ProductRepoEloquentInterface $productRepoEloquent
      * @param MiniRepoEloquentInterface $miniRepo
      * @param Request $request
      * @return JsonResponse
      */
     public function getActiveProducts(
         $shopIdOrName,
-        ProductRepoEloquentInterface $productRepoEloquent,
         MiniRepoEloquentInterface $miniRepo,
         Request $request
     ) {
@@ -87,19 +78,20 @@ class MiniController extends Controller
         ];
 
         try {
-            $activeProducts = $productRepoEloquent->getActive($request);
+            $activeProducts = $miniRepo->getActive($request);
 
             $result['total'] = count($activeProducts);
-            $currentShopId = app('current_shop_id');
-            $currentShopName = app('current_shop_name');
-            $result['view'] = view('Mini::Pages.mini.section.products',
+            $result['has_more'] = ($result['total'] >= 10);
+
+            $result['view'] = view(
+                'Mini::Pages.mini.section.products',
                 [
-                    'products' => $activeProducts,
+                    'products'    => $activeProducts,
                     'cart_detail' => $cart_detail,
-                    'shopId' => $currentShopId,
-                    'shopName' => $currentShopName,
-                ])->render();
-            $result['has_more'] = ($result['total'] >= 10); //TODO get from ENV
+                    'shopId'      => app('current_shop_id'),
+                    'shopName'    => app('current_shop_name'),
+                ]
+            )->render();
         } catch (Exception $exception) {
             $result['success'] = false;
         }

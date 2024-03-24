@@ -4,11 +4,9 @@ namespace Modules\Mini\Services;
 
 interface CartServiceInterface
 {
-    public function add($productId);
+    public function add($productId, $quantity);
 
-    public function remove($productId);
+    public function delete($productId);
 
-    public function removeAll();
-
-    public function check($id);
+    public function createOrder(array $orderData, $cartDetail, $currentShopId);
 }
