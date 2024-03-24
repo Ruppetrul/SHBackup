@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Repositories\MiniEloquentInterface;
+use Modules\Mini\Repositories\ShopEloquent;
 
 class MiniController extends Controller
 {
@@ -23,7 +24,7 @@ class MiniController extends Controller
     }
 
     public function prepareBaseData(MiniEloquentInterface $miniRepo) : array{
-        list ($cart_detail, $cart_total) = $miniRepo::getCartData();
+        list ($cart_detail, $cart_total) = ShopEloquent::getCartData();
         foreach ($cart_detail as $line) {
             $line['total'] = $line['price'] * $line['quantity'];
         }
