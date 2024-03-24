@@ -31,14 +31,14 @@ class ShopMiddleware
 
         if ($instance) {
             Config::set('database.connections.shop', [
-                'driver' => 'mysql',
-                'host' => env('DB_HOST'),
-                'database' => $instance->db_name,
-                'username' => env('DB_USERNAME'),
-                'password' => env('DB_PASSWORD'),
-                'charset' => 'utf8mb4',
+                'driver'    => 'mysql',
+                'host'      => env('DB_HOST'),
+                'database'  => $instance->db_name,
+                'username'  => env('DB_USERNAME'),
+                'password'  => env('DB_PASSWORD'),
+                'charset'   => 'utf8mb4',
                 'collation' => 'utf8mb4_unicode_ci',
-                'prefix' => '',
+                'prefix'    => '',
             ]);
 
             DB::setDefaultConnection('shop');
