@@ -15,19 +15,19 @@
             <div class="row g-sm-5 g-3">
                 <div class="col-xxl-12">
                     @if($cart_detail)
-                    <form id="order"  action="{{ route("home.create.order", ['shopIdOrName' => $shopName]) }}" method="GET">
+                    <form id="order" action="" method="GET">
                         <div class="form-group mb-3">
                             <label for="cash" class="mb-2 fw-bold">Оплата</label>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="cash" id="cash" checked>
-                                <label class="form-check-label" for="cash">
-                                    Наличными при получении
+                                <input class="form-check-input" type="radio" name="bank" id="bank" checked>
+                                <label class="form-check-label" for="bank">
+                                    Оплата банковской картой
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="cash" id="bank" disabled >
-                                <label class="form-check-label" for="bank">
-                                Оплата банковской картой
+                                <input class="form-check-input" type="radio" name="cash" id="cash" disabled >
+                                <label class="form-check-label" for="cash">
+                                    Наличными при получении
                                 </label>
                             </div>
                             <div class="form-check">
