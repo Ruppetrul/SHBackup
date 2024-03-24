@@ -7,8 +7,6 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Modules\Mini\Repositories\MiniRepoEloquentInterface;
-use Modules\Mini\Repositories\ProductRepoEloquent;
-use Modules\Mini\Repositories\ProductRepoEloquentInterface;
 
 class MiniController extends Controller
 {
@@ -49,11 +47,11 @@ class MiniController extends Controller
         return view('Mini::Pages.mini.order.index', $this->prepareBaseData($miniRepo));
     }
 
-    public function details($shopIdOrName, $itemId, ProductRepoEloquent $productRepoEloquent, MiniRepoEloquentInterface $miniRepo)
+    public function details($shopIdOrName, $itemId, MiniRepoEloquentInterface $miniRepo)
     {
         $data = array_merge(
             $this->prepareBaseData($miniRepo),
-            ['product' => $productRepoEloquent->findProductById($itemId)],
+            ['product' => $miniRepo->findProductById($itemId)],
         );
 
         return view('Mini::Pages.mini.details.index', $data);
@@ -61,14 +59,12 @@ class MiniController extends Controller
 
     /**
      * @param string|int $shopIdOrName
-     * @param ProductRepoEloquentInterface $productRepoEloquent
      * @param MiniRepoEloquentInterface $miniRepo
      * @param Request $request
      * @return JsonResponse
      */
     public function getActiveProducts(
         $shopIdOrName,
-        ProductRepoEloquentInterface $productRepoEloquent,
         MiniRepoEloquentInterface $miniRepo,
         Request $request
     ) {
@@ -82,7 +78,7 @@ class MiniController extends Controller
         ];
 
         try {
-            $activeProducts = $productRepoEloquent->getActive($request);
+            $activeProducts = $miniRepo->getActive($request);
 
             $result['total'] = count($activeProducts);
             $result['has_more'] = ($result['total'] >= 10);

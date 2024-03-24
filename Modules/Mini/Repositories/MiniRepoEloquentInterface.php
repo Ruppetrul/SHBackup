@@ -2,10 +2,13 @@
 
 namespace Modules\Mini\Repositories;
 
-/**
- * @method getLatestActiveProducts
- */
 interface MiniRepoEloquentInterface
 {
-    //TODO зачем вообще эти интерфейсы
+    static function getCartData();
+
+    function getLatestActiveProducts();
+
+    function findProductById($id);
+
+    function getActive($params);
 }
