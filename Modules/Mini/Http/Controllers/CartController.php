@@ -32,7 +32,7 @@ class CartController extends Controller
      */
     public function add($shopId, $productId, Request $request)
     {
-        CartService::add($productId);
+        $this->service->add($productId);
 
         if ($request->ajax()) {
             list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
@@ -58,7 +58,7 @@ class CartController extends Controller
      */
     public function addWithCount($shopId, $productId, $quantity, Request $request)
     {
-        CartService::addWithCount($productId, $quantity);
+        $this->service->addWithCount($productId, $quantity);
 
         if ($request->ajax()) {
             list($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
@@ -86,20 +86,7 @@ class CartController extends Controller
      */
     public function delete($shopId, $productId, Request $request)
     {
-        $cart_id = null;
-
-        list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
-
-        $prod = DB::table('cart_details')
-            ->where('cart_id', '=', $cart_id, 'AND')
-            ->where('product_id', '=', $productId)
-            ->first();
-
-        if ($prod->id) {
-            DB::table('cart_details')->where('id', '=', $prod->id)->delete();
-        }
-
-        $this->service->remove($productId);
+        $this->service->delete($productId);
 
         if ($request->ajax()) {
             return response()->json(['success' => true]);
@@ -107,27 +94,6 @@ class CartController extends Controller
 
         return $this->successMessageWithRedirect('Remove item from cart successfully');
     }
-
-    /**
-     * Delete all products from cart.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function deleteAll()
-    {
-        $cart_id = null;
-        list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
-        if ($cart_id) {
-            DB::table('cart_details')
-                ->where('cart_id', '=', $cart_id)
-                ->delete();
-        }
-
-        $params = array('title', 'All item deleted from cart successfully');
-
-        return $params;
-    }
-
 
     public function createOrder(Request $request) {
         list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
