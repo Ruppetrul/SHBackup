@@ -10,6 +10,7 @@ class YookassaController extends Controller
 {
     public function test(Request $request) {
         Log::debug('New request from Yookassa');
-        Log::debug($request);
+        $data = $request->json()->all();
+        Log::debug(json_encode($data));
     }
 }
