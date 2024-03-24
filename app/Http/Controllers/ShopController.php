@@ -102,7 +102,7 @@ class ShopController extends Controller {
             'title' => $request->get('title'),
             'price' => $request->get('price'),
         ]);
-        return redirect()->route('shop.details', ['shopIdOrName' => $shopId]);
+        return redirect()->route('shop.details', compact('shopId'));
     }
 
     /**
