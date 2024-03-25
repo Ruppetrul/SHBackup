@@ -18,7 +18,7 @@
         <li>
             <strong>Наименование товара:</strong> {{ $line['title'] }} <br>
             <strong>Цена:</strong> {{ $line['price'] }} <br>
-            <strong>Количество:</strong> {{ $line['count'] }} <br><br>
+            <strong>Количество:</strong> {{ $line['quantity'] }} <br><br>
         </li>
     @endforeach
 </ul>
