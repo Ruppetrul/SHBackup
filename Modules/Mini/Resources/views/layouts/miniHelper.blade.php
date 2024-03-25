@@ -83,7 +83,8 @@
                 if (url) {
                     window.location.href = url;
                 } else {
-                    create_order_request();
+                    document.getElementById("order").submit();
+                    //create_order_request();
                 }
             });
 
@@ -99,7 +100,7 @@
         params["_token"] = document.querySelector('meta[name="csrf-token"]').content;
 
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: '{{ route("home.create.order", ['shopIdOrName' => $shopName]) }}',
             data: params,
             success: function (data) {
