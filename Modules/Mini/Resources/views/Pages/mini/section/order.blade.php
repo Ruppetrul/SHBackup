@@ -15,7 +15,7 @@
             <div class="row g-sm-5 g-3">
                 <div class="col-xxl-12">
                     @if($cart_detail)
-                    <form id="order" action="" method="GET">
+                    <form id="order" action="{{ route("home.create.order", ['shopIdOrName' => $shopName]) }}" method="GET">
                         <div class="form-group mb-3">
                             <label for="cash" class="mb-2 fw-bold">Оплата</label>
                             <div class="form-check">

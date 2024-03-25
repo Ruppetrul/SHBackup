@@ -62,48 +62,51 @@ class CartController extends Controller
      */
     public function createOrder(Request $request) {
         list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
-
-        if ($cart_total == 0) {
+        try {
+            $this->checkBeforeCreateOrder($request, $cart_total);
+        } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Cart is empty'
+                'message' => $e->getMessage()
             ]);
         }
 
-        $currentShopId = app('current_shop_id');
-
-        $description = $request->get('description');
-        $communication = $request->get('communication');
-
-        $orderArray = $this->service->createOrder(
-            [
-                'total' => $cart_total,
-                'cart_id' => $cart_id,
-                'description' => $description,
-                'communication' => $communication,
-            ],
-            $cart_detail,
-            $currentShopId
-        );
-
-        $data = [
-            'redirect_url' => redirect()->route('mini.mini', ['shopIdOrName' => $currentShopId]),
-        ];
-
         if ($request->get('bank') == 'on') {
-            list ($success, $response) = YookassaService::registerOrder($orderArray);
+            list ($success, $response) = YookassaService::registerOrder($cart_id, $cart_total);
+
             if ($success) {
+                $currentShopId = app('current_shop_id');
+
+                $orderArray = $this->service->createOrder(
+                    [
+                        'total'         => $cart_total,
+                        'cart_id'       => $cart_id,
+                        'description'   => $request->get('description'),
+                        'communication' => $request->get('communication'),
+                    ],
+                    $cart_detail,
+                    $currentShopId
+                );
+
                 $response = json_decode($response, true);
-                $confirmation_token = $response['confirmation']['confirmation_token'];
 
                 return redirect()->route('yookassa.payment.page', [
-                    'token' => $confirmation_token,
-                    'shopIdOrName' => $currentShopId
+                    'token'        => $response['confirmation']['confirmation_token'],
+                    'id'           => $response['id'],
+                    'shopIdOrName' => $currentShopId,
                 ]);
             }
         }
+    }
 
-        session()->flash('success_message', 'Заказ создан успешно!');
-        return response()->json($data);
+    private function checkBeforeCreateOrder(Request $request, $cart_total)
+    {
+        if ($cart_total == 0) {
+            throw new Exception('Cart is empty');
+        }
+
+        if (!$request->has('communication') || empty($request->get('communication'))) {
+            throw new Exception('Communication is required');
+        }
     }
 }

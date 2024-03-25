@@ -7,16 +7,16 @@ use Modules\Mini\Services\CartServiceInterface;
 
 class YookassaService
 {
-    public static function registerOrder($orderArray): array
+    public static function registerOrder($cart_id, $cart_total): array
     {
         $url = 'https://api.yookassa.ru/v3/payments';
         $shopId = '356919';
         $secretKey = 'test_s4cF0XunDIGIT__KQjZEv2FkLYXpzCQVV0HYSxuT0Tc';
-        $idempotenceKey = $orderArray['id'];
+        $idempotenceKey = $cart_id;
 
         $data = [
             'amount' => [
-                'value' => $orderArray['total'],
+                'value' => $cart_total,
                 'currency' => 'RUB'
             ],
             'capture' => true,
@@ -40,7 +40,7 @@ class YookassaService
         curl_setopt($ch, CURLOPT_USERPWD, "$shopId:$secretKey");
 
         $response = curl_exec($ch);
-
+Log::debug('payments::response: ' . $response);
         $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
         curl_close($ch);
