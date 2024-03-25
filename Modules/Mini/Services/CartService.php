@@ -82,6 +82,7 @@ class CartService implements CartServiceInterface
                 'order_id' => $orderArray['id']
             ]);
 
+        $orderArray['lines'] = $cartDetail;
         return $orderArray;
     }
 }
