@@ -13,8 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->integer('payment_status')->default(0);
+        Schema::create('yookassa_payments', function (Blueprint $table) {
+            $table->id();
+            $table->string('yookassa_id', 50)->nullable();
+            $table->text('body')->nullable();
+            $table->text('cart_body');
+            $table->integer('cart_id')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -25,8 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('payment_status');
-        });
+        Schema::dropIfExists('yookassa_payments');
     }
 };

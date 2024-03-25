@@ -61,49 +61,26 @@ class CartService implements CartServiceInterface
      * @param array $orderData
      * @return void
      */
-    public function createOrder(array $orderData, $cartDetail, $currentShopId) : array
+    public function createOrder(array $orderData, $cartDetail) : array
     {
         $orderArray = Order::create($orderData)->toArray();
 
+        foreach ($cartDetail as $line) {
+            DB::table('order_details')->insert([
+                'order_id'   => $orderArray['id'],
+                'product_id' => $line['id'],
+                'quantity'   => $line['quantity'],
+                'price'      => $line['price'],
+            ]);
+        }
+
+        //Handle current cart
         DB::table('cart')
             ->where('id', $orderData['cart_id'])
             ->update([
                 'status' => '1',
                 'order_id' => $orderArray['id']
             ]);
-
-        $orderArray['lines'] = $cartDetail;
-
-        DB::setDefaultConnection('mysql');
-
-        $instance = DB::table('shops')->where(function ($query) use ($currentShopId) {
-            if (is_numeric($currentShopId)) {
-                $query->where('id', $currentShopId);
-            } else {
-                $query->where('name', $currentShopId);
-            }
-        })->first();
-
-        $user = DB::table('users')->where('id', '=', $instance->owner_id)->first();
-        SendEmail::dispatch($user->email, $orderArray);
-
-        if ($instance) {
-            Config::set('database.connections.shop', [
-                'driver' => 'mysql',
-                'host' => env('DB_HOST'),
-                'database' => $instance->db_name,
-                'username' => env('DB_USERNAME'),
-                'password' => env('DB_PASSWORD'),
-                'charset' => 'utf8mb4',
-                'collation' => 'utf8mb4_unicode_ci',
-                'prefix' => '',
-            ]);
-
-            DB::setDefaultConnection('shop');
-
-            app()->instance('current_shop_id', $instance->id);
-            app()->instance('current_shop_name', $instance->name);
-        }
 
         return $orderArray;
     }

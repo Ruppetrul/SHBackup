@@ -7,12 +7,17 @@ use Modules\Mini\Services\CartServiceInterface;
 
 class YookassaService
 {
-    public static function registerOrder($cart_id, $cart_total): array
+    /**
+     * @param string|int $newPaymentId
+     * @param string|int $cart_total
+     * @return array
+     */
+    public static function registerOrder($newPaymentId, $cart_total): array
     {
         $url = 'https://api.yookassa.ru/v3/payments';
         $shopId = '356919';
         $secretKey = 'test_s4cF0XunDIGIT__KQjZEv2FkLYXpzCQVV0HYSxuT0Tc';
-        $idempotenceKey = $cart_id;
+        $idempotenceKey = $newPaymentId;
 
         $data = [
             'amount' => [

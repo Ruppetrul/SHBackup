@@ -2,9 +2,11 @@
 
 namespace Modules\Mini\Http\Controllers;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use Modules\Mini\Models\YookassaPayment;
 use Modules\Mini\Repositories\MiniRepoEloquent;
 use Modules\Mini\Services\CartService;
 use Modules\Mini\Services\YookassaService;
@@ -72,34 +74,53 @@ class CartController extends Controller
         }
 
         if ($request->get('bank') == 'on') {
-            list ($success, $response) = YookassaService::registerOrder($cart_id, $cart_total);
+            $newPayment = new YookassaPayment();
 
-            if ($success) {
+            $newPayment->cart_body = json_encode([
+                'total'          => $cart_total,
+                'cart_id'        => $cart_id,
+                'description'    => $request->get('description'),
+                'communication'  => $request->get('communication'),
+                'lines'          => $cart_detail,
+            ]);
+            $newPayment->cart_id = $cart_id;
+            $newPayment->save();
+
+            $newPaymentId = $newPayment->id;
+
+            list ($success, $response) = YookassaService::registerOrder($newPaymentId, $cart_total);
+Log::debug('Yookassa response: ' . $response);
+            $newPayment->body = $response;
+
+            $response = json_decode($response, true);
+
+            if ($success && !empty($response['confirmation']['confirmation_token'])) {
+                $newPayment->yookassa_id = $response['id'];
+                $newPayment->save();
+
                 $currentShopId = app('current_shop_id');
-
-                $orderArray = $this->service->createOrder(
-                    [
-                        'total'         => $cart_total,
-                        'cart_id'       => $cart_id,
-                        'description'   => $request->get('description'),
-                        'communication' => $request->get('communication'),
-                    ],
-                    $cart_detail,
-                    $currentShopId
-                );
-
-                $response = json_decode($response, true);
 
                 return redirect()->route('yookassa.payment.page', [
                     'token'        => $response['confirmation']['confirmation_token'],
-                    'id'           => $response['id'],
+                    'payment_id'   => $newPaymentId,
                     'shopIdOrName' => $currentShopId,
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Failed to register an order. Refresh the page to try again.'
                 ]);
             }
         }
     }
 
-    private function checkBeforeCreateOrder(Request $request, $cart_total)
+    /**
+     * @param Request $request
+     * @param string|int $cart_total
+     * @return void
+     * @throws Exception
+     */
+    private function checkBeforeCreateOrder(Request $request, $cart_total): void
     {
         if ($cart_total == 0) {
             throw new Exception('Cart is empty');

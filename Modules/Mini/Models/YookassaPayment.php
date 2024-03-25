@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Modules\Mini\Models\Enums\ProductStatusEnum;
 
-class Order extends Model {
+class YookassaPayment extends Model {
 
     use HasFactory;
 
     protected $fillable = [
-        'total',
+        'id',
+        'yookassa_id',
+        'body',
+        'cart_doby',
         'cart_id',
-        'communication',
-        'description',
-        'payment_id',
     ];
 }

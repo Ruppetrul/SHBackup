@@ -25,7 +25,7 @@
         confirmation_token: '{{ $token }}',
         return_url: '{{ route('yookassa.payment.end', [
             'shopIdOrName' => $shopIdOrName,
-            'token'        => $token
+            'payment_id'   => $payment_id
         ]) }}',
 
         //При необходимости можно изменить цвета виджета, подробные настройки см. в документации

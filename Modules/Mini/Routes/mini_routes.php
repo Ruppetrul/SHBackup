@@ -35,6 +35,6 @@ Route::prefix('/mini/{shopIdOrName}')->middleware('shop')->group(function () {
     Route::group(['prefix' => 'yookassa'], static function ($router) {
         $router->any('test', ['uses' => 'YookassaController@test', 'as' => 'yookassa.test']);
         $router->any('payment/{token}', ['uses' => 'YookassaController@payment', 'as' => 'yookassa.payment.page']);
-        $router->any('payment-end/{token}', ['uses' => 'YookassaController@payment_end', 'as' => 'yookassa.payment.end']);
+        $router->any('payment-end/{payment_id}', ['uses' => 'YookassaController@payment_end', 'as' => 'yookassa.payment.end']);
     });
 });
