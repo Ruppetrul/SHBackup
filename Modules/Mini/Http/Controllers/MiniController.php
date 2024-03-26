@@ -64,7 +64,7 @@ class MiniController extends Controller
      */
     public function getActiveProducts(
         $shopIdOrName,
-        MiniEloquentInterface $miniRepo,
+        MiniRepoEloquent $miniRepo,
         Request $request
     ) {
         list ($cart_detail) = $miniRepo::getCartData();
