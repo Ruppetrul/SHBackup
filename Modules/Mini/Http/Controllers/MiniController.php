@@ -80,6 +80,8 @@ class MiniController extends Controller
             $activeProducts = $miniRepo->getActive($request);
 
             if ($request->get('only_data')) {
+                $result['products'] = $activeProducts;
+            } else {
                 $result['view'] = view(
                     'Mini::Pages.mini.section.products',
                     [
@@ -89,8 +91,6 @@ class MiniController extends Controller
                         'shopName'    => app('current_shop_name'),
                     ]
                 )->render();
-            } else {
-                $result['products'] = $activeProducts;
             }
             $result['total'] = count($activeProducts);
             $result['has_more'] = ($result['total'] >= 10);
