@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Repositories\MiniEloquentInterface;
+use Illuminate\Support\Facades\Log;
 use Modules\Mini\Repositories\MiniRepoEloquentInterface;
 use Modules\Mini\Repositories\MiniRepoEloquent;
 
@@ -80,6 +81,14 @@ class MiniController extends Controller
             $activeProducts = $miniRepo->getActive($request);
 
             if ($request->get('only_data')) {
+                foreach ($activeProducts as $product) {
+                    if (isset($cart_detail[$product['id']])) {
+                        $qty = $cart_detail[$product['id']]['quantity'];
+                        $product['quantity_in_cart'] = $qty;
+                    } else {
+                        $product['quantity_in_cart'] = 0;
+                    }
+                }
                 $result['products'] = $activeProducts;
             } else {
                 $result['view'] = view(
@@ -95,6 +104,7 @@ class MiniController extends Controller
             $result['total'] = count($activeProducts);
             $result['has_more'] = ($result['total'] >= 10);
         } catch (Exception $exception) {
+            Log::debug($exception->getMessage());
             $result['success'] = false;
         }
 
