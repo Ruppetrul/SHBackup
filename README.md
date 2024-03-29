@@ -1,4 +1,6 @@
 # Simply-shop
+Builder of simple internet shop with integration into Telegram bots.
+
 ## Install
 0) php81 composer.phar install --no-dev --optimize-autoloader
 1) configure .env
