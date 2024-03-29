@@ -24,7 +24,7 @@ class MiniRepoEloquent implements MiniRepoEloquentInterface
     /**
      * @return array
      */
-    public static function getCartData($cart_id = null)
+    public static function getCartData()
     {
         $cart = DB::table('cart')
             ->where('ip_address', $_SERVER['REMOTE_ADDR'])
@@ -67,6 +67,7 @@ class MiniRepoEloquent implements MiniRepoEloquentInterface
 
         return [$cart_detail, $cart_total, $cart_id];
     }
+
 
     /**
      * @param $id

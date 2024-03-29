@@ -16,9 +16,9 @@
 <ul>
     @foreach ($orderData['lines'] as $line)
         <li>
-            <strong>Наименование товара:</strong> {{ $line['title'] }} <br>
-            <strong>Цена:</strong> {{ $line['price'] }} <br>
-            <strong>Количество:</strong> {{ $line['quantity'] }} <br><br>
+            <strong>Наименование товара:</strong> {{ $line->title }} <br>
+            <strong>Цена:</strong> {{ $line->price }} <br>
+            <strong>Количество:</strong> {{ $line->count }} <br><br>
         </li>
     @endforeach
 </ul>

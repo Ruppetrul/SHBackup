@@ -16,6 +16,5 @@ class Order extends Model {
         'cart_id',
         'communication',
         'description',
-        'payment_id',
     ];
 }

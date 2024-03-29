@@ -2,11 +2,9 @@
 
 namespace Modules\Mini\Http\Controllers;
 
-use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
-use Modules\Mini\Models\YookassaPayment;
 use Modules\Mini\Repositories\MiniRepoEloquent;
 use Modules\Mini\Services\CartService;
 use Modules\Mini\Services\YookassaService;
@@ -64,70 +62,44 @@ class CartController extends Controller
      */
     public function createOrder(Request $request) {
         list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
-        try {
-            $this->checkBeforeCreateOrder($request, $cart_total);
-        } catch (\Exception $e) {
+
+        if ($cart_total == 0) {
             return response()->json([
                 'success' => false,
-                'message' => $e->getMessage()
+                'message' => 'Cart is empty'
             ]);
         }
+
+        $currentShopId = app('current_shop_id');
+
+        $description = $request->get('description');
+        $communication = $request->get('communication');
+
+        $orderArray = $this->service->createOrder(
+            [
+                'total' => $cart_total,
+                'cart_id' => $cart_id,
+                'description' => $description,
+                'communication' => $communication,
+            ],
+            $cart_detail,
+            $currentShopId
+        );
+
+        $data = [
+            'redirect_url' => redirect()->route('mini.mini', ['shopIdOrName' => $currentShopId]),
+        ];
 
         if ($request->get('bank') == 'on') {
-            $newPayment = new YookassaPayment();
-
-            $newPayment->cart_body = json_encode([
-                'total'          => $cart_total,
-                'cart_id'        => $cart_id,
-                'description'    => $request->get('description'),
-                'communication'  => $request->get('communication'),
-                'lines'          => $cart_detail,
-            ]);
-            $newPayment->cart_id = $cart_id;
-            $newPayment->save();
-
-            $newPaymentId = $newPayment->id;
-
-            list ($success, $response) = YookassaService::registerOrder($newPaymentId, $cart_total);
-Log::debug('Yookassa response: ' . $response);
-            $newPayment->body = $response;
-
-            $response = json_decode($response, true);
-
-            if ($success && !empty($response['confirmation']['confirmation_token'])) {
-                $newPayment->yookassa_id = $response['id'];
-                $newPayment->save();
-
-                $currentShopId = app('current_shop_id');
-
-                return redirect()->route('yookassa.payment.page', [
-                    'token'        => $response['confirmation']['confirmation_token'],
-                    'payment_id'   => $newPaymentId,
-                    'shopIdOrName' => $currentShopId,
-                ]);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Failed to register an order. Refresh the page to try again.'
-                ]);
+            $shopUrl = route('mini.mini', ['shopIdOrName' => $currentShopId]);
+            list ($success, $response) = YookassaService::registerOrder($orderArray, $shopUrl);
+            if ($success) {
+                $response = json_decode($response, true);
+                $data['redirect_url'] = $response['confirmation']['confirmation_url'];
             }
         }
-    }
 
-    /**
-     * @param Request $request
-     * @param string|int $cart_total
-     * @return void
-     * @throws Exception
-     */
-    private function checkBeforeCreateOrder(Request $request, $cart_total): void
-    {
-        if ($cart_total == 0) {
-            throw new Exception('Cart is empty');
-        }
-
-        if (!$request->has('communication') || empty($request->get('communication'))) {
-            throw new Exception('Communication is required');
-        }
+        session()->flash('success_message', 'Заказ создан успешно!');
+        return response()->json($data);
     }
 }
