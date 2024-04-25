@@ -17,7 +17,7 @@ services:
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: simply-shop
+      MYSQL_DATABASE: simply_shop
       MYSQL_USER: root1
       MYSQL_PASSWORD: root1
     ports:
