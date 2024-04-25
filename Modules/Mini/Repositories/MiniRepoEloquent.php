@@ -75,10 +75,17 @@ class MiniRepoEloquent implements MiniRepoEloquentInterface
      */
     public function findProductById($id)
     {
-        return Product::query()
+        $product = Product::query()
             ->with('medias')
             ->where('id', (int) $id)
             ->firstOrFail();
+
+        $current_shop_id = app('current_shop_id');
+        foreach ($product->medias as $item) {
+            $item->url = asset('storage/' . $current_shop_id . '/' . $item->filename);
+        }
+
+        return $product;
     }
 
     /**
