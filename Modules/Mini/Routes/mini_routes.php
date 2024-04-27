@@ -15,9 +15,9 @@ use Modules\Mini\Http\Controllers\MiniController;
 Route::prefix('/mini/{shopIdOrName}')->middleware('shop')->group(function () {
     Route::get('/', [MiniController::class, 'mini'])->name('mini.mini');
     Route::get('/detail/{itemId}', [MiniController::class, 'mini']);
+    Route::get('/carts', [MiniController::class, 'mini'])->name('home.carts');
 
     $controller = 'MiniController@';
-    Route::get('/carts', ['uses' => $controller . 'carts'])->name('home.carts');
     Route::get('/order', ['uses' => $controller . 'order'])->name('home.order');
 
     Route::post('/create-order', ['uses' => 'CartController@createOrder'])->name('home.create.order');

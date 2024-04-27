@@ -37,11 +37,6 @@ class MiniController extends Controller
         );
     }
 
-    public function carts($shopIdOrName, MiniRepoEloquentInterface $miniRepo)
-    {
-        return view('Mini::Pages.mini.carts.index', $this->prepareBaseData($miniRepo));
-    }
-
     public function order($shopIdOrName, MiniRepoEloquentInterface $miniRepo)
     {
         return view('Mini::Pages.mini.order.index', $this->prepareBaseData($miniRepo));
