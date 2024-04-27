@@ -47,16 +47,6 @@ class MiniController extends Controller
         return view('Mini::Pages.mini.order.index', $this->prepareBaseData($miniRepo));
     }
 
-    public function details($shopIdOrName, $itemId, MiniRepoEloquentInterface $miniRepo)
-    {
-        $data = array_merge(
-            $this->prepareBaseData($miniRepo),
-            ['product' => $miniRepo->findProductById($itemId)],
-        );
-
-        return view('Mini::Pages.mini.details.index', $data);
-    }
-
     /**
      * @param string|int $shopIdOrName
      * @param string|int $itemId

@@ -4,7 +4,7 @@ import TopFilterPanel from "../components/main/TopFilterPanel.vue";
 import ItemsPanel from "../components/main/ItemsPanel.vue";
 import { ref } from "vue";
 import { getItems } from '../assets/js/api/getItems.js';
-import {useRoute} from "vue-router";
+import { useRoute } from "vue-router";
 
 const items = ref([]);
 let page = 0;
