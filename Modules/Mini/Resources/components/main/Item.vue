@@ -54,7 +54,6 @@
 
 <style scoped>
   .item_cart_container {
-    background-color: aliceblue;
     padding: 5px;
   }
 
