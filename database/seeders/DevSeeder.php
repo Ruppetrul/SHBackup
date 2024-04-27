@@ -2,11 +2,14 @@
 
 namespace Database\Seeders;
 
+use App\Models\Product;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+
+use Faker\Factory as Faker;
 
 class DevSeeder extends Seeder
 {
@@ -17,8 +20,8 @@ class DevSeeder extends Seeder
     {
         DB::transaction(function () {
             $user = User::factory()->create([
-                'name' => 'admin',
-                'email' => 'admin@admin.com',
+                'name'     => 'admin',
+                'email'    => 'admin@admin.com',
                 'password' => Hash::make('adminadmin'),
             ]);
 
@@ -33,6 +36,14 @@ class DevSeeder extends Seeder
                 'created_at'     => now(),
                 'updated_at'     => now(),
             ]);
+
+            $faker = Faker::create();
+            for ($i = 0; $i < 50; $i++) {
+                $itemId = Product::createProduct($shop->id, [
+                    'title' => $faker->name() . $i,
+                    'price' => $faker->randomNumber(),
+                ]);
+            }
         });
     }
 }
