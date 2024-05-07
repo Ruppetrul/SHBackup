@@ -38,7 +38,4 @@
 
 {{-- Script js --}}
 <script src="{{ asset('home/js/script.js') }}"></script>
-
-{{-- Custom js --}}
-<script src="{{ asset('home/js/custom.js') }}"></script>
 @yield('js')
