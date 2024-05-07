@@ -28,11 +28,4 @@
 
 {{-- Quantity js --}}
 <script src="{{ asset('home/js/quantity-2.js') }}"></script>
-
-{{-- WOW js --}}
-<script src="{{ asset('home/js/wow.min.js') }}"></script>
-<script src="{{ asset('home/js/custom-wow.js') }}"></script>
-
-{{-- Script js --}}
-<script src="{{ asset('home/js/script.js') }}"></script>
 @yield('js')
