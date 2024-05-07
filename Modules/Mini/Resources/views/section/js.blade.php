@@ -44,7 +44,4 @@
 
 {{-- Theme setting js --}}
 <script src="{{ asset('home/js/theme-setting.js') }}"></script>
-
-{{-- Sweetalert js --}}
-<script src="{{ asset('panel/js/scripts/sweetalert/sweetalert.min.js') }}"></script>
 @yield('js')
