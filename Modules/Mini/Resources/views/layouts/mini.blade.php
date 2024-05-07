@@ -19,6 +19,5 @@
     <body class="bg-effect">
         @yield('content') {{-- Yield content data --}}
         @include('Mini::section.theme-options') {{-- Include theme options --}}
-        @include('Mini::section.js') {{-- Include js files --}}
     </body>
 </html>
