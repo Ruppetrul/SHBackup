@@ -41,7 +41,4 @@
 
 {{-- Custom js --}}
 <script src="{{ asset('home/js/custom.js') }}"></script>
-
-{{-- Theme setting js --}}
-<script src="{{ asset('home/js/theme-setting.js') }}"></script>
 @yield('js')
