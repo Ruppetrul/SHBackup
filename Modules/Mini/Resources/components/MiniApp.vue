@@ -14,6 +14,6 @@ export default {
 
 <style>
 #test-container {
-    padding: 30px;
+    padding-top: 30px;
 }
 </style>
