@@ -25,10 +25,10 @@
 
     const fetchDataIfNeeded = async () => {
       props.paginate();
-      setTimeout(() => {
-        if (!isScreenFilledWithCards() && props.has_more) {
-          fetchDataIfNeeded();
-      }}, 1000);
+      // setTimeout(() => {
+      //   if (!isScreenFilledWithCards() && props.has_more) {
+      //     fetchDataIfNeeded();
+      // }}, 1000);
     };
 
     fetchDataIfNeeded();
