@@ -28,48 +28,47 @@ class MiniRepoEloquent implements MiniRepoEloquentInterface
     public static function getCartData()
     {
         $remoteAddr = $_SERVER['REMOTE_ADDR'];
-        return Cache::remember('getCartData_' . $remoteAddr, 10, function () use ($remoteAddr) {
-            $cart = DB::table('cart')
-                ->where('ip_address', $remoteAddr)
-                ->where('status', 0)
-                ->first();
 
-            $cart_id = $cart->id ?? DB::table('cart')->insertGetId([
-                    'ip_address' => $remoteAddr,
-                    'status' => 0,
-                ]);
+        $cart = DB::table('cart')
+            ->where('ip_address', $remoteAddr)
+            ->where('status', 0)
+            ->first();
 
-            $cart_detail = [];
-            $cart_total = 0;
+        $cart_id = $cart->id ?? DB::table('cart')->insertGetId([
+                'ip_address' => $remoteAddr,
+                'status' => 0,
+            ]);
 
-            if ($cart_id) {
-                $cart_detail = DB::table('cart_details')
-                    ->where('cart_id', $cart_id)
-                    ->get();
+        $cart_detail = [];
+        $cart_total = 0;
 
-                $productIds = $cart_detail->pluck('product_id');
-                $products = Product::whereIn('id', $productIds)->with('avatar')->get();
+        if ($cart_id) {
+            $cart_detail = DB::table('cart_details')
+                ->where('cart_id', $cart_id)
+                ->get();
 
-                $cart_detail_res = [];
-                foreach ($products as $product) {
-                    foreach ($cart_detail as $cd) {
-                        if ($cd->product_id === $product->id) {
-                            $product->quantity = $cd->quantity;
-                            $cart_detail_res[$product->id] = $product;
-                            break;
-                        }
+            $productIds = $cart_detail->pluck('product_id');
+            $products = Product::whereIn('id', $productIds)->with('avatar')->get();
+
+            $cart_detail_res = [];
+            foreach ($products as $product) {
+                foreach ($cart_detail as $cd) {
+                    if ($cd->product_id === $product->id) {
+                        $product->quantity = $cd->quantity;
+                        $cart_detail_res[$product->id] = $product;
+                        break;
                     }
-                }
-
-                $cart_detail = $cart_detail_res;
-
-                foreach ($cart_detail as $product_c) {
-                    $cart_total += $product_c->price * $product_c->quantity;
                 }
             }
 
-            return [$cart_detail, $cart_total, $cart_id];
-        });
+            $cart_detail = $cart_detail_res;
+
+            foreach ($cart_detail as $product_c) {
+                $cart_total += $product_c->price * $product_c->quantity;
+            }
+        }
+
+        return [$cart_detail, $cart_total, $cart_id];
     }
 
 
