@@ -60,7 +60,6 @@
   .item_cart {
     background-color: white;
     height: 100%;
-    padding: 10%;
     border-radius: 7%;
     display: flex;
     flex-direction: column;
