@@ -37,14 +37,14 @@
       <div class="item_footer">
         <template v-if="props.itemData.quantity_in_cart">
           <div class="item_quantity_control_panel">
-            <button @click="decreaseCount">-</button>
+            <button class="item_count_button" @click="decreaseCount">-</button>
             <span style="width: 40%;">{{ props.itemData.quantity_in_cart }}</span>
-            <button @click="increaseCount">+</button>
+            <button class="item_count_button" @click="increaseCount">+</button>
           </div>
         </template>
         <template v-else>
           <div class="item_quantity_default_panel">
-            <button @click="increaseCount">Добавить в корзину</button>
+            <button class="item_count_button" @click="increaseCount">Добавить в корзину</button>
           </div>
         </template>
       </div>
@@ -97,5 +97,9 @@
 
   .item_quantity_control_panel button {
     width: 30%;
+  }
+
+  .item_count_button {
+      padding: 1em;
   }
 </style>
