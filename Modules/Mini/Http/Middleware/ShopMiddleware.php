@@ -4,6 +4,7 @@ namespace Modules\Mini\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,15 +20,17 @@ class ShopMiddleware
     {
         $shopIdOrName = $request->shopIdOrName;
 
-        $instance = DB::table('shops')
-            ->where(function ($query) use ($shopIdOrName) {
-                if (is_numeric($shopIdOrName)) {
-                    $query->where('id', $shopIdOrName);
-                } else {
-                    $query->where('name', $shopIdOrName);
-                }
-            })
-            ->first();
+        $instance = Cache::remember('shop_' . $shopIdOrName, 15, function () use ($shopIdOrName) {
+            return DB::table('shops')
+                ->where(function ($query) use ($shopIdOrName) {
+                    if (is_numeric($shopIdOrName)) {
+                        $query->where('id', $shopIdOrName);
+                    } else {
+                        $query->where('name', $shopIdOrName);
+                    }
+                })
+                ->first();
+        });
 
         if ($instance) {
             Config::set('database.connections.shop', [
