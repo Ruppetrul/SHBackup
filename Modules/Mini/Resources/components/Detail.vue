@@ -31,7 +31,7 @@
       <br>
     </div>
     <div class="col-12 col-xl-6 info_panel">
-      <InfoPanel :isLoading="isLoading" :item="item"/>
+      <InfoPanel :isLoading="isLoading" :item="item" :shop_id="shop_id"/>
     </div>
   </div>
 </template>

@@ -2,7 +2,7 @@
   import { defineProps, watch } from "vue";
   import { updateCount } from "../../assets/js/api/updateCount.js";
 
-  const props = defineProps(['isLoading', 'item']);
+  const props = defineProps(['isLoading', 'item', 'shop_id']);
 
   const decreaseCount = () => {
     props.item.quantity_in_cart--;
@@ -17,7 +17,7 @@
   watch(() => props.item.quantity_in_cart, (newValue) => {
     clearTimeout(timer);
     timer = setTimeout(() => {
-      updateCount(props.item.id, newValue);
+      updateCount(props.item.id, newValue, props.shop_id);
     }, 300);
   });
 
