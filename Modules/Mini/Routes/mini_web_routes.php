@@ -22,11 +22,6 @@ Route::prefix('/mini/{shopIdOrName}')->middleware('shop')->group(function () {
 
     Route::post('/create-order', ['uses' => 'CartController@createOrder'])->name('home.create.order');
 
-    Route::group(['prefix' => 'ajax'], function () use ($controller) {
-        Route::get('/products', ['uses' => $controller . 'getActiveProducts'])->name('products.active');
-        Route::get('/product/{itemId}', ['uses' => $controller . 'getProduct'])->name('product');
-    });
-
     Route::group(['prefix' => 'cart'], static function ($router) {
         $router->post('{itemId}/delete', ['uses' => 'CartController@delete', 'as' => 'cart.delete']);
     });

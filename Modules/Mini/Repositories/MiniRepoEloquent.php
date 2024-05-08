@@ -2,6 +2,7 @@
 
 namespace Modules\Mini\Repositories;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Modules\Mini\Models\Product;
 

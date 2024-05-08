@@ -24,13 +24,6 @@ class MiniServiceProvider extends ServiceProvider
     private array $routeMiddleware = ['web'];
 
     /**
-     * Get mini path.
-     *
-     * @var string
-     */
-    private string $miniPath = '/../Routes/mini_routes.php';
-
-    /**
      * Get migration path.
      *
      * @var string
@@ -56,14 +49,28 @@ class MiniServiceProvider extends ServiceProvider
      *
      * @var array|string[]
      */
-    private array $middlewareRoute = ['web'];
+    private array $middlewareWebRoute = ['web'];
+
+    /**
+     * Get middleware route.
+     *
+     * @var array|string[]
+     */
+    private array $middlewareApiRoute = ['api'];
 
     /**
      * Get route path.
      *
      * @var string
      */
-    private string $routePath = '/../Routes/mini_routes.php';
+    private string $routeWebPath = '/../Routes/mini_web_routes.php';
+
+    /**
+     * Get route path.
+     *
+     * @var string
+     */
+    private string $routeApiPath = '/../Routes/mini_api_routes.php';
 
     /**
      * Register files.
@@ -110,9 +117,13 @@ class MiniServiceProvider extends ServiceProvider
      */
     private function loadRouteFiles(): void
     {
-        Route::middleware($this->middlewareRoute)
+        Route::middleware($this->middlewareWebRoute)
             ->namespace($this->namespace)
-            ->group(__DIR__ . $this->routePath);
+            ->group(__DIR__ . $this->routeWebPath);
+
+        Route::middleware($this->middlewareApiRoute)
+            ->namespace($this->namespace)
+            ->group(__DIR__ . $this->routeApiPath);
     }
 
     /**
