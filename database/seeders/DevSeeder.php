@@ -18,32 +18,30 @@ class DevSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::transaction(function () {
-            $user = User::factory()->create([
-                'name'     => 'admin',
-                'email'    => 'admin@admin.com',
-                'password' => Hash::make('adminadmin'),
-            ]);
+        $user = User::factory()->create([
+            'name'     => 'admin',
+            'email'    => 'admin@admin.com',
+            'password' => Hash::make('adminadmin'),
+        ]);
 
-            $now = now();
-            $shop = Shop::create([
-                'name'           => 'Test shop for admin',
-                'db_name'        => 'unknown_' . $now->format('YmdHis'),
-                'owner_id'       => $user->id,
-                'payment_status' => 'trial',
-                'state'          => 'not_created',
-                'last_used_at'   => now(),
-                'created_at'     => now(),
-                'updated_at'     => now(),
-            ]);
+        $now = now();
+        $shop = Shop::create([
+            'name'           => 'Test shop for admin',
+            'db_name'        => 'unknown_' . $now->format('YmdHis'),
+            'owner_id'       => $user->id,
+            'payment_status' => 'trial',
+            'state'          => 'not_created',
+            'last_used_at'   => now(),
+            'created_at'     => now(),
+            'updated_at'     => now(),
+        ]);
 
-            $faker = Faker::create();
-            for ($i = 0; $i < 50; $i++) {
-                $itemId = Product::createProduct($shop->id, [
-                    'title' => $faker->name() . $i,
-                    'price' => $faker->randomNumber(),
-                ]);
-            }
-        });
+        $faker = Faker::create();
+        for ($i = 0; $i < 50; $i++) {
+            Product::createProduct($shop->id, [
+                'title' => $faker->name() . $i,
+                'price' => $faker->randomNumber(),
+            ]);
+        }
     }
 }
