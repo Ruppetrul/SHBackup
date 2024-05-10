@@ -8,18 +8,15 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Repositories\MiniEloquentInterface;
 use Illuminate\Support\Facades\Log;
+use Inertia\Inertia;
 use Modules\Mini\Repositories\MiniRepoEloquentInterface;
 use Modules\Mini\Repositories\MiniRepoEloquent;
 
 class MiniController extends Controller
 {
-    public function mini($shopIdOrName, MiniRepoEloquentInterface $miniRepo)
+    public function mini()
     {
-        $data = array_merge(
-            $this->prepareBaseData($miniRepo),
-        );
-
-        return view('Mini::index', $data);
+        return Inertia::render('Main', ['shop_id' => app('current_shop_id')]);
     }
 
     public function prepareBaseData(MiniRepoEloquentInterface $miniRepo) : array{

@@ -4,7 +4,15 @@ import TopFilterPanel from "../components/main/TopFilterPanel.vue";
 import ItemsPanel from "../components/main/ItemsPanel.vue";
 import { ref } from "vue";
 import { getItems } from '../assets/js/api/getItems.js';
-import { useRoute } from "vue-router";
+import tgHelper from '../js/tg_helper.js';
+
+const props = defineProps(['shop_id']);
+
+const shop_id = props.shop_id;
+
+tgHelper.tg_init();
+tgHelper.tg_init_main_button('/mini/' + shop_id + '/carts', 'Корзина');
+tgHelper.tg_back_button_hide();
 
 const items = ref([]);
 let page = 0;
@@ -12,9 +20,6 @@ let has_more = true;
 
 let search = '';
 let order = '';
-
-const route = useRoute();
-const shop_id = route.params.shop_id;
 
 async function fetchItems(is_paginate = false) {
     const params = new URLSearchParams(

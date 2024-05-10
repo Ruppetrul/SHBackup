@@ -1,26 +1,16 @@
-import { createApp } from 'vue';
+import { createApp, h } from 'vue'
+import { createInertiaApp } from '@inertiajs/vue3'
 
-import { createRouter, createWebHistory } from 'vue-router'
-import MiniApp from '../../components/MiniApp.vue';
-import Main from '../../components/Main.vue';
-import Detail from '../../components/Detail.vue';
-import Cart from '../../components/Cart.vue';
-
-const router = createRouter({
-    history: createWebHistory(),
-    routes: [
-        { path: '/mini/:shop_id', component: Main },
-        { path: '/mini/:shop_id/carts', component: Cart},
-        { path: '/mini/:shop_id/detail/:item_id', component: Detail, props: true, meta: { requiresItemId: true }},
-    ]
+createInertiaApp({
+    resolve: name => {
+        console.log('pages');
+        const pages = import.meta.glob('./../../components/*.vue', { eager: true })
+        return pages[`../../components/${name}.vue`]
+    },
+    setup({ el, App, props, plugin }) {
+        console.log('pages');
+        createApp({ render: () => h(App, props) })
+            .use(plugin)
+            .mount(el)
+    },
 })
-
-router.beforeResolve((to, from, next) => {
-    if (to.path === '/mini/:shop_id/detail' && !to.params.item_id) {
-        next('/')
-    } else {
-        next()
-    }
-})
-
-createApp(MiniApp).use(router).mount('#app')

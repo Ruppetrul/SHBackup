@@ -13,9 +13,9 @@ use Modules\Mini\Http\Controllers\MiniController;
 */
 
 Route::prefix('/mini/{shopIdOrName}')->middleware('shop')->group(function () {
-    Route::get('/', [MiniController::class, 'mini'])->name('mini.mini');
+    Route::get('/', [MiniController::class, 'mini']);
     Route::get('/detail/{itemId}', [MiniController::class, 'mini']);
-    Route::get('/carts', [MiniController::class, 'mini'])->name('home.carts');
+    Route::get('/carts', [MiniController::class, 'mini']);
 
     $controller = 'MiniController@';
     Route::get('/order', ['uses' => $controller . 'order'])->name('home.order');
