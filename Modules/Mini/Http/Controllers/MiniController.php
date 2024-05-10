@@ -29,6 +29,11 @@ class MiniController extends Controller
         return Inertia::render('Cart');
     }
 
+    public function order()
+    {
+        return Inertia::render('Order');
+    }
+
     public function prepareBaseData(MiniRepoEloquentInterface $miniRepo) : array{
         list ($cart_detail, $cart_total) = $miniRepo::getCartData();
         foreach ($cart_detail as $line) {
@@ -42,11 +47,6 @@ class MiniController extends Controller
             'cart_detail' => $cart_detail,
             'cart_total'  => $cart_total,
         );
-    }
-
-    public function order($shopIdOrName, MiniRepoEloquentInterface $miniRepo)
-    {
-        return view('Mini::Pages.mini.order.index', $this->prepareBaseData($miniRepo));
     }
 
     /**
