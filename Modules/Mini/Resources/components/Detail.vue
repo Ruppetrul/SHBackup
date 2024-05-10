@@ -1,21 +1,22 @@
 <script setup>
   import { getItem } from '../assets/js/api/getItem.js';
   import { ref } from "vue";
-  import { useRoute } from 'vue-router';
 
   import Medias from "../components/detail/Medias.vue";
   import InfoPanel from "../components/detail/InfoPanel.vue";
+
+  const props = defineProps(['shop_id', 'item_id']);
+
+  const shop_id = props.shop_id;
+  const item_id = props.item_id;
 
   const item = ref([]);
   const medias = ref([]);
   const isLoading = ref(true);
 
-  const route = useRoute();
-  const shop_id = route.params.shop_id;
-
   (async () => {
     try {
-      item.value = await getItem(route.params.item_id, shop_id);
+      item.value = await getItem(item_id, shop_id);
       medias.value = item.value.medias;
       isLoading.value = false;
     } catch (error) {

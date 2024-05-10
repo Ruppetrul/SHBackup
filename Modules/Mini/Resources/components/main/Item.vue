@@ -1,6 +1,7 @@
 <script setup>
   import { defineProps, watch } from 'vue';
   import { updateCount } from '../../assets/js/api/updateCount.js';
+  import { Link } from '@inertiajs/vue3'
 
   const props = defineProps(['itemData', 'shop_id'])
 
@@ -26,12 +27,12 @@
   <div class="item_cart_container">
     <div class="item_cart">
       <div class="item_avatar">
-        <router-link :to="`/mini/${props.shop_id}/detail/${props.itemData.id}`">
+        <Link :href="`/mini/${props.shop_id}/detail/${props.itemData.id}`">
           <img :src="props.itemData.avatar_url" width="200" height="200" alt="Дефолтная картинка" loading="lazy">
-        </router-link>
+        </Link>
       </div>
       <div class="item_detail">
-        <router-link :to="`/mini/${props.shop_id}/detail/${props.itemData.id}`">{{ props.itemData.title }}</router-link>
+          <Link :href="`/mini/${props.shop_id}/detail/${props.itemData.id}`">{{ props.itemData.title }}</Link>
         <h5>{{ props.itemData.price }}</h5>
       </div>
       <div class="item_footer">

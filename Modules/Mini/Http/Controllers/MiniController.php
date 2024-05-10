@@ -19,6 +19,11 @@ class MiniController extends Controller
         return Inertia::render('Main', ['shop_id' => app('current_shop_id')]);
     }
 
+    public function detail($itemId)
+    {
+        return Inertia::render('Detail', ['shop_id' => app('current_shop_id'), 'item_id' => $itemId]);
+    }
+
     public function prepareBaseData(MiniRepoEloquentInterface $miniRepo) : array{
         list ($cart_detail, $cart_total) = $miniRepo::getCartData();
         foreach ($cart_detail as $line) {
