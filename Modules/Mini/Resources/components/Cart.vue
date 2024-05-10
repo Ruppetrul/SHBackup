@@ -1,6 +1,7 @@
 <script setup>
   import { ref } from "vue";
   import ItemPreloader from "../components/cart/ItemPreloader.vue";
+  import Layout from './Layout.vue';
   const isLoading = ref(true);
 </script>
 
