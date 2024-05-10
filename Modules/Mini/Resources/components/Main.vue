@@ -64,7 +64,7 @@ async function paginate() {
 </script>
 
 <template>
-  <Layout :need_web_button=!tgHelper.is_tg>
+  <Layout :need_web_button=!tgHelper.is_tg :text="'Корзина'">
       <div id="page">
           <SearchPanel :change_search_filter="change_search_filter"/>
           <TopFilterPanel :change_order_filter="change_order_filter"/>

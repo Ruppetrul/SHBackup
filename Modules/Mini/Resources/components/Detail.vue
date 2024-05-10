@@ -34,7 +34,7 @@
 </script>
 
 <template>
-  <Layout :need_web_button=!tgHelper.is_tg>
+  <Layout :need_web_button=!tgHelper.is_tg :text="'Корзина'">
     <div class="row">
       <div class="col-12 col-xl-6 medias_panel">
         <Medias :isLoading="isLoading" :medias="medias"/>

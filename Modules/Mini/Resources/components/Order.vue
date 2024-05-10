@@ -13,7 +13,7 @@
 </script>
 
 <template>
-  <Layout :need_web_button=!tgHelper.is_tg>
+  <Layout :need_web_button=!tgHelper.is_tg :text="'Оплатить'">
     <h1>Order page</h1>
   </Layout>
 </template>

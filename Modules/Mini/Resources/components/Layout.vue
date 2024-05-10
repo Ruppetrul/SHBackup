@@ -1,5 +1,5 @@
 <script setup>
-    const props = defineProps(['need_web_button']);
+    const props = defineProps(['need_web_button', 'text']);
 </script>
 
 <template>
@@ -8,7 +8,7 @@
             <slot></slot>
         </div>
     </div>
-    <button id="bottom-button" v-show="props.need_web_button === true">Кнопка</button>
+    <button id="bottom-button" v-show="props.need_web_button === true">{{ props.text }}</button>
 </template>
 
 <style>

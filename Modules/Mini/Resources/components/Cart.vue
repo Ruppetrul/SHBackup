@@ -13,7 +13,7 @@
 </script>
 
 <template>
-  <Layout :need_web_button=!tgHelper.is_tg>
+  <Layout :need_web_button=!tgHelper.is_tg :text="'Оформить'">
     <h1>Корзина</h1>
     <hr>
     <template v-if="isLoading">
