@@ -1,5 +1,7 @@
 <script setup>
-    const props = defineProps(['need_web_button', 'text']);
+    import { Link } from '@inertiajs/vue3'
+
+    const props = defineProps(['need_web_button', 'text', 'link']);
 </script>
 
 <template>
@@ -8,7 +10,9 @@
             <slot></slot>
         </div>
     </div>
-    <button id="bottom-button" v-show="props.need_web_button === true">{{ props.text }}</button>
+    <Link :href="props.link">
+        <button id="bottom-button" v-show="props.need_web_button === true">{{ props.text }}</button>
+    </Link>
 </template>
 
 <style>

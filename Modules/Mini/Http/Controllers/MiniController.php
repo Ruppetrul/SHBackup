@@ -26,7 +26,7 @@ class MiniController extends Controller
 
     public function cart()
     {
-        return Inertia::render('Cart');
+        return Inertia::render('Cart', ['shop_id' => app('current_shop_id')]);
     }
 
     public function order()

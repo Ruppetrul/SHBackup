@@ -10,10 +10,13 @@
       tgHelper.tg_init_main_button('/mini/' + shop_id + '/order', 'Оформить');
       tgHelper.tg_back_button_hide();
   }
+
+  const props = defineProps(['shop_id']);
+  const shop_id = props.shop_id;
 </script>
 
 <template>
-  <Layout :need_web_button=!tgHelper.is_tg :text="'Оформить'">
+  <Layout :need_web_button=!tgHelper.is_tg :text="'Оформить'" :link="`/mini/${shop_id}/order`">
     <h1>Корзина</h1>
     <hr>
     <template v-if="isLoading">

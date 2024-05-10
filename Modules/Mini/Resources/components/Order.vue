@@ -13,7 +13,7 @@
 </script>
 
 <template>
-  <Layout :need_web_button=!tgHelper.is_tg :text="'Оплатить'">
+  <Layout :need_web_button=!tgHelper.is_tg :text="'Оплатить'" :link="`/mini/${props.shop_id}/order`">
     <h1>Order page</h1>
   </Layout>
 </template>
