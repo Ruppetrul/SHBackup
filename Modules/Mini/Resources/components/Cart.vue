@@ -5,16 +5,18 @@
 </script>
 
 <template>
-  <h1>Корзина</h1>
-  <hr>
-  <template v-if="isLoading">
-    <div class="placeholder_image">
-      <ItemPreloader v-for="index in 10" :key="index" />
-    </div>
-  </template>
-  <template v-else>
+  <Layout>
+    <h1>Корзина</h1>
+    <hr>
+    <template v-if="isLoading">
+      <div class="placeholder_image">
+        <ItemPreloader v-for="index in 10" :key="index" />
+      </div>
+    </template>
+    <template v-else>
 
-  </template>
+    </template>
+  </Layout>
 </template>
 
 <style scoped>

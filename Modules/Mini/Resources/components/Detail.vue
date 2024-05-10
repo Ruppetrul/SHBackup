@@ -4,6 +4,7 @@
 
   import Medias from "../components/detail/Medias.vue";
   import InfoPanel from "../components/detail/InfoPanel.vue";
+  import Layout from './Layout.vue';
 
   const props = defineProps(['shop_id', 'item_id']);
 
@@ -26,15 +27,17 @@
 </script>
 
 <template>
-  <div class="row">
-    <div class="col-12 col-xl-6 medias_panel">
-      <Medias :isLoading="isLoading" :medias="medias"/>
-      <br>
+  <Layout>
+    <div class="row">
+      <div class="col-12 col-xl-6 medias_panel">
+        <Medias :isLoading="isLoading" :medias="medias"/>
+        <br>
+      </div>
+      <div class="col-12 col-xl-6 info_panel">
+        <InfoPanel :isLoading="isLoading" :item="item" :shop_id="shop_id"/>
+      </div>
     </div>
-    <div class="col-12 col-xl-6 info_panel">
-      <InfoPanel :isLoading="isLoading" :item="item" :shop_id="shop_id"/>
-    </div>
-  </div>
+  </Layout>
 </template>
 
 <style scoped>

@@ -7,7 +7,7 @@ export default {
 <template>
     <div class="container">
         <div class="container-fluid-lg" id="test-container">
-            <router-view></router-view>
+            <slot></slot>
         </div>
     </div>
 </template>

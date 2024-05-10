@@ -2,6 +2,8 @@
 import SearchPanel from "../components/main/SearchPanel.vue";
 import TopFilterPanel from "../components/main/TopFilterPanel.vue";
 import ItemsPanel from "../components/main/ItemsPanel.vue";
+import Layout from './Layout.vue';
+
 import { ref } from "vue";
 import { getItems } from '../assets/js/api/getItems.js';
 import tgHelper from '../js/tg_helper.js';
@@ -60,11 +62,13 @@ async function paginate() {
 </script>
 
 <template>
-    <div id="page">
-        <SearchPanel :change_search_filter="change_search_filter"/>
-        <TopFilterPanel :change_order_filter="change_order_filter"/>
-        <ItemsPanel :items="items" :paginate="paginate" :has_more="has_more" :shop_id="shop_id"/>
-    </div>
+  <Layout>
+      <div id="page">
+          <SearchPanel :change_search_filter="change_search_filter"/>
+          <TopFilterPanel :change_order_filter="change_order_filter"/>
+          <ItemsPanel :items="items" :paginate="paginate" :has_more="has_more" :shop_id="shop_id"/>
+      </div>
+  </Layout>
 </template>
 
 <style scoped>
