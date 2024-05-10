@@ -17,6 +17,7 @@
 }
 
 #bottom-button {
+    background-color: #f0f8ff;
     height: 3em;
     position: fixed;
     bottom: 0;

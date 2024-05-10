@@ -13,7 +13,7 @@
 </script>
 
 <template>
-  <Layout>
+  <Layout :need_web_button=!tgHelper.is_tg>
     <h1>Order page</h1>
   </Layout>
 </template>
