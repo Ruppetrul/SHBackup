@@ -3,6 +3,13 @@
   import ItemPreloader from "../components/cart/ItemPreloader.vue";
   import Layout from './Layout.vue';
   const isLoading = ref(true);
+  import tgHelper from "../js/tg_helper.js";
+
+  tgHelper.tg_init();
+  if (tgHelper.is_tg) {
+      tgHelper.tg_init_main_button('/mini/' + shop_id + '/order', 'Оформить');
+      tgHelper.tg_back_button_hide();
+  }
 </script>
 
 <template>

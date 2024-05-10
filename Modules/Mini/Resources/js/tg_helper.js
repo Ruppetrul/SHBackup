@@ -88,6 +88,7 @@ const tgHelper = {
     tg_init_back_button,
     tg_back_button_hide,
     tg_init_main_button,
+    is_tg
 };
 
 export default tgHelper;

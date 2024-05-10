@@ -5,6 +5,7 @@
   import Medias from "../components/detail/Medias.vue";
   import InfoPanel from "../components/detail/InfoPanel.vue";
   import Layout from './Layout.vue';
+  import tgHelper from "../js/tg_helper.js";
 
   const props = defineProps(['shop_id', 'item_id']);
 
@@ -14,6 +15,12 @@
   const item = ref([]);
   const medias = ref([]);
   const isLoading = ref(true);
+
+  tgHelper.tg_init();
+  if (tgHelper.is_tg) {
+      tgHelper.tg_init_main_button('/mini/' + shop_id + '/carts', 'Корзина');
+      tgHelper.tg_back_button_hide();
+  }
 
   (async () => {
     try {

@@ -13,8 +13,10 @@ const props = defineProps(['shop_id']);
 const shop_id = props.shop_id;
 
 tgHelper.tg_init();
-tgHelper.tg_init_main_button('/mini/' + shop_id + '/carts', 'Корзина');
-tgHelper.tg_back_button_hide();
+if (tgHelper.is_tg) {
+    tgHelper.tg_init_main_button('/mini/' + shop_id + '/carts', 'Корзина');
+    tgHelper.tg_back_button_hide();
+}
 
 const items = ref([]);
 let page = 0;
