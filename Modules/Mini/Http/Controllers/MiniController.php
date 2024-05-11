@@ -43,7 +43,7 @@ class MiniController extends Controller
 
     public function order()
     {
-        return Inertia::render('Order');
+        return Inertia::render('Order', $this->prepareBaseData());
     }
 
     /**
