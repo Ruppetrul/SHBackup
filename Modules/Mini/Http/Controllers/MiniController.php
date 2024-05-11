@@ -19,7 +19,7 @@ class MiniController extends Controller
         return Inertia::render('Main', $this->prepareBaseData());
     }
 
-    public function detail($itemId)
+    public function detail($shopId, $itemId)
     {
         return Inertia::render('Detail', array_merge(
             $this->prepareBaseData(),
