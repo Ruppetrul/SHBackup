@@ -14,7 +14,7 @@ use Modules\Mini\Http\Controllers\MiniController;
 
 Route::prefix('/mini/{shopIdOrName}/ajax')->middleware('shop')->group(function () {
     Route::group(['prefix' => 'products'], function () {
-        Route::get('/', [MiniController::class, 'getActiveProducts'])->name('mini.mini');
+        Route::get('/', [MiniController::class, 'getActiveProducts']);
     });
     Route::get('/product/{itemId}', [MiniController::class, 'getProduct'])->name('product');
 });
