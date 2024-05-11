@@ -40,7 +40,7 @@
       <template v-if="item.quantity_in_cart">
         <div class="item_quantity_control_panel">
           <button class="item_count_button" @click="decreaseCount">-</button>
-          <span class="quantity_panel" style="width: 40%;">{{ props.item.quantity_in_cart }}</span>
+          <span class="quantity_panel">{{ props.item.quantity_in_cart }}</span>
           <button class="item_count_button" @click="increaseCount">+</button>
         </div>
       </template>
@@ -57,6 +57,8 @@
   .quantity_panel {
     padding-right: 20px;
     padding-left: 20px;
+    width: 40%;
+    text-align: center;
   }
 
   .placeholder_text, .placeholder_quantity_panel {
