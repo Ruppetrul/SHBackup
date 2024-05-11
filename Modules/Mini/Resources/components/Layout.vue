@@ -1,10 +1,11 @@
 <script setup>
-    import { Link } from '@inertiajs/vue3'
+    import { Link, Head } from '@inertiajs/vue3'
 
-    const props = defineProps(['need_web_button', 'text', 'link']);
+    const props = defineProps(['need_web_button', 'text', 'link', 'title']);
 </script>
 
 <template>
+    <Head :title="title ? `${title}` : 'Simply shop'"></Head>
     <div class="container" :style="{ 'padding-bottom': props.need_web_button ? '3em' : '0' }">
         <div id="test-container">
             <slot></slot>

@@ -16,17 +16,29 @@ class MiniController extends Controller
 {
     public function mini()
     {
-        return Inertia::render('Main', ['shop_id' => app('current_shop_id')]);
+        return Inertia::render('Main', $this->prepareBaseData());
     }
 
     public function detail($itemId)
     {
-        return Inertia::render('Detail', ['shop_id' => app('current_shop_id'), 'item_id' => $itemId]);
+        return Inertia::render('Detail', array_merge(
+            $this->prepareBaseData(),
+            [
+                'item_id' => $itemId,
+            ]
+        ));
     }
 
     public function cart()
     {
-        return Inertia::render('Cart', ['shop_id' => app('current_shop_id')]);
+        return Inertia::render('Cart', $this->prepareBaseData());
+    }
+
+    private function prepareBaseData() {
+        return array(
+            'shop_id' => app('current_shop_id'),
+            'title'   => app('current_shop_name'),
+        );
     }
 
     public function order()

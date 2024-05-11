@@ -8,7 +8,7 @@ import { ref } from "vue";
 import { getItems } from '../assets/js/api/getItems.js';
 import tgHelper from '../js/tg_helper.js';
 
-const props = defineProps(['shop_id']);
+const props = defineProps(['shop_id', 'title']);
 
 const shop_id = props.shop_id;
 
@@ -64,7 +64,7 @@ async function paginate() {
 </script>
 
 <template>
-  <Layout :need_web_button=!tgHelper.is_tg :text="'Корзина'" :link="`/mini/${props.shop_id}/cart`">
+  <Layout :need_web_button=!tgHelper.is_tg :text="'Корзина'" :link="`/mini/${props.shop_id}/cart`" :title="title">
       <div id="page">
           <SearchPanel :change_search_filter="change_search_filter"/>
           <TopFilterPanel :change_order_filter="change_order_filter"/>

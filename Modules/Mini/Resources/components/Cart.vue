@@ -11,12 +11,12 @@
       tgHelper.tg_back_button_hide();
   }
 
-  const props = defineProps(['shop_id']);
+  const props = defineProps(['shop_id', 'title']);
   const shop_id = props.shop_id;
 </script>
 
 <template>
-  <Layout :need_web_button=!tgHelper.is_tg :text="'Оформить'" :link="`/mini/${shop_id}/order`">
+  <Layout :need_web_button=!tgHelper.is_tg :text="'Оформить'" :link="`/mini/${shop_id}/order`" :title="title">
     <h1>Корзина</h1>
     <hr>
     <template v-if="isLoading">

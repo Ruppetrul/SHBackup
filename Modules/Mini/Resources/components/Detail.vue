@@ -7,7 +7,7 @@
   import Layout from './Layout.vue';
   import tgHelper from "../js/tg_helper.js";
 
-  const props = defineProps(['shop_id', 'item_id']);
+  const props = defineProps(['shop_id', 'item_id', 'title']);
 
   const shop_id = props.shop_id;
   const item_id = props.item_id;
@@ -34,7 +34,7 @@
 </script>
 
 <template>
-  <Layout :need_web_button=!tgHelper.is_tg :text="'Корзина'" :link="`/mini/${props.shop_id}/cart`">
+  <Layout :need_web_button=!tgHelper.is_tg :text="'Корзина'" :link="`/mini/${props.shop_id}/cart`" :title="title">
     <div class="row">
       <div class="col-12 col-xl-6 medias_panel">
         <Medias :isLoading="isLoading" :medias="medias"/>
