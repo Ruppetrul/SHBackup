@@ -2,8 +2,10 @@
   import { ref } from "vue";
   import ItemPreloader from "../components/cart/ItemPreloader.vue";
   import Layout from './Layout.vue';
+  import Item from './cart/Item.vue';
   const isLoading = ref(true);
   import tgHelper from "../js/tg_helper.js";
+  import { getCart } from '../assets/js/api/getCart.js';
 
   tgHelper.tg_init();
   if (tgHelper.is_tg) {
@@ -13,6 +15,11 @@
 
   const props = defineProps(['shop_id', 'title']);
   const shop_id = props.shop_id;
+  const items = ref([]);
+
+  getCart(shop_id, items).then(
+      isLoading.value = false
+  );
 </script>
 
 <template>
@@ -25,7 +32,9 @@
       </div>
     </template>
     <template v-else>
-
+      <div>
+        <Item v-for="item in items" :item="item"/>
+      </div>
     </template>
   </Layout>
 </template>

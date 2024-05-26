@@ -102,4 +102,16 @@ class CartController extends Controller
         session()->flash('success_message', 'Заказ создан успешно!');
         return response()->json($data);
     }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     */
+    public function getCartData(Request $request) {
+        list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
+        return response()->json([
+            'details' => $cart_detail,
+            'total'   => $cart_total,
+        ]);
+    }
 }

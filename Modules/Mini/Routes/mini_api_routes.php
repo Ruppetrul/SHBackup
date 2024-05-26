@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Mini\Http\Controllers\CartController;
 use Modules\Mini\Http\Controllers\MiniController;
 
 /*
@@ -17,4 +18,5 @@ Route::prefix('/mini/{shopIdOrName}/ajax')->middleware('shop')->group(function (
         Route::get('/', [MiniController::class, 'getActiveProducts']);
     });
     Route::get('/product/{itemId}', [MiniController::class, 'getProduct'])->name('product');
+    Route::get('/cart', [CartController::class, 'getCartData']);
 });
