@@ -27,4 +27,4 @@ Builder of simple internet shop with integration into Telegram bots.
 
 ## Admin user
 Login user: admin 
-password: adminadmin
+password: adminadmin274p1
