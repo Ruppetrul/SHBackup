@@ -17,9 +17,11 @@
   const shop_id = props.shop_id;
   const items = ref([]);
 
-  getCart(shop_id, items).then(
-      isLoading.value = false
-  );
+  getCart(shop_id, items)
+      .finally(() => {
+          isLoading.value = false;
+      });
+
 </script>
 
 <template>

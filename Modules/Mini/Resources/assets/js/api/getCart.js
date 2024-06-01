@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export async function getCart(shop_id, items) {
-    axios.get(`/mini/${shop_id}/ajax/cart?`)
+    return axios.get(`/mini/${shop_id}/ajax/cart?`)
         .then(response => {
             items.value = response.data.details;
         })
