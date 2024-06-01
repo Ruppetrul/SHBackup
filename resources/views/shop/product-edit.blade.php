@@ -178,7 +178,7 @@
                     formData,
                     '{{ route('product.update.image', ['shopId' => $shopId]) }}',
                     function (response) {
-                        if (response.url) {
+                        if (response.success) {
                             let imagePanel = null;
 
                             if (elementId === 'imagePanelAvatar') {
@@ -191,13 +191,13 @@
                             imageContainer.classList.add('sortable-item');
 
                             const imgElement = document.createElement('img');
-                            imgElement.src = response.url;
+                            imgElement.src = response.data.url;
                             imgElement.style.height = '150px';
                             imgElement.alt = 'Image';
 
                             const closeIcon = document.createElement('div');
                             closeIcon.classList.add('delete-icon', 'deleteMedia');
-                            closeIcon.setAttribute('data-media-id', response.media_id);
+                            closeIcon.setAttribute('data-media-id', response.data.media_id);
                             closeIcon.setAttribute('data-media-type', elementId === 'imagePanelAvatar' ? 'avatar' : 'image');
                             closeIcon.textContent = '✖';
 

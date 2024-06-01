@@ -5,6 +5,7 @@ while ! nc -z mysql 3306; do
     sleep 1
 done
 
+php artisan storage:link
 php artisan migrate --force
 php artisan db:seed --class=DevSeeder
 

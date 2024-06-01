@@ -135,6 +135,7 @@ class ShopController extends Controller {
      * @param Request $request
      */
     public function productUpdateImage($shopId, Request $request) {
+        $success = true;
         if (!$request->has('itemId')) {
             return response()->json(array(
                 'message' => "'itemId' parameter is missing"
@@ -144,34 +145,41 @@ class ShopController extends Controller {
         $itemId = $request->get('itemId');
 
         $file = $request->file('file');
-        $path = $file->store($shopId, 'public');
-        $filename = basename($path);
+        try {
+            $path = $file->store($shopId, 'public');
+            $filename = basename($path);
 
-        $storagePath = storage_path('app/public/' . $path);
+            $storagePath = storage_path('app/public/' . $path);
 
-        $manager = new ImageManager(
-            new Driver()
-        );
-        list($width, $height) = getimagesize($storagePath);
+            $manager = new ImageManager(
+                new Driver()
+            );
+            list($width, $height) = getimagesize($storagePath);
 
-        $scale = $width / 1500;
+            $scale = $width / 1500;
 
-        if ($width > 1500) {
-            $image = $manager->read($storagePath);
-            $image->resize(1500, $height / $scale);
-            $image->save();
-        }
+            if ($width > 1500) {
+                $image = $manager->read($storagePath);
+                $image->resize(1500, $height / $scale);
+                $image->save();
+            }
 
-        if ($request->has('mediaType') && $request->get('mediaType') === 'avatar') {
-            $mediaId = Product::updateProductAvatar($shopId, $itemId, $filename, $path);
-        } else {
-            $mediaId = Product::saveProductImage($shopId, $itemId, $filename);
+            if ($request->has('mediaType') && $request->get('mediaType') === 'avatar') {
+                $mediaId = Product::updateProductAvatar($shopId, $itemId, $filename, $path);
+            } else {
+                $mediaId = Product::saveProductImage($shopId, $itemId, $filename);
+            }
+        } catch (\Exception $e) {
+            $success = false;
         }
 
         return response()->json(array(
-            'file_name' => $filename,
-            'url' => asset(Storage::url($path)),
-            'media_id' => $mediaId
+            'success' => $success,
+            'data' => [
+                'file_name' => $filename,
+                'url'       => asset(Storage::url($path)),
+                'media_id'  => $mediaId
+            ]
         ));
     }
 
