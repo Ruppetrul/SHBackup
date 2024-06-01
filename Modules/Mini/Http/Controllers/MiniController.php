@@ -41,9 +41,17 @@ class MiniController extends Controller
         );
     }
 
-    public function order()
+    /**
+     * @param MiniRepoEloquentInterface $miniRepo
+     * @return \Inertia\Response
+     */
+    public function order(MiniRepoEloquentInterface $miniRepo)
     {
-        return Inertia::render('Order', $this->prepareBaseData());
+        list (, $cart_total) = $miniRepo::getCartData();
+        return Inertia::render('Order', array_merge(
+            $this->prepareBaseData(),
+            ['total' => $cart_total]
+        ));
     }
 
     /**
