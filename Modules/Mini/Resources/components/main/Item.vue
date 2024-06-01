@@ -78,6 +78,7 @@
 
   .item_footer {
     text-align: center;
+    margin-top: 2px;
   }
 
   .item_detail {
