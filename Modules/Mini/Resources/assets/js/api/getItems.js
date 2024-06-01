@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 export async function getItems(params, is_paginate, items, setHasMore, shop_id) {
-    axios.get(`/mini/${shop_id}/ajax/products?${params.toString()}`)
+    return axios.get(`/mini/${shop_id}/ajax/products?${params.toString()}`)
         .then(response => {
             setHasMore(response.data.has_more);
             if (!is_paginate) {

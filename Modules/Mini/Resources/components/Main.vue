@@ -2,11 +2,14 @@
 import SearchPanel from "../components/main/SearchPanel.vue";
 import TopFilterPanel from "../components/main/TopFilterPanel.vue";
 import ItemsPanel from "../components/main/ItemsPanel.vue";
+import PreloaderItemsPanel from "../components/main/PreloaderItemsPanel.vue";
 import Layout from './Layout.vue';
 
-import { ref } from "vue";
+import {onMounted, ref, watch} from "vue";
 import { getItems } from '../assets/js/api/getItems.js';
 import tgHelper from '../js/tg_helper.js';
+
+const isLoading = ref(true);
 
 const props = defineProps(['shop_id', 'title']);
 
@@ -26,6 +29,7 @@ let search = '';
 let order = '';
 
 async function fetchItems(is_paginate = false) {
+    isLoading.value = true;
     const params = new URLSearchParams(
         {
             only_data: 1,
@@ -35,7 +39,11 @@ async function fetchItems(is_paginate = false) {
         }
     );
 
-    await getItems(params, is_paginate, items, setHasMore, shop_id);
+    getItems(params, is_paginate, items, setHasMore, shop_id).finally(
+        () => {
+            isLoading.value = false;
+        }
+    );
 }
 
 function setHasMore(value) {
@@ -61,15 +69,54 @@ async function paginate() {
     }
 }
 
+const bottomOfPage = ref(false);
+const handleScroll = () => {
+    const scrollTop = document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = document.documentElement.clientHeight;
+
+    bottomOfPage.value = scrollTop + clientHeight >= scrollHeight - 50;
+}
+
+
+watch(bottomOfPage, (newValue) => {
+    if (newValue) {
+        props.paginate();
+    }
+});
+
+onMounted(() => {
+    window.addEventListener('scroll', handleScroll);
+
+    const fetchDataIfNeeded = async () => {
+        await paginate();
+        // setTimeout(() => {
+        //   if (!isScreenFilledWithCards() && props.has_more) {
+        //     fetchDataIfNeeded();
+        // }}, 1000);
+        // const isScreenFilledWithCards = () => {
+        //     const clientHeight = document.documentElement.clientHeight;
+        //     const cardContainerHeight = document.getElementById('items_panel').offsetHeight;
+        //     return cardContainerHeight >= clientHeight;
+        // }
+    };
+
+    fetchDataIfNeeded();
+});
 </script>
 
 <template>
   <Layout :need_web_button=!tgHelper.is_tg :text="'Корзина'" :link="`/mini/${props.shop_id}/cart`" :title="title">
-      <div id="page">
-          <SearchPanel :change_search_filter="change_search_filter"/>
-          <TopFilterPanel :change_order_filter="change_order_filter"/>
-          <ItemsPanel :items="items" :paginate="paginate" :has_more="has_more" :shop_id="shop_id"/>
-      </div>
+      <SearchPanel :change_search_filter="change_search_filter"/>
+      <TopFilterPanel :change_order_filter="change_order_filter"/>
+      <template v-if="isLoading">
+          <PreloaderItemsPanel />
+      </template>
+      <template v-else>
+          <div id="page">
+              <ItemsPanel :items="items" :paginate="paginate" :has_more="has_more" :shop_id="shop_id"/>
+          </div>
+      </template>
   </Layout>
 </template>
 
