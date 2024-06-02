@@ -82,6 +82,10 @@ const fetchData = async () => {
     }
 
     items.value = items.value.concat(response.data.products.data);
+
+    // If screen too large we need fill full screen
+    const scrollEvent = new Event('scroll');
+    window.dispatchEvent(scrollEvent);
 }
 
 onMounted(() => {
