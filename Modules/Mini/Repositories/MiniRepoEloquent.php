@@ -55,6 +55,14 @@ class MiniRepoEloquent implements MiniRepoEloquentInterface
                 foreach ($cart_detail as $cd) {
                     if ($cd->product_id === $product->id) {
                         $product->quantity = $cd->quantity;
+                        $avatarUrl = '';
+                        if (isset($product['avatar'][0]['filename'])) {
+                            $avatarUrl = asset('storage/' . app('current_shop_id') . '/' . $product['avatar'][0]['filename']);
+                        } else {
+                            $avatarUrl = asset('home/images/default_item_img.jpg');
+                        }
+                        $product->avatar_url = $avatarUrl;
+                        unset($product['avatar']);
                         $cart_detail_res[$product->id] = $product;
                         break;
                     }
