@@ -29,7 +29,6 @@ let search = '';
 let order = '';
 
 async function fetchItems(is_paginate = false) {
-    isLoading.value = true;
     const params = new URLSearchParams(
         {
             only_data: 1,
@@ -39,11 +38,7 @@ async function fetchItems(is_paginate = false) {
         }
     );
 
-    getItems(params, is_paginate, items, setHasMore, shop_id).finally(
-        () => {
-            isLoading.value = false;
-        }
-    );
+    return getItems(params, is_paginate, items, setHasMore, shop_id);
 }
 
 function setHasMore(value) {
@@ -51,57 +46,62 @@ function setHasMore(value) {
 }
 
 function change_search_filter(search_filter) {
-    page = 1;
+    page = 0;
     search = search_filter;
-    fetchItems();
+    setHasMore(true);
+    items.value = [];
+    fetchData();
 }
 
 function change_order_filter(order_filter) {
-    page = 1;
+    page = 0;
     order = order_filter;
-    fetchItems();
+    setHasMore(true);
+    items.value = [];
+    fetchData();
 }
 
 async function paginate() {
     page += 1;
-    if (has_more) {
-        await fetchItems(true);
-    }
+    return fetchItems(true);
 }
 
-const bottomOfPage = ref(false);
-const handleScroll = () => {
-    const scrollTop = document.documentElement.scrollTop;
-    const scrollHeight = document.documentElement.scrollHeight;
-    const clientHeight = document.documentElement.clientHeight;
-
-    bottomOfPage.value = scrollTop + clientHeight >= scrollHeight - 50;
-}
-
-
-watch(bottomOfPage, (newValue) => {
-    if (newValue) {
-        props.paginate();
+const fetchData = async () => {
+    if (page === 0) {
+        isLoading.value = true;
     }
-});
+
+    const response = await paginate();
+
+    isLoading.value = false;
+
+    has_more = response.data.has_more;
+    setHasMore(has_more);
+    if (!has_more) {
+        window.removeEventListener('scroll', handleScroll);
+    }
+
+    items.value = items.value.concat(response.data.products.data);
+}
 
 onMounted(() => {
+    const bottomOfPage = ref(false);
+    const handleScroll = () => {
+        const scrollTop = document.documentElement.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = document.documentElement.clientHeight;
+
+        bottomOfPage.value = scrollTop + clientHeight >= scrollHeight - 50;
+    }
+
+    watch(bottomOfPage, (newValue) => {
+        if (newValue && has_more) {
+            fetchData();
+        }
+    });
+
     window.addEventListener('scroll', handleScroll);
-
-    const fetchDataIfNeeded = async () => {
-        await paginate();
-        // setTimeout(() => {
-        //   if (!isScreenFilledWithCards() && props.has_more) {
-        //     fetchDataIfNeeded();
-        // }}, 1000);
-        // const isScreenFilledWithCards = () => {
-        //     const clientHeight = document.documentElement.clientHeight;
-        //     const cardContainerHeight = document.getElementById('items_panel').offsetHeight;
-        //     return cardContainerHeight >= clientHeight;
-        // }
-    };
-
-    fetchDataIfNeeded();
+    fetchData();
 });
 </script>
 
@@ -114,7 +114,7 @@ onMounted(() => {
       </template>
       <template v-else>
           <div id="page">
-              <ItemsPanel :items="items" :paginate="paginate" :has_more="has_more" :shop_id="shop_id"/>
+              <ItemsPanel :items="items" :has_more="has_more" :shop_id="shop_id"/>
           </div>
       </template>
   </Layout>

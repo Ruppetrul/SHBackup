@@ -2,7 +2,7 @@
   import Item from './Item.vue';
   import { defineProps, onMounted, watch, ref } from "vue";
 
-  const props = defineProps(['items', 'paginate', 'has_more', 'shop_id'])
+  const props = defineProps(['items', 'shop_id'])
 </script>
 
 <template>
