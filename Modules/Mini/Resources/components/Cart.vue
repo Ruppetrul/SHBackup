@@ -22,6 +22,9 @@
           isLoading.value = false;
       });
 
+  const deleteItem = (index) => {
+      items.value.splice(index, 1);
+  };
 </script>
 
 <template>
@@ -35,7 +38,7 @@
     </template>
     <template v-else>
       <div>
-        <Item v-for="item in items" :item="item"/>
+        <Item v-for="(item, index) in items" :item="item" :shop_id="shop_id"  @delete-item="deleteItem(index)"/>
       </div>
     </template>
   </Layout>

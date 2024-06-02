@@ -1,6 +1,32 @@
 <script setup>
     import { Link } from '@inertiajs/vue3'
-    const props = defineProps(['item'])
+    import {watch} from "vue";
+    import {updateCount} from "../../assets/js/api/updateCount.js";
+    const props = defineProps(['item', 'shop_id'])
+    const emits = defineEmits(['delete-item']);
+
+    const decreaseCount = () => {
+        if (props.item.quantity > 0) {
+            props.item.quantity--;
+        }
+    };
+
+    const increaseCount = () => {
+        props.item.quantity++;
+    };
+
+    let timer = null;
+
+    watch(() => props.item.quantity, (newValue) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            updateCount(props.item.id, newValue, props.shop_id).finally(() => {
+                if (newValue === 0) {
+                    emits('delete-item');
+                }
+            });
+        }, 300);
+    });
 </script>
 
 <template>
@@ -19,9 +45,9 @@
                     </div>
 
                     <div class="count_panel">
-                        <button>-</button>
-                        <div class="item_count">{{ props.item.count }}</div>
-                        <button>+</button>
+                        <button @click="decreaseCount">-</button>
+                        <div class="item_count">{{ props.item.quantity }}</div>
+                        <button @click="increaseCount">+</button>
                     </div>
                 </div>
             </div>
