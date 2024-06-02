@@ -9,7 +9,8 @@ import {onMounted, ref, watch} from "vue";
 import { getItems } from '../assets/js/api/getItems.js';
 import tgHelper from '../js/tg_helper.js';
 
-const isLoading = ref(true);
+const isLoading = ref(false);
+const isEmpty = ref(true);
 
 const props = defineProps(['shop_id', 'title']);
 
@@ -66,44 +67,51 @@ async function paginate() {
     return fetchItems(true);
 }
 
+const bottomOfPage = ref(false);
+
+watch(bottomOfPage, (newValue) => {
+    if (newValue && has_more) {
+        fetchData();
+    }
+});
+
+const handleScroll = () => {
+    const scrollTop = document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = document.documentElement.clientHeight;
+
+    bottomOfPage.value = scrollTop + clientHeight >= scrollHeight - 50;
+}
+
 const fetchData = async () => {
-    if (page === 0) {
+    if (isLoading.value === false) {
+        isEmpty.value = false;
         isLoading.value = true;
+
+        const preloaders = Array.from({ length: 5 }, () => ({ isPreloader: true }));
+
+        items.value = items.value.concat(preloaders);
+
+        const response = await paginate();
+
+        has_more = response.data.has_more;
+        setHasMore(has_more);
+        if (!has_more) {
+            window.removeEventListener('scroll', handleScroll);
+        }
+
+        items.value.splice(-5, 5);
+
+        items.value = items.value.concat(response.data.products.data)
+        isLoading.value = false;
+
+        // If screen too large we need fill full screen
+        const scrollEvent = new Event('scroll');
+        window.dispatchEvent(scrollEvent);
     }
-
-    const response = await paginate();
-
-    isLoading.value = false;
-
-    has_more = response.data.has_more;
-    setHasMore(has_more);
-    if (!has_more) {
-        window.removeEventListener('scroll', handleScroll);
-    }
-
-    items.value = items.value.concat(response.data.products.data);
-
-    // If screen too large we need fill full screen
-    const scrollEvent = new Event('scroll');
-    window.dispatchEvent(scrollEvent);
 }
 
 onMounted(() => {
-    const bottomOfPage = ref(false);
-    const handleScroll = () => {
-        const scrollTop = document.documentElement.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight;
-        const clientHeight = document.documentElement.clientHeight;
-
-        bottomOfPage.value = scrollTop + clientHeight >= scrollHeight - 50;
-    }
-
-    watch(bottomOfPage, (newValue) => {
-        if (newValue && has_more) {
-            fetchData();
-        }
-    });
-
     window.addEventListener('scroll', handleScroll);
     fetchData();
 });
@@ -111,16 +119,16 @@ onMounted(() => {
 
 <template>
   <Layout :need_web_button=!tgHelper.is_tg :text="'Корзина'" :link="`/mini/${props.shop_id}/cart`" :title="title">
-      <SearchPanel :change_search_filter="change_search_filter"/>
-      <TopFilterPanel :change_order_filter="change_order_filter"/>
-      <template v-if="isLoading">
-          <PreloaderItemsPanel />
-      </template>
-      <template v-else>
-          <div id="page">
-              <ItemsPanel :items="items" :has_more="has_more" :shop_id="shop_id"/>
-          </div>
-      </template>
+    <SearchPanel :change_search_filter="change_search_filter"/>
+    <TopFilterPanel :change_order_filter="change_order_filter"/>
+    <template v-if="isEmpty">
+      <PreloaderItemsPanel />
+    </template>
+    <template v-else>
+      <div id="page">
+        <ItemsPanel :items="items" :has_more="has_more" :shop_id="shop_id"/>
+      </div>
+    </template>
   </Layout>
 </template>
 

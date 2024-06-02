@@ -25,31 +25,47 @@
 
 <template>
   <div class="item_cart_container">
-    <div class="item_cart">
-      <div class="item_avatar">
-        <Link :href="`/mini/${props.shop_id}/detail/${props.itemData.id}`">
-          <img :src="props.itemData.avatar_url" width="200" height="200" alt="Дефолтная картинка" loading="lazy">
-        </Link>
-      </div>
-      <div class="item_detail">
-          <Link :href="`/mini/${props.shop_id}/detail/${props.itemData.id}`">{{ props.itemData.title }}</Link>
-        <h5>{{ props.itemData.price }}</h5>
-      </div>
-      <div class="item_footer">
-        <template v-if="props.itemData.quantity_in_cart">
-          <div class="item_quantity_control_panel">
-            <button class="item_count_button" @click="decreaseCount">-</button>
-            <span class="item_count" style="width: 40%;">{{ props.itemData.quantity_in_cart }}</span>
-            <button class="item_count_button" @click="increaseCount">+</button>
-          </div>
-        </template>
-        <template v-else>
-          <div class="item_quantity_default_panel">
-            <button class="item_count_button" @click="increaseCount">Добавить в корзину</button>
-          </div>
-        </template>
-      </div>
-    </div>
+    <template v-if="props.itemData.isPreloader">
+        <div class="item_cart_container">
+            <div class="item_cart">
+                <div class="preloader_image col-2">
+                </div>
+                <div class="preloader_name">
+                </div>
+                <div class="preloader_price">
+                </div>
+                <div class="preloader_control_panel">
+                </div>
+            </div>
+        </div>
+    </template>
+    <template v-else>
+        <div class="item_cart">
+            <div class="item_avatar">
+                <Link :href="`/mini/${props.shop_id}/detail/${props.itemData.id}`">
+                    <img :src="props.itemData.avatar_url" width="200" height="200" alt="Дефолтная картинка" loading="lazy">
+                </Link>
+            </div>
+            <div class="item_detail">
+                <Link :href="`/mini/${props.shop_id}/detail/${props.itemData.id}`">{{ props.itemData.title }}</Link>
+                <h5>{{ props.itemData.price }}</h5>
+            </div>
+            <div class="item_footer">
+                <template v-if="props.itemData.quantity_in_cart">
+                    <div class="item_quantity_control_panel">
+                        <button class="item_count_button" @click="decreaseCount">-</button>
+                        <span class="item_count" style="width: 40%;">{{ props.itemData.quantity_in_cart }}</span>
+                        <button class="item_count_button" @click="increaseCount">+</button>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="item_quantity_default_panel">
+                        <button class="item_count_button" @click="increaseCount">Добавить в корзину</button>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </template>
   </div>
 </template>
 
@@ -107,5 +123,37 @@
 
   .item_count {
       align-content: center;
+  }
+
+  /*Preloader*/
+  .preloader_image, .preloader_name, .preloader_price , .preloader_control_panel {
+      background-color: #f0f0f0;
+      height: 1em;
+      animation: pulse 0.5s infinite alternate;
+      border-radius: 5px;
+  }
+
+  .preloader_image {
+      width: 100%;
+      height: 15em;
+      min-width: 4em;
+  }
+
+  .preloader_name {
+      width: 50%;
+      min-height: 1em;
+      margin-top: 1em;
+  }
+
+  .preloader_price {
+      width: 25%;
+      min-height: 1em;
+      margin-top: 1em;
+  }
+
+  .preloader_control_panel {
+      width: 100%;
+      min-height: 2em;
+      margin-top: 1em;
   }
 </style>
