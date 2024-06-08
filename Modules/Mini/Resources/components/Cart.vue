@@ -25,6 +25,10 @@
   const deleteItem = (index) => {
       items.value.splice(index, 1);
   };
+
+  const preloadItem = (index) => {
+      items.value.push()
+  }
 </script>
 
 <template>
@@ -33,7 +37,7 @@
     <hr>
     <template v-if="isLoading">
       <div class="placeholder_image">
-        <ItemPreloader v-for="index in 10" :key="index" />
+        <ItemPreloader v-for="index in 5" :key="index" />
       </div>
     </template>
     <template v-else>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::get('/product-edit/{itemId}', [ShopController::class, 'productEditView'])->name('product.edit.view');
             Route::delete('/delete', [ShopController::class, 'shopDelete'])->name('shop.delete');
             Route::post('/add-telegram-token', [ShopController::class, 'addTelegramToken'])->name('shop.add_telegram_token');
+            Route::post('/save-yookassa-token', [PaymentController::class, 'saveYookassaToken'])->name('shop.save-yookassa-token');
 
             Route::prefix('/product')->group(function () {
                 Route::post('/create', [ShopController::class, 'productCreate'])->name('product.create');

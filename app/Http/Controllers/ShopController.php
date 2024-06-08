@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Services\TelegramService;
@@ -37,7 +38,9 @@ class ShopController extends Controller {
             return redirect()->route('shops.view');
         }
 
-        return view('shop.details', compact('shop', 'products', 'success', 'orders'));
+        $yookassaToken = Payment::find($id, Payment::TAG_YOOKASSA);
+
+        return view('shop.details', compact('shop', 'products', 'success', 'orders', 'yookassaToken'));
     }
 
     /**

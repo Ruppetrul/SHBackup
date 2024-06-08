@@ -96,6 +96,16 @@
                                             aria-controls="options"
                                             aria-selected="false">{{__('shop.options')}}</button>
                                 </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link"
+                                            id="shop_payment-tab"
+                                            data-bs-toggle="tab"
+                                            data-bs-target="#shop_payment"
+                                            type="button"
+                                            role="tab"
+                                            aria-controls="shop_payment"
+                                            aria-selected="false">{{__('shop.shop_payment')}}</button>
+                                </li>
                             </ul>
                             <div class="tab-content" id="shopTabsContent">
                                 <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
@@ -177,6 +187,24 @@
                                     <div class="py-6">
                                         <button class="btn btn-danger btn-block" id="deleteShop">{{__('shop.delete')}}</button>
                                     </div>
+                                </div>
+                                <div class="tab-pane fade" id="shop_payment" role="tabpanel" aria-labelledby="shop_payment-tab" style="padding-top: 10px">
+                                    <form method="POST" action="{{ route('shop.save-yookassa-token', ['shopId' => $shop['id']]) }}">
+                                        @csrf
+                                        <h1>В данный момент поддерживается только интеграция с ЮКаssa!</h1> <br>
+                                        <h1>Инструкция по подключению:</h1>
+                                        <a> 1. Зарегистрируйтесь в ЮКаsse.</a><br>
+                                        <a> 2. В ЮKassa скопируйте ShopID из раздела Настройки -> Магазин</a><br>
+                                        <a> 3. Перейдите в чат с ботом @BotFather в Telegram</a><br>
+                                        <a> 4. Отправте команду /mybots и нажмите кнопку Payments</a><br>
+                                        <a> 5. Из списка платежных систем выберите ЮКаssa и укажите ваш ShopID</a><br>
+                                        <a> В ответ бот @BotFather вам пришлет платежный токен в формате: "390540012:LIVE:27425". Укажите его в поле Платежный токен</a><br>
+                                        <h4>Платежный токен</h4>
+                                        <input type="text" name="yookassa_token" class="form-control" value="{{ $yookassaToken }}"/>
+                                        <div class="py-6">
+                                            <button class="btn btn-danger btn-block" id="shop_payment">Сохранить</button>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         @endif
