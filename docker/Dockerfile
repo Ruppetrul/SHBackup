@@ -15,19 +15,7 @@ RUN apt-get update && apt-get install -y \
 
 COPY ../. /var/www/html
 
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap
-
-COPY .env.example /var/www/html/.env
-
-RUN composer install
-
-RUN php artisan key:generate
-
-RUN a2enmod rewrite
-
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
-
-RUN chmod +x /var/www/html/docker/entrypoint.sh
 CMD ["./docker/entrypoint.sh"]
 
 EXPOSE 80
