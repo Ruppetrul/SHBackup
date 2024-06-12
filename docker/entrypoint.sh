@@ -10,6 +10,11 @@ composer install
 if [ ! -f .env ]; then
     cp .env.example .env
 fi
+chmod 777 storage/framework/sessions
+chmod 777 storage/framework/views
+
+npm install vite
+npm run build
 
 php artisan key:generate
 
