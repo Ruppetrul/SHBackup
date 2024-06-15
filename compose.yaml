@@ -37,8 +37,6 @@ services:
 
   certbot:
     build: ./docker/cerebot
-    volumes:
-      - certbot-etc:/etc/letsencrypt
-      - certbot-var:/var/www/certbot
+
 networks:
   app-network:
