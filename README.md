@@ -26,5 +26,5 @@ Builder of simple internet shop with integration into Telegram bots.
 1) php artisan shops:update
 
 ## Admin user
-Login user: admin 
+Login user: admin@admin.com 
 password: adminadmin274p1

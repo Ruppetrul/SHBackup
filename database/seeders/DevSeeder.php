@@ -40,7 +40,7 @@ class DevSeeder extends Seeder
         for ($i = 0; $i < 50; $i++) {
             Product::createProduct($shop->id, [
                 'title' => $faker->name() . $i,
-                'price' => $faker->randomNumber(),
+                'price' => $faker->numberBetween(10,10000),
             ]);
         }
     }

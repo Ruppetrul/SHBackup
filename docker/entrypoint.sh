@@ -22,6 +22,10 @@ a2enmod rewrite
 
 php artisan storage:link
 php artisan migrate --force
+
+if [ ! -d storage/app/dump ]; then mkdir -p storage/app/dump; fi
+if [ -f /app/dump/default_db.sql ]; then rm /app/dump/default_db.sql; fi
+php artisan mini:prepareDefaultDB
 php artisan db:seed --class=DevSeeder
 
 exec apache2-foreground
