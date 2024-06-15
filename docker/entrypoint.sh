@@ -10,8 +10,10 @@ composer install
 if [ ! -f .env ]; then
     cp .env.example .env
 fi
-chmod 777 storage/framework/sessions
-chmod 777 storage/framework/views
+chmod 777 ./storage/framework/sessions
+chmod 777 ./storage/framework/views
+chmod 777 ./storage/framework/cache/data
+chmod 777 ./storage/logs/laravel.log
 
 npm install vite
 npm run build
