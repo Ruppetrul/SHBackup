@@ -26,4 +26,5 @@ return [
     'password' => 'Password',
     'cancel' => 'Cancel',
     'delete_account_button' => 'Delete Account',
+    'shops' => 'Shops',
 ];

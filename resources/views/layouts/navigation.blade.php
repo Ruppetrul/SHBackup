@@ -16,7 +16,7 @@
 {{--                        {{ __('Dashboard') }}--}}
 {{--                    </x-nav-link>--}}
                     <x-nav-link :href="route('shops.view')" :active="request()->routeIs('shops')">
-                        {{ __('Shops') }}
+                        {{ __('general.shops') }}
                     </x-nav-link>
                 </div>
             </div>

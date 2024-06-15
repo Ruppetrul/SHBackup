@@ -26,4 +26,5 @@ return [
     'password' => 'Пароль',
     'cancel' => 'Отмена',
     'delete_account_button' => 'Удалить аккаунт',
+    'shops' => 'Магазины',
 ];
