@@ -13,7 +13,14 @@ fi
 chmod 777 ./storage/framework/sessions
 chmod 777 ./storage/framework/views
 chmod 777 ./storage/framework/cache/data
-chmod 777 ./storage/logs/laravel.log
+
+log_file="./storage/logs/laravel.log"
+if [ -f "$log_file" ]; then
+    chmod 777 "$log_file"
+    echo "Permissions changed for $log_file"
+else
+    echo "File $log_file does not exist, skipping chmod."
+fi
 
 npm install vite
 npm run build
