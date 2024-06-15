@@ -22,7 +22,6 @@
                     <div class="flex items-center mt-2">
                         Ваш магазин доступен тут:
                         <a href="{{ route('mini.mini', ['shopIdOrName' => $shop['id']]) }}" id="shopLink" class="mr-2 px-2 py-1 border-gray-300 rounded-md" target="_blank" rel="noopener noreferrer">{{ route('mini.mini', ['shopIdOrName' => $shop['id']]) }}</a>
-                        <button onclick="copyShopLink(event)" class="px-4 py-2 bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600">Копировать ссылку</button>
                     </div>
                     <br>
                     <p>{{__('general.created_at')}} @if($shop['created_at']) {{$shop['created_at']->format('Y-m-d')}} @endif</p>
