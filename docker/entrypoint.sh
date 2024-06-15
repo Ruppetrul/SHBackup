@@ -18,8 +18,6 @@ log_file="./storage/logs/laravel.log"
 if [ -f "$log_file" ]; then
     chmod 777 "$log_file"
     echo "Permissions changed for $log_file"
-else
-    echo "File $log_file does not exist, skipping chmod."
 fi
 
 npm install vite
