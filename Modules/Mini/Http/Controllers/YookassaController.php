@@ -22,7 +22,8 @@ class YookassaController extends Controller
             $mapping = DB::table('order_mapping')->where(
                 'order_yookassa_id', $data['object']['id']
             )->first();
-
+Log::debug('Mapping');
+Log::debug($mapping);
             $currentShopId = $mapping->shop_id;
             $instance = DB::table('shops')->where(function ($query) use ($currentShopId) {
                 if (is_numeric($currentShopId)) {
