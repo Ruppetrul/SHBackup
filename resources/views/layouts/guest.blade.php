@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col flex flex-col sm:justify-center items-center">
                         <div>
-                            <a href="/">
+                            <a>
                                 <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
                             </a>
                         </div>
@@ -30,7 +30,7 @@
                             {{ $slot }}
                         </div>
                     </div>
-                    <div class="col flex flex-col">
+                    <div class="col flex flex-col" style="padding: 10px">
                         <h style="font-size: 20pt;" class="ms-2 text-sm text-gray-600 dark:text-gray-400">
                             {{ __('auth.simply_header') }}
                         </h>
