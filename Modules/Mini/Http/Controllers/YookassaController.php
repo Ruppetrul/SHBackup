@@ -33,7 +33,7 @@ class YookassaController extends Controller
             })->first();
             $shop = Shop::find($mapping->shop_id)->first();
 
-            $user = User::query()->where('id', $shop['owner_id'])->first();
+            $user = User::find($shop['owner_id'])->first();
 
             DB::table('shops');
 
