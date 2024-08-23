@@ -23,7 +23,7 @@ class YookassaController extends Controller
                 'order_yookassa_id', $data['object']['id']
             )->first();
 
-            $shop = Shop::find($mapping['shop_id'])->first();
+            $shop = Shop::find($mapping->shop_id)->first();
 
             $user = User::find($shop['owner_id'])->first();
 
@@ -42,7 +42,7 @@ class YookassaController extends Controller
 
             DB::setDefaultConnection('shop');
 
-            $order = DB::table('orders')->where('id', $mapping['order_id'])->first();
+            $order = DB::table('orders')->where('id', $mapping->order_id)->first();
 
             list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData($order['cart_id']);
 
