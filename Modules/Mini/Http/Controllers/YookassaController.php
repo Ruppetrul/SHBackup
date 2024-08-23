@@ -50,7 +50,7 @@ class YookassaController extends Controller
 
             DB::setDefaultConnection('shop');
 
-            $order = DB::table('orders')->where('id', $mapping->order_id)->first();
+            $order = DB::table('orders')->where('id', $mapping->order_id)->first()->toArray();
 
             list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData($order['cart_id']);
 
