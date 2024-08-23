@@ -61,7 +61,7 @@ class YookassaController extends Controller
                 ->where('id', $order['cart_id'])
                 ->update([
                     'status'   => '1',
-                    'order_id' => $order
+                    'order_id' => $mapping->order_id
                 ]);
 
             $order['lines'] = $cart_detail;
