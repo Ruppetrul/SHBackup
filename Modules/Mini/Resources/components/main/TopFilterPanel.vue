@@ -25,4 +25,8 @@
   #filterSelect {
     border-radius: 4px;
   }
+  .custom-select {
+      border: none;
+      padding: 0.5em
+  }
 </style>
