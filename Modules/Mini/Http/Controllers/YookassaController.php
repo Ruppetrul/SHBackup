@@ -35,9 +35,9 @@ Log::debug(json_encode(get_object_vars($mapping)));
             $shop = Shop::query()->where('id', $mapping->shop_id)->first()->toArray();
 Log::debug('$shop');
 Log::debug(json_encode($shop));
-            $user = User::find($shop['owner_id'])->first();
+            $user = User::query()->where('id', $shop['owner_id'])->first()->toArray();
 Log::debug('$user');
-Log::debug(json_encode(get_object_vars($user)));
+Log::debug(json_encode($user));
             DB::table('shops');
 
             Config::set('database.connections.shop', [
