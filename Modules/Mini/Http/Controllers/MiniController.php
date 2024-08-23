@@ -53,7 +53,10 @@ class MiniController extends Controller
 
             $user = DB::table('users')->where('id', '=', $instance->owner_id)->first();
 
-            SendEmail::dispatch($user->email, $order->toArray());
+            $order = $order->toArray();
+            $order['lines'] = $cart_detail;
+
+            SendEmail::dispatch($user->email, $order);
 
             Config::set('database.connections.shop', [
                 'driver' => 'mysql',
