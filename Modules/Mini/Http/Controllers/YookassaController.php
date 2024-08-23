@@ -34,7 +34,7 @@ Log::debug(json_encode(get_object_vars($mapping)));
             })->first();
             $shop = Shop::query()->where('id', $mapping->shop_id)->first()->toArray();
 Log::debug('$shop');
-Log::debug(json_encode(get_object_vars($shop)));
+Log::debug(json_encode($shop));
             $user = User::find($shop['owner_id'])->first();
 Log::debug('$user');
 Log::debug(json_encode(get_object_vars($user)));
