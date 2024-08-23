@@ -45,9 +45,9 @@
                     </div>
 
                     <div class="count_panel">
-                        <button @click="decreaseCount">-</button>
+                        <button class="changeCountButton" @click="decreaseCount">-</button>
                         <div class="item_count">{{ props.item.quantity }}</div>
-                        <button @click="increaseCount">+</button>
+                        <button class="changeCountButton" @click="increaseCount">+</button>
                     </div>
                 </div>
             </div>
@@ -89,4 +89,14 @@
     margin-top: 10px;
 }
 
+.item_count {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.changeCountButton {
+    border: none;
+    background: none;
+    cursor: pointer;
+}
 </style>
