@@ -6,10 +6,10 @@ use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Services\TelegramService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
@@ -136,9 +136,10 @@ class ShopController extends Controller {
     /**
      * @param string|int $shopId
      * @param Request $request
+     * @return JsonResponse
      */
-    public function productUpdateImage($shopId, Request $request) {
-        $success = true;
+    public function productUpdateImage($shopId, Request $request): JsonResponse
+    {
         if (!$request->has('itemId')) {
             return response()->json(array(
                 'message' => "'itemId' parameter is missing"
@@ -172,18 +173,20 @@ class ShopController extends Controller {
             } else {
                 $mediaId = Product::saveProductImage($shopId, $itemId, $filename);
             }
-        } catch (\Exception $e) {
-            $success = false;
-        }
 
-        return response()->json(array(
-            'success' => $success,
-            'data' => [
-                'file_name' => $filename,
-                'url'       => asset(Storage::url($path)),
-                'media_id'  => $mediaId
-            ]
-        ));
+            return response()->json(array(
+                'success' => true,
+                'data' => [
+                    'file_name' => $filename,
+                    'url'       => asset(Storage::url($path)),
+                    'media_id'  => $mediaId ?? ''
+                ]
+            ));
+        } catch (\Exception $e) {
+            return response()->json(array(
+                'success' => false,
+            ));
+        }
     }
 
     /**
