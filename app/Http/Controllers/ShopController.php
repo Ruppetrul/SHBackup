@@ -183,6 +183,7 @@ class ShopController extends Controller {
                 ]
             ));
         } catch (\Exception $e) {
+            dd($e);
             return response()->json(array(
                 'success' => false,
             ));
