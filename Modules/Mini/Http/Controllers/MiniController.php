@@ -39,7 +39,12 @@ class MiniController extends Controller
             return Redirect::to($newUrl);
         }
 
-        return Inertia::render('Main', $this->prepareBaseData());
+        return Inertia::render('Main', array_merge(
+            $this->prepareBaseData(),
+            [
+                'message' => session('success_message')
+            ]
+        ));
     }
 
     public function detail($shopId, $itemId)

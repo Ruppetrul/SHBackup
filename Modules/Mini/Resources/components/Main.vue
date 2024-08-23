@@ -12,7 +12,7 @@ import tgHelper from '../js/tg_helper.js';
 const isLoading = ref(false);
 const isEmpty = ref(true);
 
-const props = defineProps(['shop_id', 'title']);
+const props = defineProps(['shop_id', 'title', 'message']);
 
 const shop_id = props.shop_id;
 
@@ -115,13 +115,28 @@ onMounted(() => {
     window.addEventListener('scroll', handleScroll);
     fetchData();
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    var notification = document.getElementById('notification');
+    notification.style.display = 'block';
+    document.body.style.paddingTop = notification.offsetHeight + 'px';
+    setTimeout(function() {
+        notification.style.display = 'none';
+        document.body.style.paddingTop = '0';
+    }, 3000);
+});
 </script>
 
 <template>
-  <Layout :need_web_button=!tgHelper.is_tg :text="'Корзина'" :link="`/mini/${props.shop_id}/cart`" :title="title" :shop_id="props.shop_id">
-    <SearchPanel :change_search_filter="change_search_filter"/>
-    <TopFilterPanel :change_order_filter="change_order_filter"/>
-    <template v-if="isEmpty">
+    <div v-if="props.message" id="notification" class="alert alert-success position-fixed top-0 start-50 translate-middle-x w-75"
+         role="alert">
+        {{ props.message }}
+    </div>
+    <Layout :need_web_button=!tgHelper.is_tg :text="'Корзина'" :link="`/mini/${props.shop_id}/cart`" :title="title"
+            :shop_id="props.shop_id">
+        <SearchPanel :change_search_filter="change_search_filter"/>
+        <TopFilterPanel :change_order_filter="change_order_filter"/>
+        <template v-if="isEmpty">
       <PreloaderItemsPanel />
     </template>
     <template v-else>
