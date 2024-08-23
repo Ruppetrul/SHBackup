@@ -32,7 +32,7 @@ Log::debug(json_encode(get_object_vars($mapping)));
                     $query->where('name', $currentShopId);
                 }
             })->first();
-            $shop = Shop::find($mapping->shop_id);
+            $shop = Shop::query()->where('id', $mapping->shop_id)->first()->toArray();
 Log::debug('$shop');
 Log::debug(json_encode(get_object_vars($shop)));
             $user = User::find($shop['owner_id'])->first();
