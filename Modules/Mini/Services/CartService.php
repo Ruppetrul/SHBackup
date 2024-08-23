@@ -77,7 +77,6 @@ class CartService implements CartServiceInterface
         })->first();
 
         $user = DB::table('users')->where('id', '=', $instance->owner_id)->first();
-        SendEmail::dispatch($user->email, $orderArray);
 
         if ($instance) {
             Config::set('database.connections.shop', [

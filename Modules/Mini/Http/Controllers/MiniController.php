@@ -2,11 +2,14 @@
 
 namespace Modules\Mini\Http\Controllers;
 
+use App\Jobs\SendEmail;
+use App\Models\Order;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Repositories\MiniEloquentInterface;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
@@ -16,9 +19,9 @@ use Modules\Mini\Repositories\MiniRepoEloquent;
 
 class MiniController extends Controller
 {
-    public function mini(Request $request)
+    public function mini(Request $request, $shopIdOrName)
     {
-        if ($order = $request->filled('order')) {
+        if ($order = $request->get('order')) {
             list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
 
             DB::table('cart')
@@ -35,6 +38,34 @@ class MiniController extends Controller
             unset($query['order']);
 
             $newUrl = $url . '?' . http_build_query($query);
+
+            $order = Order::find((int)$order);
+
+            DB::setDefaultConnection('mysql');
+
+            $instance = DB::table('shops')->where(function ($query) use ($shopIdOrName) {
+                if (is_numeric($shopIdOrName)) {
+                    $query->where('id', $shopIdOrName);
+                } else {
+                    $query->where('name', $shopIdOrName);
+                }
+            })->first();
+
+            $user = DB::table('users')->where('id', '=', $instance->owner_id)->first();
+
+            SendEmail::dispatch($user->email, $order->toArray());
+
+            Config::set('database.connections.shop', [
+                'driver' => 'mysql',
+                'host' => env('DB_HOST'),
+                'database' => $instance->db_name,
+                'username' => env('DB_USERNAME'),
+                'password' => env('DB_PASSWORD'),
+                'charset' => 'utf8mb4',
+                'collation' => 'utf8mb4_unicode_ci',
+                'prefix' => '',
+            ]);
+            DB::setDefaultConnection('shop');
 
             return Redirect::to($newUrl);
         }
@@ -78,7 +109,9 @@ class MiniController extends Controller
         list (, $cart_total) = $miniRepo::getCartData();
         return Inertia::render('Order', array_merge(
             $this->prepareBaseData(),
-            ['total' => $cart_total]
+            [
+                'total' => $cart_total
+            ]
         ));
     }
 

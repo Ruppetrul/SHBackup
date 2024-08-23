@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Modules\Mini\Models\Enums\ProductStatusEnum;
 
+/**
+ * @method static find(bool $order)
+ */
 class Order extends Model {
 
     use HasFactory;

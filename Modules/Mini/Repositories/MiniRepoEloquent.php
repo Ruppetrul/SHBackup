@@ -35,9 +35,9 @@ class MiniRepoEloquent implements MiniRepoEloquentInterface
             ->first();
 
         $cart_id = $cart->id ?? DB::table('cart')->insertGetId([
-                'ip_address' => $remoteAddr,
-                'status' => 0,
-            ]);
+            'ip_address' => $remoteAddr,
+            'status' => 0,
+        ]);
 
         $cart_detail = [];
         $cart_total = 0;
