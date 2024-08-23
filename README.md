@@ -11,6 +11,7 @@ Builder of simple internet shop with integration into Telegram bots.
 4) create storage/app/dump
 5) php artisan mini:prepareDefaultDB
 6) php artisan queue:work --daemon
+7) Configure max upload size on php + apache
 
 ## For development
 0) First, you need to deploy project. See 'Install'.
