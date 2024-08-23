@@ -33,9 +33,11 @@ Log::debug(json_encode(get_object_vars($mapping)));
                 }
             })->first();
             $shop = Shop::find($mapping->shop_id)->first();
-
+Log::debug('$shop');
+Log::debug(json_encode(get_object_vars($shop)));
             $user = User::find($shop['owner_id'])->first();
-
+Log::debug('$user');
+Log::debug(json_encode(get_object_vars($user)));
             DB::table('shops');
 
             Config::set('database.connections.shop', [
