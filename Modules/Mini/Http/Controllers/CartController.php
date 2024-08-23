@@ -58,7 +58,6 @@ class CartController extends Controller
 
     /**
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function createOrder(Request $request) {
         list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
@@ -77,30 +76,26 @@ class CartController extends Controller
 
         $orderArray = $this->service->createOrder(
             [
-                'total' => $cart_total,
-                'cart_id' => $cart_id,
-                'description' => $description,
+                'total'         => $cart_total,
+                'cart_id'       => $cart_id,
+                'description'   => $description,
                 'communication' => $communication,
             ],
             $cart_detail,
             $currentShopId
         );
 
-        $data = [
-            'redirect_url' => redirect()->route('mini.mini', ['shopIdOrName' => $currentShopId]),
-        ];
+        $shopUrl = route('mini.mini', ['shopIdOrName' => $currentShopId]);
+        list ($success, $response) = YookassaService::registerOrder($orderArray, $shopUrl);
 
-        if ($request->get('bank') == 'on') {
-            $shopUrl = route('mini.mini', ['shopIdOrName' => $currentShopId]);
-            list ($success, $response) = YookassaService::registerOrder($orderArray, $shopUrl);
-            if ($success) {
-                $response = json_decode($response, true);
-                $data['redirect_url'] = $response['confirmation']['confirmation_url'];
-            }
+        if (!$success) {
+            return response('Ошибка при регистрации ордера', 500);
         }
 
+        $response = json_decode($response, true);
+
         session()->flash('success_message', 'Заказ создан успешно!');
-        return response()->json($data);
+        return redirect()->away($response['confirmation']['confirmation_url']);
     }
 
     /**
