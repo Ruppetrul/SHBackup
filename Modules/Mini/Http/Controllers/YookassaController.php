@@ -69,7 +69,7 @@ Log::debug(json_encode($user));
 
             $order['lines'] = $cart_detail;
             DB::setDefaultConnection('mysql');
-            SendEmail::dispatch($user->email, $order);
+            SendEmail::dispatch($user['email'], $order);
         }
         Log::debug(json_encode($data));
     }
