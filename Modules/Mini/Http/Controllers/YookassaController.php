@@ -23,6 +23,14 @@ class YookassaController extends Controller
                 'order_yookassa_id', $data['object']['id']
             )->first();
 
+            $currentShopId = $mapping->shop_id;
+            $instance = DB::table('shops')->where(function ($query) use ($currentShopId) {
+                if (is_numeric($currentShopId)) {
+                    $query->where('id', $currentShopId);
+                } else {
+                    $query->where('name', $currentShopId);
+                }
+            })->first();
             $shop = Shop::find($mapping->shop_id)->first();
 
             $user = User::find($shop['owner_id'])->first();
@@ -32,7 +40,7 @@ class YookassaController extends Controller
             Config::set('database.connections.shop', [
                 'driver' => 'mysql',
                 'host' => env('DB_HOST'),
-                'database' => $shop->db_name,
+                'database' => $instance->db_name,
                 'username' => env('DB_USERNAME'),
                 'password' => env('DB_PASSWORD'),
                 'charset' => 'utf8mb4',
