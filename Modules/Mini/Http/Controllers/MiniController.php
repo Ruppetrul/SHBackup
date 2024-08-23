@@ -7,15 +7,38 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Repositories\MiniEloquentInterface;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Modules\Mini\Repositories\MiniRepoEloquentInterface;
 use Modules\Mini\Repositories\MiniRepoEloquent;
 
 class MiniController extends Controller
 {
-    public function mini()
+    public function mini(Request $request)
     {
+        if ($order = $request->filled('order')) {
+            list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
+
+            DB::table('cart')
+                ->where('id', $cart_id)
+                ->update([
+                    'status' => '1',
+                    'order_id' => $order
+                ]);
+
+            session()->flash('success_message', 'Заказ создан успешно!');
+
+            $url = $request->url();
+            $query = $request->query();
+            unset($query['order']);
+
+            $newUrl = $url . '?' . http_build_query($query);
+
+            return Redirect::to($newUrl);
+        }
+
         return Inertia::render('Main', $this->prepareBaseData());
     }
 

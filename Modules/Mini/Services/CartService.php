@@ -59,18 +59,10 @@ class CartService implements CartServiceInterface
 
     /**
      * @param array $orderData
-     * @return void
      */
     public function createOrder(array $orderData, $cartDetail, $currentShopId) : array
     {
         $orderArray = Order::create($orderData)->toArray();
-
-        DB::table('cart')
-            ->where('id', $orderData['cart_id'])
-            ->update([
-                'status' => '1',
-                'order_id' => $orderArray['id']
-            ]);
 
         $orderArray['lines'] = $cartDetail;
 

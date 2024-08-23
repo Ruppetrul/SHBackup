@@ -85,7 +85,7 @@ class CartController extends Controller
             $currentShopId
         );
 
-        $shopUrl = route('mini.mini', ['shopIdOrName' => $currentShopId]);
+        $shopUrl = route('mini.mini', ['shopIdOrName' => $currentShopId]) . '?order=' . $orderArray['id'];
         list ($success, $response) = YookassaService::registerOrder($orderArray, $shopUrl);
 
         if (!$success) {
@@ -94,7 +94,6 @@ class CartController extends Controller
 
         $response = json_decode($response, true);
 
-        session()->flash('success_message', 'Заказ создан успешно!');
         return redirect()->away($response['confirmation']['confirmation_url']);
     }
 
