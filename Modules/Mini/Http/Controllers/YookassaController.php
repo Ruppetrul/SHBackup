@@ -22,8 +22,7 @@ class YookassaController extends Controller
             $mapping = DB::table('order_mapping')->where(
                 'order_yookassa_id', $data['object']['id']
             )->first();
-Log::debug('Mapping');
-Log::debug(json_encode(get_object_vars($mapping)));
+
             $currentShopId = $mapping->shop_id;
             $instance = DB::table('shops')->where(function ($query) use ($currentShopId) {
                 if (is_numeric($currentShopId)) {
@@ -33,11 +32,9 @@ Log::debug(json_encode(get_object_vars($mapping)));
                 }
             })->first();
             $shop = Shop::query()->where('id', $mapping->shop_id)->first()->toArray();
-Log::debug('$shop');
-Log::debug(json_encode($shop));
+
             $user = User::query()->where('id', $shop['owner_id'])->first()->toArray();
-Log::debug('$user');
-Log::debug(json_encode($user));
+
             DB::table('shops');
 
             Config::set('database.connections.shop', [
