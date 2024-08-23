@@ -23,7 +23,7 @@
                                     {{ $shop['name'] }}
                                 @endif</strong> (@if ($shop['state'])
                                 {{__('states.' . $shop['state'])}}
-                            @endif</h3>
+                            @endif)</h3>
                         <div class="flex items-center mt-2">
                             Ваш магазин доступен тут:
                             <a href="{{ route('mini.mini', ['shopIdOrName' => $shop['id']]) }}"
