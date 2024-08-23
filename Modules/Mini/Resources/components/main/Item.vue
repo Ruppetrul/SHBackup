@@ -80,6 +80,7 @@
     border-radius: 7%;
     display: flex;
     flex-direction: column;
+    padding: 1em;
   }
 
   .item_avatar {
