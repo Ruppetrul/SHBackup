@@ -2,6 +2,14 @@
     import { Link, Head } from '@inertiajs/vue3'
 
     const props = defineProps(['need_web_button', 'text', 'link', 'title']);
+
+    function redirectToOrderPage() {
+        console.log(props.text);
+        if (props.text === 'Оплатить') {
+            event.preventDefault()
+            window.location.href = '/mini/1/create-order'
+        }
+    }
 </script>
 
 <template>
@@ -12,7 +20,7 @@
         </div>
     </div>
     <Link :href="props.link">
-        <button id="bottom-button" v-show="props.need_web_button === true">{{ props.text }}</button>
+        <button id="bottom-button" v-show="props.need_web_button === true" @click="redirectToOrderPage">{{ props.text }}</button>
     </Link>
 </template>
 

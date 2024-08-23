@@ -18,7 +18,7 @@ Route::prefix('/mini/{shopIdOrName}')->middleware('shop')->group(function () {
     Route::get('/cart', [MiniController::class, 'cart']);
     Route::get('/order', [MiniController::class, 'order']);
 
-    Route::post('/create-order', ['uses' => 'CartController@createOrder'])->name('home.create.order');
+    Route::get('/create-order', ['uses' => 'CartController@createOrder'])->name('home.create.order');
 
     Route::group(['prefix' => 'cart'], static function ($router) {
         $router->post('{itemId}/delete', ['uses' => 'CartController@delete', 'as' => 'cart.delete']);
