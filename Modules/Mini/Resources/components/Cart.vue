@@ -32,7 +32,7 @@
 </script>
 
 <template>
-  <Layout :need_web_button=!tgHelper.is_tg :text="'Оформить'" :link="`/mini/${shop_id}/order`" :title="title">
+  <Layout :need_web_button=!tgHelper.is_tg :text="'Оформить'" :link="`/mini/${shop_id}/order`" :title="title" :shop_id="shop_id">
     <h1>Корзина</h1>
     <hr>
     <template v-if="isLoading">

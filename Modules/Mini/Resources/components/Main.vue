@@ -118,7 +118,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <Layout :need_web_button=!tgHelper.is_tg :text="'Корзина'" :link="`/mini/${props.shop_id}/cart`" :title="title">
+  <Layout :need_web_button=!tgHelper.is_tg :text="'Корзина'" :link="`/mini/${props.shop_id}/cart`" :title="title" :shop_id="props.shop_id">
     <SearchPanel :change_search_filter="change_search_filter"/>
     <TopFilterPanel :change_order_filter="change_order_filter"/>
     <template v-if="isEmpty">

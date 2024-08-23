@@ -34,7 +34,7 @@
 </script>
 
 <template>
-  <Layout :need_web_button=!tgHelper.is_tg :text="'Корзина'" :link="`/mini/${props.shop_id}/cart`" :title="title">
+  <Layout :need_web_button=!tgHelper.is_tg :text="'Корзина'" :link="`/mini/${props.shop_id}/cart`" :title="title" :shop_id="props.shop_id">
     <div class="row">
       <div class="col-12 col-xl-6 medias_panel">
         <Medias :isLoading="isLoading" :medias="medias"/>

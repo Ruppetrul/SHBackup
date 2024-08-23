@@ -13,7 +13,7 @@
 </script>
 
 <template>
-  <Layout :need_web_button=!tgHelper.is_tg :text="'Оплатить'" :link="`/mini/${props.shop_id}/order`" :title="title">
+  <Layout :need_web_button=!tgHelper.is_tg :text="'Оплатить'" :link="`/mini/${props.shop_id}/order`" :title="title" :shop_id="props.shop_id">
     <h1>Заказ</h1>
     <hr>
     <h2>Сумма заказа: {{props.total}} р.</h2>

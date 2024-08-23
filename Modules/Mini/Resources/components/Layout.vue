@@ -1,13 +1,13 @@
 <script setup>
     import { Link, Head } from '@inertiajs/vue3'
 
-    const props = defineProps(['need_web_button', 'text', 'link', 'title']);
+    const props = defineProps(['need_web_button', 'text', 'link', 'title', 'shop_id']);
 
     function redirectToOrderPage() {
         console.log(props.text);
         if (props.text === 'Оплатить') {
             event.preventDefault()
-            window.location.href = '/mini/1/create-order'
+            window.location.href = '/mini/' + props.shop_id + '/create-order'
         }
     }
 </script>
