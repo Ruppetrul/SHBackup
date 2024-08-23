@@ -2,7 +2,8 @@
 <x-app-layout>
     <div class="py-3">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <button class="btn btn-primary " id="openModalBtn" onclick="window.location='{{ route('shops.view') }}'">{{__('shop.back_to_shops')}}</button>
+            <button class="btn btn-primary " id="openModalBtn"
+                    onclick="window.location='{{ route('shops.view') }}'">{{__('shop.back_to_shops')}}</button>
         </div>
     </div>
     @if($shop->state === 'deleted')
@@ -14,43 +15,55 @@
             </div>
         </div>
     @else
-    <div class="py-3">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-600">
-                    <h3><strong> @if($shop['name']) {{ $shop['name'] }} @endif</strong> (@if ($shop['state']) {{__('states.' . $shop['state'])}} @endif)</h3>
-                    <div class="flex items-center mt-2">
-                        Ваш магазин доступен тут:
-                        <a href="{{ route('mini.mini', ['shopIdOrName' => $shop['id']]) }}" id="shopLink" class="mr-2 px-2 py-1 border-gray-300 rounded-md" target="_blank" rel="noopener noreferrer">{{ route('mini.mini', ['shopIdOrName' => $shop['id']]) }}</a>
+        <div class="py-3">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900 dark:text-gray-600">
+                        <h3><strong> @if($shop['name'])
+                                    {{ $shop['name'] }}
+                                @endif</strong> (@if ($shop['state'])
+                                {{__('states.' . $shop['state'])}}
+                            @endif</h3>
+                        <div class="flex items-center mt-2">
+                            Ваш магазин доступен тут:
+                            <a href="{{ route('mini.mini', ['shopIdOrName' => $shop['id']]) }}"
+                               id="shopLink"
+                               class="mr-2 px-2 py-1 border-gray-300 rounded-md"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               style="text-decoration: underline;">{{ route('mini.mini', ['shopIdOrName' => $shop['id']]) }}</a>
+                        </div>
+                        <br>
+                        <p>{{__('general.created_at')}} @if($shop['created_at'])
+                                {{$shop['created_at']->format('Y-m-d')}}
+                            @endif</p>
                     </div>
-                    <br>
-                    <p>{{__('general.created_at')}} @if($shop['created_at']) {{$shop['created_at']->format('Y-m-d')}} @endif</p>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="py-3">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-600">
-                    @if ($shop->is_attachment_tg !== 1)
-                        <h3><strong>Ваш магазин ещё не привязан к телеграм боту.</strong></h3>
-                    @elseif ($shop->tg_name != '')
-                        Привязан к Telegram боту <span>@</span>{{$shop->tg_name}}
-                    @endif
-
-                    <br><br>
-                    <button id="showAddTelegramButton" class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+        <div class="py-3">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 text-gray-900 dark:text-gray-600">
                         @if ($shop->is_attachment_tg !== 1)
-                            Привязать к боту
-                        @else
-                            Сменить бота
+                            <h3><strong>Ваш магазин ещё не привязан к телеграм боту.</strong></h3>
+                        @elseif ($shop->tg_name != '')
+                            Привязан к Telegram боту <span>@</span>{{$shop->tg_name}}
                         @endif
-                    </button>
+
+                        <br><br>
+                        <button id="showAddTelegramButton"
+                                class="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                            @if ($shop->is_attachment_tg !== 1)
+                                Привязать к боту
+                            @else
+                                Сменить бота
+                            @endif
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
         <div class="py-3">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -107,13 +120,15 @@
                                 </li>
                             </ul>
                             <div class="tab-content" id="shopTabsContent">
-                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <div class="tab-pane fade show active" id="home" role="tabpanel"
+                                     aria-labelledby="home-tab">
                                     @if (count($products) == 0)
                                         <div class="p-6 col d-flex align-items-center justify-content-center">
                                             <div class="card text-center p-4">
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{__('shop.no_products')}}</h5>
-                                                    <a href="{{ route('product.create.view', ['shopId' => $shop['id']]) }}"  class="btn btn-primary mt-3">{{__('shop.add_item')}}</a>
+                                                    <a href="{{ route('product.create.view', ['shopId' => $shop['id']]) }}"
+                                                       class="btn btn-primary mt-3">{{__('shop.add_item')}}</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -122,7 +137,8 @@
                                             <div class="p-6">
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <div></div>
-                                                    <a href="{{ route('product.create.view', ['shopId' => $shop['id']]) }}"  class="btn btn-primary mt-3">{{__('shop.add_item')}}</a>
+                                                    <a href="{{ route('product.create.view', ['shopId' => $shop['id']]) }}"
+                                                       class="btn btn-primary mt-3">{{__('shop.add_item')}}</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -133,9 +149,11 @@
                                                 <div class="col mb-4">
                                                     <div class="card">
                                                         @if (isset($product['avatar_url']))
-                                                            <img src="{{ $product['avatar_url'] }}" class="item-card-img" alt="{{ $product['title'] }}">
+                                                            <img src="{{ $product['avatar_url'] }}"
+                                                                 class="item-card-img" alt="{{ $product['title'] }}">
                                                         @else
-                                                            <img src="{{ asset('home/images/default_item_img.jpg') }}" class="item-card-img" alt="{{ $product['title'] }}">
+                                                            <img src="{{ asset('home/images/default_item_img.jpg') }}"
+                                                                 class="item-card-img" alt="{{ $product['title'] }}">
                                                         @endif
                                                         <div class="card-body">
                                                             <h5 class="card-title">{{ $product['title'] }}</h5>
@@ -143,8 +161,11 @@
                                                             <p class="card-text">{{__('general.status')}} {{ $product['status'] }}</p>
                                                             <p class="card-text">{{__('shop.item_price')}} {{ $product['price'] }}</p>
                                                             <div class="d-flex">
-                                                                <a class="btn btn-primary me-2 flex-grow-1 editButton" href="{{ route('product.edit.view', ['shopId' => $shop['id'], 'itemId' => $product['id']]) }}">Редактировать</a>
-                                                                <button class="btn btn-danger ms-auto deleteButton" data-product-id="{{ $product['id'] }}"><i class="fas fa-trash-alt"></i></button>
+                                                                <a class="btn btn-primary me-2 flex-grow-1 editButton"
+                                                                   href="{{ route('product.edit.view', ['shopId' => $shop['id'], 'itemId' => $product['id']]) }}">Редактировать</a>
+                                                                <button class="btn btn-danger ms-auto deleteButton"
+                                                                        data-product-id="{{ $product['id'] }}"><i
+                                                                        class="fas fa-trash-alt"></i></button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -153,7 +174,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="order_history" role="tabpanel" aria-labelledby="order-history">
+                                <div class="tab-pane fade" id="order_history" role="tabpanel"
+                                     aria-labelledby="order-history">
                                     @if (isset($orders) && count($orders))
                                         @foreach ($orders as $order)
                                             <div class="list-group py-3">
@@ -184,11 +206,14 @@
                                 </div>
                                 <div class="tab-pane fade" id="options" role="tabpanel" aria-labelledby="options-tab">
                                     <div class="py-6">
-                                        <button class="btn btn-danger btn-block" id="deleteShop">{{__('shop.delete')}}</button>
+                                        <button class="btn btn-danger btn-block"
+                                                id="deleteShop">{{__('shop.delete')}}</button>
                                     </div>
                                 </div>
-                                <div class="tab-pane fade" id="shop_payment" role="tabpanel" aria-labelledby="shop_payment-tab" style="padding-top: 10px">
-                                    <form method="POST" action="{{ route('shop.save-yookassa-token', ['shopId' => $shop['id']]) }}">
+                                <div class="tab-pane fade" id="shop_payment" role="tabpanel"
+                                     aria-labelledby="shop_payment-tab" style="padding-top: 10px">
+                                    <form method="POST"
+                                          action="{{ route('shop.save-yookassa-token', ['shopId' => $shop['id']]) }}">
                                         @csrf
                                         <h1>В данный момент поддерживается только интеграция с ЮКаssa!</h1> <br>
                                         <h1>Инструкция по подключению:</h1>
@@ -197,11 +222,14 @@
                                         <a> 3. Перейдите в чат с ботом @BotFather в Telegram</a><br>
                                         <a> 4. Отправте команду /mybots и нажмите кнопку Payments</a><br>
                                         <a> 5. Из списка платежных систем выберите ЮКаssa и укажите ваш ShopID</a><br>
-                                        <a> В ответ бот @BotFather вам пришлет платежный токен в формате: "390540012:LIVE:27425". Укажите его в поле Платежный токен</a><br>
+                                        <a> В ответ бот @BotFather вам пришлет платежный токен в формате:
+                                            "390540012:LIVE:27425". Укажите его в поле Платежный токен</a><br>
                                         <h4>Платежный токен</h4>
-                                        <input type="text" name="yookassa_token" class="form-control" value="{{ $yookassaToken }}"/>
+                                        <input type="text" name="yookassa_token" class="form-control"
+                                               value="{{ $yookassaToken }}"/>
                                         <div class="py-6">
-                                            <button class="btn btn-danger btn-block" id="shop_payment">Сохранить</button>
+                                            <button class="btn btn-danger btn-block" id="shop_payment">Сохранить
+                                            </button>
                                         </div>
                                     </form>
                                 </div>
@@ -212,7 +240,8 @@
             </div>
         </div>
 
-        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
+             aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -222,14 +251,16 @@
                         {{__('shop.delete_info')}}
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn" data-dismiss="modal" id="confirmDeleteBtn">{{__('shop.delete_confirm')}}</button>
+                        <button type="button" class="btn" data-dismiss="modal"
+                                id="confirmDeleteBtn">{{__('shop.delete_confirm')}}</button>
                         <button type="button" class="btn" id="cancelDeleteShopBtn">{{__('shop.delete_cancel')}}</button>
                     </div>
                 </div>
             </div>
         </div>
         <!-- Модальное окно -->
-        <div class="modal fade" id="addTelegramModal" tabindex="-1" role="dialog" aria-labelledby="createShopModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addTelegramModal" tabindex="-1" role="dialog" aria-labelledby="createShopModalLabel"
+             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -240,7 +271,7 @@
                         <p>Скопируйте ваш токен и вставте сюда.</p>
                         <br>
                         <label for="telegram_token">Telegram token:</label>
-                        <input type="text" id="telegram_token" class="form-control" />
+                        <input type="text" id="telegram_token" class="form-control"/>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn" id="cancelAddTelegramBtn" data-dismiss="modal">Отмена</button>
@@ -266,18 +297,18 @@
 
             document.body.appendChild(copiedNotification);
 
-            setTimeout(function() {
+            setTimeout(function () {
                 copiedNotification.remove();
             }, 2000);
         }
     </script>
     <script>
-        $(document).ready(function() {
-            $('#showAddTelegramButton, #cancelAddTelegramBtn').click(function() {
+        $(document).ready(function () {
+            $('#showAddTelegramButton, #cancelAddTelegramBtn').click(function () {
                 $('#addTelegramModal').modal('toggle');
             });
 
-            $('#addTelegramBtn').click(function() {
+            $('#addTelegramBtn').click(function () {
                 const telegram_token = $('#telegram_token').val();
                 if (telegram_token === '') {
                     alert("{{ __('shop.input_telegram_token') }}");
@@ -299,7 +330,7 @@
                 );
             });
 
-            $('.deleteButton').on('click', function() {
+            $('.deleteButton').on('click', function () {
                 const productId = $(this).data('product-id');
 
                 const formData = new FormData();
@@ -318,15 +349,15 @@
             });
         });
 
-        $(document).on('click', '#deleteShop', function() {
+        $(document).on('click', '#deleteShop', function () {
 
             $('#confirmDeleteModal').modal('toggle');
 
-            $('#cancelDeleteShopBtn').click(function() {
+            $('#cancelDeleteShopBtn').click(function () {
                 $('#confirmDeleteModal').modal('toggle');
             });
 
-            $('#confirmDeleteBtn').on('click', function() {
+            $('#confirmDeleteBtn').on('click', function () {
                 delete_shop(
                     '{{ route('shop.delete', ['shopId' => $shop['id']]) }}',
                     document.querySelector('meta[name="csrf-token"]').content,
