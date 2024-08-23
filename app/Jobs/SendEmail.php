@@ -33,7 +33,7 @@ class SendEmail implements ShouldQueue
      */
     public function handle(): void
     {
-        Log::debug(json_encode($this->orderData));
+        //Log::debug(json_encode($this->orderData));
         Mail::to($this->recipient)->send(new SimpleEmail($this->orderData));
     }
 }
