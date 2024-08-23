@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     netcat-openbsd \
     nodejs npm \
     default-mysql-client \
+    php8.2-gd \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd pdo_mysql zip
 
