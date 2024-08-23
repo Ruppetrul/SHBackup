@@ -94,6 +94,35 @@ class CartController extends Controller
 
         $response = json_decode($response, true);
 
+        DB::setDefaultConnection('mysql');
+
+        $instance = DB::table('shops')->where(function ($query) use ($currentShopId) {
+            if (is_numeric($currentShopId)) {
+                $query->where('id', $currentShopId);
+            } else {
+                $query->where('name', $currentShopId);
+            }
+        })->first();
+
+        DB::table('order_mapping')->insert([
+            'order_yookassa_id' => $response['id'],
+            'shop_id'           => $currentShopId,
+            'order_id'          => $orderArray['id'],
+        ]);
+
+        Config::set('database.connections.shop', [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST'),
+            'database' => $instance->db_name,
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+        ]);
+
+        DB::setDefaultConnection('shop');
+
         return redirect()->away($response['confirmation']['confirmation_url']);
     }
 

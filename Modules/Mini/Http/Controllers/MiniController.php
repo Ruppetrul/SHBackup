@@ -21,58 +21,6 @@ class MiniController extends Controller
 {
     public function mini(Request $request, $shopIdOrName)
     {
-        if ($order = $request->get('order')) {
-            list ($cart_detail, $cart_total, $cart_id) = MiniRepoEloquent::getCartData();
-
-            DB::table('cart')
-                ->where('id', $cart_id)
-                ->update([
-                    'status' => '1',
-                    'order_id' => $order
-                ]);
-
-            session()->flash('success_message', 'Заказ создан успешно!');
-
-            $url = $request->url();
-            $query = $request->query();
-            unset($query['order']);
-
-            $newUrl = $url . '?' . http_build_query($query);
-
-            $order = Order::find((int)$order);
-
-            DB::setDefaultConnection('mysql');
-
-            $instance = DB::table('shops')->where(function ($query) use ($shopIdOrName) {
-                if (is_numeric($shopIdOrName)) {
-                    $query->where('id', $shopIdOrName);
-                } else {
-                    $query->where('name', $shopIdOrName);
-                }
-            })->first();
-
-            $user = DB::table('users')->where('id', '=', $instance->owner_id)->first();
-
-            $order = $order->toArray();
-            $order['lines'] = $cart_detail;
-
-            SendEmail::dispatch($user->email, $order);
-
-            Config::set('database.connections.shop', [
-                'driver' => 'mysql',
-                'host' => env('DB_HOST'),
-                'database' => $instance->db_name,
-                'username' => env('DB_USERNAME'),
-                'password' => env('DB_PASSWORD'),
-                'charset' => 'utf8mb4',
-                'collation' => 'utf8mb4_unicode_ci',
-                'prefix' => '',
-            ]);
-            DB::setDefaultConnection('shop');
-
-            return Redirect::to($newUrl);
-        }
-
         return Inertia::render('Main', array_merge(
             $this->prepareBaseData(),
             [
