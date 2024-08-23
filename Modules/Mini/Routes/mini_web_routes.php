@@ -26,9 +26,9 @@ Route::prefix('/mini/{shopIdOrName}')->middleware('shop')->group(function () {
     Route::group(['prefix' => 'cart-add'], static function ($router) {
         $router->post('{itemId}/{count?}', ['uses' => 'CartController@addToCart', 'as' => 'cart.add']);
     });
+});
 
-    /* Payment services */
-    Route::group(['prefix' => 'yookassa'], static function ($router) {
-        $router->any('test', ['uses' => 'YookassaController@test', 'as' => 'yookassa.test']);
-    });
+/* Payment services */
+Route::group(['prefix' => 'yookassa'], static function ($router) {
+    $router->any('test', ['uses' => 'YookassaController@test', 'as' => 'yookassa.test']);
 });

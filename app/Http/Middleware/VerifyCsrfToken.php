@@ -12,7 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        '/mini/1/yookassa/test',
+        '/mini/yookassa/test',
         //
     ];
 }
