@@ -248,6 +248,19 @@
                                         <button class="btn btn-danger btn-block" id="categories_add">Создать категорию
                                         </button>
                                     </div>
+                                    <div>
+                                        @if (isset($categories) && count($categories))
+                                            @foreach ($categories as $category)
+                                                <div>
+                                                    <div class="list-group py-1">
+                                                        <a href="#" class="list-group-item list-group-item-action">
+                                                            {{ $category->name }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            @endforeach
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         @endif

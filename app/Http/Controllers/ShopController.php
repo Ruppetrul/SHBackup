@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\ImageManager;
+use Modules\Mini\Models\Category;
 
 class ShopController extends Controller {
 
@@ -39,8 +40,12 @@ class ShopController extends Controller {
         }
 
         $yookassaToken = Payment::find($id, Payment::TAG_YOOKASSA);
+        list ($success, $categories) = Category::fetch($shop->id);
 
-        return view('shop.details', compact('shop', 'products', 'success', 'orders', 'yookassaToken'));
+        return view('shop.details', compact(
+            'shop', 'products', 'success', 'orders', 'yookassaToken',
+            'categories'
+        ));
     }
 
     /**

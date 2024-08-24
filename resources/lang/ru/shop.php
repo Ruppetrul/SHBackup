@@ -3,6 +3,7 @@ return [
     'items' => 'Товары',
     'options' => 'Параметры',
     'order_history' => 'История заказов',
+    'categories' => 'Категории',
     'shop_payment' => 'Платёжная система',
     'analytics' => 'Аналитика',
     'add_item' => 'Добавить товар',

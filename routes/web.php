@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
@@ -44,6 +45,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
                 Route::delete('/delete-media', [ShopController::class, 'productDeleteMedia'])->name('product.delete.media');
                 Route::delete('/delete', [ShopController::class, 'productDelete'])->name('product.delete');
             });
+
+            Route::resource('categories', CategoriesController::class)->only('store')
+                ->names(['store' => 'categories.store']);
         });
 
         Route::post('/create', [ShopController::class, 'create'])->name('shops.create');

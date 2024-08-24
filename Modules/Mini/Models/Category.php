@@ -2,7 +2,7 @@
 
 namespace Modules\Mini\Models;
 
-use App\Models\Shop;
+use App\Repositories\MiniEloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Article\Models\Article;
@@ -27,4 +27,14 @@ class Category extends Model
     protected $fillable = ['name'];
 
     protected $table = 'categories';
+
+    public static function fetch($shop_id)
+    {
+        $categories = [];
+        $success = MiniEloquent::executeWithShopConnection($shop_id, function ($connection) use (&$categories, $shop_id) {
+            $categories = $connection->table('categories')->get()->all();
+        });
+
+        return array($success, $categories);
+    }
 }
