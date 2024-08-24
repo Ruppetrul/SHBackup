@@ -33,6 +33,11 @@ class Product extends Model
         return $this->hasMany(Media::class, 'item_id');
     }
 
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'product_categories', 'product_id', 'category_id');
+    }
+
     /**
      * Scope active status.
      *
@@ -53,16 +58,6 @@ class Product extends Model
     public function getPrice()
     {
         return number_format($this->price);
-    }
-
-    /**
-     * Relation to Category model, many to many.
-     *
-     * @return BelongsToMany
-     */
-    public function categories()
-    {
-        return $this->belongsToMany(Category::class, 'product_category');
     }
 
     public function medias()

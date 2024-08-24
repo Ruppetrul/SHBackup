@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Repositories\MiniEloquent;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -45,7 +44,13 @@ class Product extends Model
     {
         $itemId = null;
         MiniEloquent::executeWithShopConnection($shop_id, function ($connection) use ($data, &$itemId) {
-            $itemId = $connection->table('products')->insertGetId($data);
+            DB::setDefaultConnection('shop_connection');
+
+            $prd = new \Modules\Mini\Models\Product();
+            $prd->fill($data);
+            $prd->save();
+            $prd->categories()->sync([$data['category']]);
+            $itemId = $prd->id;
         });
 
         return $itemId;

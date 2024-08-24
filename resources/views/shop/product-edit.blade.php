@@ -33,6 +33,19 @@
                                               inputmode="numeric" oninput="formatDecimal(this)" pattern="[0-9]+([.][0-9]{0,2})?"
                                 />
 
+                                <div class="py-3">
+                                    <label for="category">{{ __('shop.category') }}</label>
+                                    <select name="category" class="block mt-1 w-full">
+                                        <option value="0"></option>
+                                        @if (isset($categories) && count($categories))
+                                            @foreach ($categories as $category)
+                                                <option value="{{$category->id}}"> {{ $category->name }}</option>
+                                            @endforeach
+                                        @endif
+                                        //TODO categories
+                                    </select>
+                                </div>
+
                                 @if(isset($item))
                                     <label for="images">{{ __('shop.item_avatar') }}</label> <br>
                                     <div class="row">

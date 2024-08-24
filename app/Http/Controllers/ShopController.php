@@ -93,8 +93,9 @@ class ShopController extends Controller {
      */
     public function productCreate($shop_id, Request $request) {
         $itemId = Product::createProduct($shop_id, [
-            'title' => $request->get('title'),
-            'price' => $request->get('price'),
+            'title'    => $request->get('title'),
+            'price'    => $request->get('price'),
+            'category' => $request->get('category'),
         ]);
 
         return redirect()->route('product.edit.view', ['shopId' => $shop_id, 'itemId' => $itemId]);
@@ -135,6 +136,8 @@ class ShopController extends Controller {
             $data['item'] = Product::fetchProduct($shopId, $itemId);
         }
 
+        list (, $categories) = Category::fetch($shopId);
+        $data['categories'] = $categories;
         return view('shop.product-edit', $data);
     }
 
