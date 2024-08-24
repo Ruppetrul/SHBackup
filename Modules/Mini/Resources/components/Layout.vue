@@ -16,6 +16,8 @@
     <Head :title="title ? `${title}` : 'Simply shop'"></Head>
     <div class="container" :style="{ 'padding-bottom': props.need_web_button ? '3em' : '0' }">
         <div id="test-container">
+            <H2>{{props.title}}</H2>
+            <br>
             <slot></slot>
         </div>
     </div>
