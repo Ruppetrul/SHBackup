@@ -90,13 +90,23 @@
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link"
+                                            id="categories-tab"
+                                            data-bs-toggle="tab"
+                                            data-bs-target="#categories"
+                                            type="button"
+                                            role="tab"
+                                            aria-controls="categories"
+                                            aria-selected="false">{{__('shop.categories')}}</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link"
                                             id="order-history-tab"
                                             data-bs-toggle="tab"
                                             data-bs-target="#order_history"
                                             type="button"
                                             role="tab"
                                             aria-controls="order_history"
-                                            aria-selected="true">{{__('shop.order_history')}}</button>
+                                            aria-selected="false">{{__('shop.order_history')}}</button>
                                 </li>
                                 <li class="nav-item" role="presentation">
                                     <button class="nav-link"
@@ -233,6 +243,12 @@
                                         </div>
                                     </form>
                                 </div>
+                                <div class="tab-pane fade" id="categories" role="tabpanel" aria-labelledby="categories-tab">
+                                    <div class="py-6">
+                                        <button class="btn btn-danger btn-block" id="categories_add">Создать категорию
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         @endif
                     </div>
@@ -276,6 +292,25 @@
                     <div class="modal-footer">
                         <button type="button" class="btn" id="cancelAddTelegramBtn" data-dismiss="modal">Отмена</button>
                         <button type="button" class="btn" id="addTelegramBtn">Подключить</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно -->
+        <div class="modal fade" id="createCategory" tabindex="-1" role="dialog" aria-labelledby="createCategoryLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createCategoryLabel">Как назвать категорию?</h5>
+                    </div>
+                    <div class="modal-body">
+{{--                        <label for="shop_name">Название категории:</label>--}}
+                        <input type="text" id="category_name" class="form-control" />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn" id="cancelCreateCategoryBtn" data-dismiss="modal">Отмена</button>
+                        <button type="button" class="btn" id="createCreateCategoryBtn">Создать</button>
                     </div>
                 </div>
             </div>
@@ -370,6 +405,19 @@
 
                 $('#confirmDeleteModal').modal('hide');
             });
+        });
+
+        //Categories
+        $('#categories_add').click(function() {
+            $('#createCategory').modal('toggle');
+        });
+
+        $('#cancelCreateCategoryBtn, #createCreateCategoryBtn').click(function () {
+            $('#createCategory').modal('toggle');
+        });
+
+        $('#createCreateCategoryBtn').click(function () {
+            //TODO
         });
     </script>
 </x-app-layout>
