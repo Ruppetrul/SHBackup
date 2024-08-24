@@ -35,7 +35,7 @@
 
                                 <div class="py-3">
                                     <label for="category">{{ __('shop.category') }}</label>
-                                    <select name="category" class="block mt-1 w-full">
+                                    <select name="category" class="block rounded-md border-gray-300 mt-1 w-full">
                                         <option value="0"></option>
                                         @if (isset($categories) && count($categories))
                                             @foreach ($categories as $category)
