@@ -417,7 +417,17 @@
         });
 
         $('#createCreateCategoryBtn').click(function () {
-            //TODO
+            const categoryName = $('#category_name').val();
+            category_add(
+                categoryName,
+                document.querySelector('meta[name="csrf-token"]').content,
+                '{{ route('categories.store', ['shopId' => $shop['id']]) }}',
+                function (response) {
+                    window.location.reload();
+                },
+                function (error) {
+                }
+            );
         });
     </script>
 </x-app-layout>

@@ -159,4 +159,25 @@ function add_telegram_token(telegram_token, token, url, successCallback, errorCa
     });
 }
 
+function category_add(name, token, url, successCallback, errorCallback) {
+    const formData = new FormData();
+    formData.append('name', name);
+    customer_do_request({
+        method: 'POST',
+        url: url,
+        headers: {
+            'X-CSRF-TOKEN': token,
+        },
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            successCallback(response);
+        },
+        error: function (error) {
+            errorCallback(error);
+        }
+    });
+}
+
 console.log('include');
