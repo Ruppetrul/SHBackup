@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Modules\Mini\Models\Media;
 
 class Product extends Model
 {
@@ -65,7 +66,12 @@ class Product extends Model
     public static function updateProduct($shop_id, $product_id, $data)
     {
         MiniEloquent::executeWithShopConnection($shop_id, function ($connection) use ($product_id, $data) {
-            $connection->table('products')->where('id', $product_id)->update($data);
+            DB::setDefaultConnection('shop_connection');
+
+            $prd = \Modules\Mini\Models\Product::find($product_id);
+            $prd->fill($data);
+            $prd->save();
+            $prd->categories()->sync([$data['category']]);
         });
     }
 
@@ -90,31 +96,31 @@ class Product extends Model
     {
         $item = null;
         MiniEloquent::executeWithShopConnection($shop_id, function ($connection) use ($shop_id, $item_id, &$item) {
-            $item = (array) $connection
-                ->table('products')
-                ->select('products.*', 'medias.filename as avatar')
-                ->where('products.id', $item_id)
-                ->leftJoin('medias', 'products.first_media_id', '=', 'medias.id')
-                ->first();
+            DB::setDefaultConnection('shop_connection');
 
-            $v = $connection
-                ->table('medias')
-                ->select('medias.*')
-                ->where('medias.item_id', $item_id);
+            $product = \Modules\Mini\Models\Product::where('id', $item_id)
+                ->with('medias')
+                ->firstOrFail();
 
-            if (!empty($item['first_media_id'])) {
-                $v->whereNotIn('medias.id', [$item['first_media_id']]);
-            }
+            // for sirst time
+            $product->category = $product->categories()->first()->id ?? null;
 
-            $v = $v->get();
+            $medias = Media::where('item_id', $item_id)
+                ->where('id', '!=', $product->first_media_id)
+                ->get();
 
-            $v = $v->map(function ($media) use ($shop_id) {
+            $medias = $medias->map(function ($media) use ($shop_id) {
                 $filename = $media->filename;
                 $media->url = asset(Storage::url('/')) . '/' . $shop_id . '/' . $filename;
                 return $media;
             });
-            $item['medias'] = $v;
+
+            $product->medias = $medias;
+
+            $item = $product->toArray();
+            $item['medias'] = $medias;
         });
+        DB::setDefaultConnection('mysql');
         return $item;
     }
 

@@ -39,7 +39,9 @@
                                         <option value="0"></option>
                                         @if (isset($categories) && count($categories))
                                             @foreach ($categories as $category)
-                                                <option value="{{$category->id}}"> {{ $category->name }}</option>
+                                                <option value="{{$category->id}}"
+                                                @if(isset($item) && $category->id == $item['category']) selected @endif
+                                                > {{ $category->name }}</option>
                                             @endforeach
                                         @endif
                                         //TODO categories

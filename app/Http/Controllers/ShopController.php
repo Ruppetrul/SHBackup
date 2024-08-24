@@ -7,8 +7,8 @@ use App\Models\Product;
 use App\Models\Shop;
 use App\Services\TelegramService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -109,8 +109,9 @@ class ShopController extends Controller {
      */
     public function productUpdate(Request $request, $shopId, $itemId) {
         Product::updateProduct($shopId, $itemId, [
-            'title' => $request->get('title'),
-            'price' => $request->get('price'),
+            'title'    => $request->get('title'),
+            'price'    => $request->get('price'),
+            'category' => $request->get('category'),
         ]);
         return redirect()->route('shop.details', compact('shopId'));
     }
