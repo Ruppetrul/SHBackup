@@ -47,10 +47,15 @@ class Product extends Model
         MiniEloquent::executeWithShopConnection($shop_id, function ($connection) use ($data, &$itemId) {
             DB::setDefaultConnection('shop_connection');
 
-            $prd = new \Modules\Mini\Models\Product();
-            $prd->fill($data);
-            $prd->save();
-            $prd->categories()->sync([$data['category']]);
+            try {
+                $prd = new \Modules\Mini\Models\Product();
+                $prd->fill($data);
+                $prd->save();
+
+                $prd->categories()->sync($data['category'] == 0 ? [] : [$data['category']]);
+                } catch (\Exception $exception) {
+                    dd($exception->getMessage());
+                }
             $itemId = $prd->id;
         });
 
@@ -71,7 +76,7 @@ class Product extends Model
             $prd = \Modules\Mini\Models\Product::find($product_id);
             $prd->fill($data);
             $prd->save();
-            $prd->categories()->sync([$data['category']]);
+            $prd->categories()->sync($data['category'] == 0 ? [] : [$data['category']]);
         });
     }
 
