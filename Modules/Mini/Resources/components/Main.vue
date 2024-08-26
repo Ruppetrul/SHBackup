@@ -8,11 +8,12 @@ import Layout from './Layout.vue';
 import {onMounted, ref, watch} from "vue";
 import { getItems } from '../assets/js/api/getItems.js';
 import tgHelper from '../js/tg_helper.js';
+import Categories from "./main/Categories.vue";
 
 const isLoading = ref(false);
 const isEmpty = ref(true);
 
-const props = defineProps(['shop_id', 'title', 'message']);
+const props = defineProps(['shop_id', 'title', 'message', 'categories']);
 
 const shop_id = props.shop_id;
 
@@ -136,6 +137,7 @@ document.addEventListener("DOMContentLoaded", function() {
             :shop_id="props.shop_id">
         <SearchPanel :change_search_filter="change_search_filter"/>
         <TopFilterPanel :change_order_filter="change_order_filter"/>
+        <Categories :categories="props.categories"></Categories>
         <template v-if="isEmpty">
       <PreloaderItemsPanel />
     </template>

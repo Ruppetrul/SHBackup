@@ -1,0 +1,31 @@
+<script setup>
+  import { defineProps } from "vue";
+
+  const props = defineProps(['name']);
+</script>
+
+<template>
+    <div class="categories-container">
+        <h3 class="categories-name">{{ props.name }}</h3>
+    </div>
+</template>
+
+<style scoped>
+.categories-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 10em;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.categories-name {
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    text-align: center;
+    padding: 0.5em;
+    box-sizing: border-box;
+}
+</style>
+

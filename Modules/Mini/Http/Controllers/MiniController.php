@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
+use Modules\Mini\Models\Category;
 use Modules\Mini\Repositories\MiniRepoEloquentInterface;
 use Modules\Mini\Repositories\MiniRepoEloquent;
 
@@ -24,7 +25,8 @@ class MiniController extends Controller
         return Inertia::render('Main', array_merge(
             $this->prepareBaseData(),
             [
-                'message' => session('success_message')
+                'message'    => session('success_message'),
+                'categories' => Category::all()->toArray()
             ]
         ));
     }
