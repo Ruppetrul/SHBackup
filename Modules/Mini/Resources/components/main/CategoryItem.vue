@@ -1,12 +1,12 @@
 <script setup>
   import { defineProps } from "vue";
 
-  const props = defineProps(['name']);
+  const props = defineProps(['category', 'clickHandler']);
 </script>
 
 <template>
-    <div class="categories-container">
-        <h3 class="categories-name">{{ props.name }}</h3>
+    <div class="categories-container" @click="props.clickHandler(props.category.id)">
+        <h3 class="categories-name">{{ props.category.name }}</h3>
     </div>
 </template>
 

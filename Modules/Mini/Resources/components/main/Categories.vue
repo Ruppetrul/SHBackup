@@ -3,12 +3,12 @@
 
   import CategoryItem from "./CategoryItem.vue";
 
-  const props = defineProps(['categories'])
+  const props = defineProps(['categories', 'clickHandler'])
 </script>
 
 <template>
     <div id="categories-panel" class="py-3">
-        <CategoryItem v-for="category in props.categories" :name="category.name">
+        <CategoryItem v-for="category in props.categories" :category="category" :clickHandler="clickHandler">
         </CategoryItem>
     </div>
 </template>

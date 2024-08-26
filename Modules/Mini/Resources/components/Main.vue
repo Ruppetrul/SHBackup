@@ -29,6 +29,7 @@ let has_more = true;
 
 let search = '';
 let order = '';
+let category = '';
 
 async function fetchItems(is_paginate = false) {
     const params = new URLSearchParams(
@@ -36,6 +37,7 @@ async function fetchItems(is_paginate = false) {
             only_data: 1,
             page: page,
             search: search,
+            category: category,
             priority_filter: order
         }
     );
@@ -58,6 +60,14 @@ function change_search_filter(search_filter) {
 function change_order_filter(order_filter) {
     page = 0;
     order = order_filter;
+    setHasMore(true);
+    items.value = [];
+    fetchData();
+}
+
+function select_category_filter(category_filter) {
+    page = 0;
+    category = category_filter;
     setHasMore(true);
     items.value = [];
     fetchData();
@@ -137,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
             :shop_id="props.shop_id">
         <SearchPanel :change_search_filter="change_search_filter"/>
         <TopFilterPanel :change_order_filter="change_order_filter"/>
-        <Categories :categories="props.categories"></Categories>
+        <Categories :categories="props.categories" :clickHandler="select_category_filter"></Categories>
         <template v-if="isEmpty">
       <PreloaderItemsPanel />
     </template>

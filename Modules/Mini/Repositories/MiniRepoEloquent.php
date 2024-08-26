@@ -1,8 +1,7 @@
 <?php
 
 namespace Modules\Mini\Repositories;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Facades\DB;
 use Modules\Mini\Models\Product;
 
@@ -113,6 +112,8 @@ class MiniRepoEloquent implements MiniRepoEloquentInterface
     public function getActive($params)
     {
         $pageSize = 10;
+
+        /** @var Builder $query */
         $query = Product::query()->active();
 
         if (isset($params['search'])) {
@@ -138,6 +139,12 @@ class MiniRepoEloquent implements MiniRepoEloquentInterface
                 default:
                     break;
             }
+        }
+
+        if ($params['category'] != 0) {
+            $query->whereHas('categories', function ($query) use ($params) {
+                $query->where('category_id', $params['category']);
+            });
         }
 
         return $query->paginate($pageSize);
