@@ -68,7 +68,7 @@ class MiniController extends Controller
     {
         return Inertia::render('Info', array_merge(
             $this->prepareBaseData(),
-            ['company_data' => ShopData::all()->first()?->toArray()]
+            ['company_data' => ShopData::all()->first()?->toArray() ?? []]
         ));
     }
 

@@ -7,27 +7,29 @@ const props = defineProps(['company_data', 'shop_id']);
 
 <template>
     <div class="container">
-        <Link :href="`/mini/${props.shop_id}/`" class="back-link">Назад на главную</Link>
+        <Link :href="`/mini/${props.shop_id}/`" class="back-link">
+            <span class="material-icons">Назад на главную</span>
+        </Link>
         <div class="info-block">
             <div class="info-item">
                 <span class="info-label">Номер:</span>
-                <span class="info-value">{{ props.company_data.number }}</span>
+                <span class="info-value">{{ props.company_data.number || 'Не указан' }}</span>
             </div>
             <div class="info-item">
                 <span class="info-label">Фио:</span>
-                <span class="info-value">{{ props.company_data.fio }}</span>
+                <span class="info-value">{{ props.company_data.fio || 'Не указан' }}</span>
             </div>
             <div class="info-item">
                 <span class="info-label">Адрес:</span>
-                <span class="info-value">{{ props.company_data.address }}</span>
+                <span class="info-value">{{ props.company_data.address || 'Не указан' }}</span>
             </div>
             <div class="info-item">
                 <span class="info-label">ИНН:</span>
-                <span class="info-value">{{ props.company_data.inn }}</span>
+                <span class="info-value">{{ props.company_data.inn || 'Не указан' }}</span>
             </div>
             <div class="info-item">
                 <span class="info-label">ОГРНИП:</span>
-                <span class="info-value">{{ props.company_data.ogrnip }}</span>
+                <span class="info-value">{{ props.company_data.ogrnip || 'Не указан' }}</span>
             </div>
         </div>
     </div>
@@ -49,21 +51,27 @@ const props = defineProps(['company_data', 'shop_id']);
     background: none;
     border: none;
     cursor: pointer;
-    text-decoration: underline;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.back-link .material-icons {
+    margin-right: 8px; /* Space between icon and text */
 }
 
 .back-link:hover {
-    text-decoration: none;
+    text-decoration: underline;
 }
 
 .info-block {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px; /* Optional: space between columns */
+    gap: 10px;
     padding: 20px;
-    background-color: #fff; /* Optional: background color for the block */
-    border-radius: 8px; /* Optional: rounded corners */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: shadow for the block */
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .info-item {
