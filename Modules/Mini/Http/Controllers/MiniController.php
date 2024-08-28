@@ -2,21 +2,17 @@
 
 namespace Modules\Mini\Http\Controllers;
 
-use App\Jobs\SendEmail;
-use App\Models\Order;
+use App\Models\ShopData;
+use App\Repositories\MiniEloquentInterface;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use App\Repositories\MiniEloquentInterface;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Modules\Mini\Models\Category;
-use Modules\Mini\Repositories\MiniRepoEloquentInterface;
 use Modules\Mini\Repositories\MiniRepoEloquent;
+use Modules\Mini\Repositories\MiniRepoEloquentInterface;
 
 class MiniController extends Controller
 {
@@ -65,6 +61,14 @@ class MiniController extends Controller
             [
                 'total' => $cart_total
             ]
+        ));
+    }
+
+    public function info(MiniRepoEloquentInterface $miniRepo)
+    {
+        return Inertia::render('Info', array_merge(
+            $this->prepareBaseData(),
+            ['company_data' => ShopData::all()->first()->toArray()]
         ));
     }
 

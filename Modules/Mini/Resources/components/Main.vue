@@ -9,6 +9,7 @@ import {onMounted, ref, watch} from "vue";
 import { getItems } from '../assets/js/api/getItems.js';
 import tgHelper from '../js/tg_helper.js';
 import Categories from "./main/Categories.vue";
+import BottomPanel from "./main/BottomPanel.vue";
 
 const isLoading = ref(false);
 const isEmpty = ref(true);
@@ -156,6 +157,8 @@ document.addEventListener("DOMContentLoaded", function() {
         <ItemsPanel :items="items" :has_more="has_more" :shop_id="shop_id"/>
       </div>
     </template>
+    <hr>
+    <BottomPanel :shop_id="shop_id"/>
   </Layout>
 </template>
 
