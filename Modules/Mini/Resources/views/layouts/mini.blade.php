@@ -6,7 +6,7 @@
         <script src="https://telegram.org/js/telegram-web-app.js"></script>
         @include('Mini::section.css') {{-- Include css files --}}
     </head>
-    <body class="bg-effect" style="background-color: BlanchedAlmond">
+    <body class="bg-effect" style="background-color: {{$page['props']['company_data']['background-color']}}">
         @inertia
         @yield('content') {{-- Yield content data --}}
     </body>
