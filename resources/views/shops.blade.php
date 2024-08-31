@@ -1,14 +1,13 @@
 <x-app-layout>
-    @if (count($shops) != 0)
-        <x-slot name="header">
-            <div class="d-flex justify-content-between align-items-center">
-                <div></div>
-                <button class="btn btn-primary" id="openModalBtn">{{__('shop.create_shop')}}</button>
+    <div class="p-6">
+        @if (count($shops) != 0)
+            <div style="padding-bottom: 1.5rem">
+                <div class="d-flex align-items-center">
+                    <div></div>
+                    <button class="btn btn-primary" id="openModalBtn">{{__('shop.create_shop')}}</button>
+                </div>
             </div>
-        </x-slot>
-    @endif
-
-    <div class="container py-6">
+        @endif
         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
             @if (count($shops) == 0)
                 <div class="p-6 col d-flex align-items-center justify-content-center mx-auto">

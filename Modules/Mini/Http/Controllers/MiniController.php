@@ -72,6 +72,13 @@ class MiniController extends Controller
         ));
     }
 
+    public function delivery(MiniRepoEloquentInterface $miniRepo)
+    {
+        return Inertia::render('Delivery', array_merge(
+            $this->prepareBaseData()
+        ));
+    }
+
     /**
      * @param string|int $shopIdOrName
      * @param string|int $itemId

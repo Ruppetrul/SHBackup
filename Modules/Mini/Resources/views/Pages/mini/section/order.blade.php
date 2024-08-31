@@ -71,7 +71,7 @@
                                 </div>
                                 <ul class="summery-total">
                                     <li class="list-total border-top-0">
-                                        <span class="text-muted">Доставка: Бесплатно</span>
+                                        <span class="text-muted">Доставка: Рассчитывается индивидуально</span>
                                     </li>
                                 </ul>
                                 <script src="https://yastatic.net/jquery/3.3.1/jquery.min.js"></script>
