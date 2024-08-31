@@ -68,7 +68,7 @@ function change_order_filter(order_filter) {
 
 function select_category_filter(category_filter) {
     page = 0;
-    category = category_filter;
+    category = category_filter ?? null;
     setHasMore(true);
     items.value = [];
     fetchData();

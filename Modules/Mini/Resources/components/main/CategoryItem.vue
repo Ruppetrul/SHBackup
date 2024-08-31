@@ -12,6 +12,7 @@
 
 <style scoped>
 .categories-container {
+    border-radius: 15%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -21,6 +22,7 @@
 }
 
 .categories-name {
+    border-radius: 15%;
     background: rgba(0, 0, 0, 0.5);
     color: #fff;
     text-align: center;

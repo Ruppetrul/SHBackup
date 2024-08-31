@@ -1,14 +1,18 @@
 <script setup>
-  import { defineProps } from "vue";
+  import { defineProps, computed } from "vue";
 
   import CategoryItem from "./CategoryItem.vue";
 
   const props = defineProps(['categories', 'clickHandler'])
+  const categoriesWithAll = computed(() => [
+      { name: 'Все категории' },
+      ...props.categories
+  ]);
 </script>
 
 <template>
     <div id="categories-panel" class="py-3">
-        <CategoryItem v-for="category in props.categories" :category="category" :clickHandler="clickHandler">
+        <CategoryItem v-for="category in categoriesWithAll" :category="category" :clickHandler="clickHandler">
         </CategoryItem>
     </div>
 </template>

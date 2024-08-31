@@ -141,7 +141,7 @@ class MiniRepoEloquent implements MiniRepoEloquentInterface
             }
         }
 
-        if ($params['category'] != 0) {
+        if (!empty($params['category']) && $params['category'] != 'null') {
             $query->whereHas('categories', function ($query) use ($params) {
                 $query->where('category_id', $params['category']);
             });
