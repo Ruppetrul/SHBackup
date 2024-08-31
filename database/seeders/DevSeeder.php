@@ -18,30 +18,39 @@ class DevSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::factory()->create([
-            'name'     => 'admin',
-            'email'    => 'admin@admin.com',
-            'password' => Hash::make('adminadmin274p1'),
-        ]);
+        $user = User::where('email', 'admin@admin.com')->first();
+
+        if (!$user) {
+            $user = User::factory()->create([
+                'name'     => 'admin',
+                'email'    => 'admin@admin.com',
+                'password' => Hash::make('adminadmin274p1'),
+            ]);
+        }
 
         $now = now();
-        $shop = Shop::create([
-            'name'           => 'Test shop for admin',
-            'db_name'        => 'unknown_' . $now->format('YmdHis'),
-            'owner_id'       => $user->id,
-            'payment_status' => 'trial',
-            'state'          => 'not_created',
-            'last_used_at'   => now(),
-            'created_at'     => now(),
-            'updated_at'     => now(),
-        ]);
 
-        $faker = Faker::create();
-        for ($i = 0; $i < 50; $i++) {
-            Product::createProduct($shop->id, [
-                'title' => $faker->name() . $i,
-                'price' => $faker->numberBetween(10,10000),
+        $shop = Shop::where('db_name', 'unknown_' . $now->format('YmdHis'))->first();
+        if (!$shop) {
+            $shop = Shop::create([
+                'name' => 'Test shop for admin',
+                'db_name' => 'unknown_' . $now->format('YmdHis'),
+                'owner_id' => $user->id,
+                'payment_status' => 'trial',
+                'state' => 'not_created',
+                'last_used_at' => now(),
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
+
+
+            $faker = Faker::create();
+            for ($i = 0; $i < 50; $i++) {
+                Product::createProduct($shop->id, [
+                    'title' => $faker->name() . $i,
+                    'price' => $faker->numberBetween(10,10000),
+                ]);
+            }
         }
     }
 }
