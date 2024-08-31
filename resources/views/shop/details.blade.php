@@ -132,28 +132,27 @@
                             <div class="tab-content" id="shopTabsContent">
                                 <div class="tab-pane fade show active" id="home" role="tabpanel"
                                      aria-labelledby="home-tab">
-                                    @if (count($products) == 0)
-                                        <div class="p-6 col d-flex align-items-center justify-content-center">
-                                            <div class="card text-center p-4">
-                                                <div class="card-body">
-                                                    <h5 class="card-title">{{__('shop.no_products')}}</h5>
-                                                    <a href="{{ route('product.create.view', ['shopId' => $shop['id']]) }}"
-                                                       class="btn btn-primary mt-3">{{__('shop.add_item')}}</a>
+
+                                    <div class="container py-6">
+                                        @if (count($products) == 0)
+                                            <div class="p-6 col d-flex align-items-center justify-content-center">
+                                                <div class="card text-center p-4">
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">{{__('shop.no_products')}}</h5>
+                                                        <a href="{{ route('product.create.view', ['shopId' => $shop['id']]) }}"
+                                                           class="btn btn-primary mt-3">{{__('shop.add_item')}}</a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    @else
-                                        <div class="overflow-hidden sm:rounded-lg">
-                                            <div class="p-6">
-                                                <div class="d-flex justify-content-between align-items-center">
+                                        @else
+                                            <div class="overflow-hidden sm:rounded-lg">
+                                                <div class="d-flex align-items-center" style="padding-bottom: 1.5rem">
                                                     <div></div>
                                                     <a href="{{ route('product.create.view', ['shopId' => $shop['id']]) }}"
                                                        class="btn btn-primary mt-3">{{__('shop.add_item')}}</a>
                                                 </div>
                                             </div>
-                                        </div>
-                                    @endif
-                                    <div class="container py-6">
+                                        @endif
                                         <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4">
                                             @foreach ($products as $product)
                                                 <div class="col mb-4">
