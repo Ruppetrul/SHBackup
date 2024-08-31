@@ -20,6 +20,10 @@ const props = defineProps(['company_data', 'shop_id']);
                 <span class="info-value">{{ props.company_data.fio || 'Не указан' }}</span>
             </div>
             <div class="info-item">
+                <span class="info-label">Email:</span>
+                <span class="info-value">{{ props.company_data.email || 'Не указан' }}</span>
+            </div>
+            <div class="info-item">
                 <span class="info-label">Адрес:</span>
                 <span class="info-value">{{ props.company_data.address || 'Не указан' }}</span>
             </div>
