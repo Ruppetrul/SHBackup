@@ -46,6 +46,7 @@ class MiniController extends Controller
         return array(
             'shop_id' => app('current_shop_id'),
             'title'   => app('current_shop_name'),
+            'company_data' => ShopData::all()->first()?->toArray() ?? []
         );
     }
 
@@ -67,8 +68,7 @@ class MiniController extends Controller
     public function info(MiniRepoEloquentInterface $miniRepo)
     {
         return Inertia::render('Info', array_merge(
-            $this->prepareBaseData(),
-            ['company_data' => ShopData::all()->first()?->toArray() ?? []]
+            $this->prepareBaseData()
         ));
     }
 
