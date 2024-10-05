@@ -2,10 +2,10 @@
 
 use App\Http\Controllers\CategoriesController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
-use Modules\Mini\Http\Controllers\MiniController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,15 +28,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::prefix('/{shopId}')->group(function () {
             Route::get('/', [ShopController::class, 'detailsView'])->name('shop.details');
-            Route::get('/product-create', [ShopController::class, 'productCreateView'])->name('product.create.view');
-            Route::get('/product-edit/{itemId}', [ShopController::class, 'productEditView'])->name('product.edit.view');
             Route::delete('/delete', [ShopController::class, 'shopDelete'])->name('shop.delete');
             Route::post('/add-telegram-token', [ShopController::class, 'addTelegramToken'])->name('shop.add_telegram_token');
             Route::post('/save-yookassa-token', [PaymentController::class, 'saveYookassaToken'])->name('shop.save-yookassa-token');
 
-            Route::resource('product', ShopController::class)->only(['store', 'update', 'destroy']);
-            Route::post('product/{product}/update-image', [ShopController::class, 'productUpdateImage'])->name('product.update.image');
-            Route::delete('product/{product}/delete-media', [ShopController::class, 'productDeleteMedia'])->name('product.delete.media');
+            Route::resource('product', ProductController::class)->only(['create', 'store', 'edit', 'update', 'destroy']);
+            Route::post('product/{product}/update-image', [ProductController::class, 'productUpdateImage'])->name('product.update.image');
+            Route::delete('product/{product}/delete-media', [ProductController::class, 'productDeleteMedia'])->name('product.delete.media');
 
             Route::resource('categories', CategoriesController::class)->only('store')
                 ->names(['store' => 'categories.store']);

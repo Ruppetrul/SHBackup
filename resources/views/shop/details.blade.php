@@ -139,7 +139,7 @@
                                                 <div class="card text-center p-4">
                                                     <div class="card-body">
                                                         <h5 class="card-title">{{__('shop.no_products')}}</h5>
-                                                        <a href="{{ route('product.create.view', ['shopId' => $shop['id']]) }}"
+                                                        <a href="{{ route('product.create', ['shopId' => $shop['id']]) }}"
                                                            class="btn btn-primary mt-3">{{__('shop.add_item')}}</a>
                                                     </div>
                                                 </div>
@@ -148,7 +148,7 @@
                                             <div class="overflow-hidden sm:rounded-lg">
                                                 <div class="d-flex align-items-center" style="padding-bottom: 1.5rem">
                                                     <div></div>
-                                                    <a href="{{ route('product.create.view', ['shopId' => $shop['id']]) }}"
+                                                    <a href="{{ route('product.create', ['shopId' => $shop['id']]) }}"
                                                        class="btn btn-primary mt-3">{{__('shop.add_item')}}</a>
                                                 </div>
                                             </div>
@@ -171,7 +171,7 @@
                                                             <p class="card-text">{{__('shop.item_price')}} {{ $product['price'] }}</p>
                                                             <div class="d-flex">
                                                                 <a class="btn btn-primary me-2 flex-grow-1 editButton"
-                                                                   href="{{ route('product.edit.view', ['shopId' => $shop['id'], 'itemId' => $product['id']]) }}">Редактировать</a>
+                                                                   href="{{ route('product.edit', ['shopId' => $shop['id'], 'product' => $product['id']]) }}">Редактировать</a>
                                                                 <button class="btn btn-danger ms-auto deleteButton"
                                                                         data-product-id="{{ $product['id'] }}"><i
                                                                         class="fas fa-trash-alt"></i></button>
