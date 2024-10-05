@@ -138,6 +138,9 @@ class ShopController extends Controller {
      * @return bool
      */
     public function productDelete($shop_id, Request $request) {
+        if (!auth()->user()->can('productDelete', Shop::findOrFail($shop_id))) {
+            abort(403);
+        }
         Product::deleteProduct($shop_id, $request->get('id'));
         return true;
     }
