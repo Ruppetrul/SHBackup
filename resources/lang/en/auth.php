@@ -18,4 +18,5 @@ return [
     'verification_link_sent' => 'A new verification link has been sent to the email address you provided during registration.',
     'resend_verification_email' => 'Resend Verification Email',
     'failed' => 'Incorrect email or password',
+    'Profile' => 'Profile',
 ];
