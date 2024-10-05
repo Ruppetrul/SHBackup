@@ -252,6 +252,9 @@ class ShopController extends Controller {
      * @param string|int $shop_id
      */
     public function shopDelete($shop_id) {
+        if (!auth()->user()->can('shopDelete', Shop::findOrFail($shop_id))) {
+            abort(403);
+        }
         $shop = Shop::where('owner_id', Auth::id())->where('id', $shop_id)->first();
 
         if (!$shop) {

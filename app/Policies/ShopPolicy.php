@@ -36,4 +36,9 @@ class ShopPolicy
     {
         return $this->isOwner($user, $shop);
     }
+
+    public function shopDelete(User $user, Shop $shop): bool
+    {
+        return $this->isOwner($user, $shop);
+    }
 }
