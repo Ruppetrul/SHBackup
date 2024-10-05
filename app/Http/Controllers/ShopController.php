@@ -34,7 +34,7 @@ class ShopController extends Controller {
     public function detailsView(Shop $shopId) {
         $shop = $shopId; //Only for route saving
 
-        Gate::allows('view', $shop);
+        if (Gate::denies('view', $shop)) abort(403);
 
         list($success, $orders) = Order::fetchOrders($shop->id);
 
@@ -139,10 +139,14 @@ class ShopController extends Controller {
     }
 
     /**
-     * @param string|int $shopId
-     * @param string|int $itemId
+     * @param int $shopId
+     * @param Product $itemId
+     * @return Application|Factory|View|\Illuminate\Foundation\Application
      */
-    public function productEditView($shopId, $itemId = null) {
+    public function productEditView(int $shopId, int $itemId) {
+        $shop = Shop::findOrFail($shopId);
+        if (Gate::denies('productUpdate', $shop)) abort(403);
+
         $data = array();
         $data['shopId'] = $shopId;
         if ($itemId) {

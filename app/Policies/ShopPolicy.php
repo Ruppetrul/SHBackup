@@ -39,6 +39,11 @@ class ShopPolicy
         //
     }
 
+    public function productUpdate(User $user, Shop $shop): bool
+    {
+        return $shop->owner_id === $user->id;
+    }
+
     /**
      * Determine whether the user can delete the model.
      */
