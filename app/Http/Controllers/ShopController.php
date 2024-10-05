@@ -6,9 +6,14 @@ use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Shop;
 use App\Services\TelegramService;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Drivers\Gd\Driver;
@@ -22,9 +27,16 @@ class ShopController extends Controller {
         return view('shops', compact('shops'));
     }
 
-    public function detailsView($id) {
-        $shop = Shop::where('owner_id', auth()->id())->find($id);
-        list($success, $orders) = Order::fetchOrders($id);
+    /**
+     * @param Shop $shopId
+     * @return Application|Factory|View|RedirectResponse
+     */
+    public function detailsView(Shop $shopId) {
+        $shop = $shopId; //Only for route saving
+
+        Gate::allows('view', $shop);
+
+        list($success, $orders) = Order::fetchOrders($shop->id);
 
         $success = false;
         if ($shop) {
@@ -39,7 +51,7 @@ class ShopController extends Controller {
             return redirect()->route('shops.view');
         }
 
-        $yookassaToken = Payment::find($id, Payment::TAG_YOOKASSA);
+        $yookassaToken = Payment::find($shop->id, Payment::TAG_YOOKASSA);
         list ($success, $categories) = Category::fetch($shop->id);
 
         return view('shop.details', compact(

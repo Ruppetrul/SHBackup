@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 /**
  * @method static where(string $string, string $string1)
+ * @property int $id
  */
 class Shop extends Model
 {
