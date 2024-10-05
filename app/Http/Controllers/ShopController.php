@@ -147,6 +147,23 @@ class ShopController extends Controller {
      * @param Product $itemId
      * @return Application|Factory|View|\Illuminate\Foundation\Application
      */
+    public function productCreateView(int $shopId) {
+        $shop = Shop::findOrFail($shopId);
+        if (Gate::denies('productUpdate', $shop)) abort(403);
+
+        $data = array();
+        $data['shopId'] = $shopId;
+
+        list (, $categories) = Category::fetch($shopId);
+        $data['categories'] = $categories;
+        return view('shop.product-edit', $data);
+    }
+
+    /**
+     * @param int $shopId
+     * @param Product $itemId
+     * @return Application|Factory|View|\Illuminate\Foundation\Application
+     */
     public function productEditView(int $shopId, int $itemId) {
         $shop = Shop::findOrFail($shopId);
         if (Gate::denies('productUpdate', $shop)) abort(403);

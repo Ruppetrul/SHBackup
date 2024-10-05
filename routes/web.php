@@ -28,7 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         Route::prefix('/{shopId}')->group(function () {
             Route::get('/', [ShopController::class, 'detailsView'])->name('shop.details');
-            Route::get('/product-create', [ShopController::class, 'productEditView'])->name('product.create.view');
+            Route::get('/product-create', [ShopController::class, 'productCreateView'])->name('product.create.view');
             Route::get('/product-edit/{itemId}', [ShopController::class, 'productEditView'])->name('product.edit.view');
             Route::delete('/delete', [ShopController::class, 'shopDelete'])->name('shop.delete');
             Route::post('/add-telegram-token', [ShopController::class, 'addTelegramToken'])->name('shop.add_telegram_token');
