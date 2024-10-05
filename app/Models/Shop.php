@@ -6,11 +6,11 @@ use App\Repositories\MiniEloquent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 /**
  * @method static where(string $string, string $string1)
+ * @method static findOrFail(int $shopId)
  * @property int $id
  */
 class Shop extends Model

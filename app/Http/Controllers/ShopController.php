@@ -115,11 +115,15 @@ class ShopController extends Controller {
 
     /**
      * @param Request $request
-     * @param string|int $shopId
+     * @param int $shopId
      * @param string|int $itemId
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function productUpdate(Request $request, $shopId, $itemId) {
+    public function productUpdate(Request $request, int $shopId, $itemId): RedirectResponse
+    {
+        $shop = Shop::findOrFail($shopId);
+        if (Gate::denies('productUpdate', $shop)) abort(403);
+
         Product::updateProduct($shopId, $itemId, [
             'title'    => $request->get('title'),
             'price'    => $request->get('price'),
