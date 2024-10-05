@@ -12,9 +12,9 @@
                     <div class="card-body">
                         <form method="POST"
                               @if(isset($item))
-                                  action="{{route('product.update',  ['shopId' => $shopId, 'itemId' => $item['id']] )}}"
+                                  action="{{route('product.update',  ['shopId' => $shopId, 'product' => $item['id']] )}}"
                               @else
-                                  action="{{route('product.create',  ['shopId' => $shopId])}}"
+                                  action="{{route('product.store',  ['shopId' => $shopId])}}"
                               @endif
                         >
                             @csrf
@@ -153,7 +153,7 @@
                 formData.append('media_id',  this.getAttribute('data-media-id'));
                 delete_media(
                     formData,
-                    '{{ route('product.delete.media', ['shopId' => $shopId]) }}',
+                    `{{ route('product.delete.media', ['shopId' => $shopId, 'product' => '__PRODUCT_ID__']) }}`.replace('__PRODUCT_ID__', productId),
                     document.querySelector('meta[name="csrf-token"]').content,
                     function (response) {
                         const item = event.currentTarget.closest('.sortable-item');
@@ -180,7 +180,8 @@
             $('#imagePanelAdditional, #imagePanelAvatar').on('change', function (element) {
                 const  formData = new FormData();
                 formData.append('file', $(this)[0].files[0]);
-                formData.append('itemId', $(this).data('item-id'));
+                let productId = $(this).data('item-id');
+                formData.append('itemId', productId);
                 formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
 
                 const elementId = element.currentTarget.getAttribute('id');
@@ -191,7 +192,7 @@
 
                 update_media(
                     formData,
-                    '{{ route('product.update.image', ['shopId' => $shopId]) }}',
+                    `{{ route('product.update', ['shopId' => $shopId, 'product' => '__PRODUCT_ID__']) }}`.replace('__PRODUCT_ID__', productId),
                     function (response) {
                         if (response.success) {
                             let imagePanel = null;

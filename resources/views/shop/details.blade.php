@@ -385,7 +385,7 @@
 
                 delete_item(
                     formData,
-                    '{{ route('product.delete', ['shopId' => $shop['id']]) }}',
+                    `{{ route('product.destroy', ['shopId' => $shop['id'], 'product' => '__PRODUCT_ID__']) }}`.replace('__PRODUCT_ID__', productId),
                     document.querySelector('meta[name="csrf-token"]').content,
                     function (response) {
                         window.location.reload();

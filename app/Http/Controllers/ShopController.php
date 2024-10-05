@@ -103,7 +103,7 @@ class ShopController extends Controller {
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function productCreate($shop_id, Request $request) {
+    public function store($shop_id, Request $request) {
         $itemId = Product::createProduct($shop_id, [
             'title'    => $request->get('title'),
             'price'    => $request->get('price'),
@@ -119,7 +119,7 @@ class ShopController extends Controller {
      * @param string|int $itemId
      * @return RedirectResponse
      */
-    public function productUpdate(Request $request, int $shopId, $itemId): RedirectResponse
+    public function update(Request $request, int $shopId, $itemId): RedirectResponse
     {
         $shop = Shop::findOrFail($shopId);
         if (Gate::denies('productUpdate', $shop)) abort(403);
@@ -137,7 +137,7 @@ class ShopController extends Controller {
      * @param Request $request
      * @return bool
      */
-    public function productDelete($shop_id, Request $request) {
+    public function destroy($shop_id, Request $request) {
         if (!auth()->user()->can('productDelete', Shop::findOrFail($shop_id))) {
             abort(403);
         }

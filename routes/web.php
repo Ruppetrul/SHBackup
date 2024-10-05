@@ -34,13 +34,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::post('/add-telegram-token', [ShopController::class, 'addTelegramToken'])->name('shop.add_telegram_token');
             Route::post('/save-yookassa-token', [PaymentController::class, 'saveYookassaToken'])->name('shop.save-yookassa-token');
 
-            Route::prefix('/product')->group(function () {
-                Route::post('/create', [ShopController::class, 'productCreate'])->name('product.create');
-                Route::put('/update/{itemId}', [ShopController::class, 'productUpdate'])->name('product.update');
-                Route::post('/update-image', [ShopController::class, 'productUpdateImage'])->name('product.update.image');
-                Route::delete('/delete-media', [ShopController::class, 'productDeleteMedia'])->name('product.delete.media');
-                Route::delete('/delete', [ShopController::class, 'productDelete'])->name('product.delete');
-            });
+            Route::resource('product', ShopController::class)->only(['store', 'update', 'destroy']);
+            Route::post('product/{product}/update-image', [ShopController::class, 'productUpdateImage'])->name('product.update.image');
+            Route::delete('product/{product}/delete-media', [ShopController::class, 'productDeleteMedia'])->name('product.delete.media');
 
             Route::resource('categories', CategoriesController::class)->only('store')
                 ->names(['store' => 'categories.store']);
