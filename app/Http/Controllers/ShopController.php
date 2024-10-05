@@ -276,7 +276,11 @@ class ShopController extends Controller {
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function addTelegramToken($shop_id, Request $request) {
+    public function addTelegramToken(int $shop_id, Request $request) {
+        if (!auth()->user()->can('addTelegramToken', Shop::findOrFail($shop_id))) {
+            abort(403);
+        }
+
         $new_telegram_token = $request->get('telegram_token');
 
         if (empty($new_telegram_token) || !is_string($new_telegram_token)) {

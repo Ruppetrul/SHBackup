@@ -26,4 +26,9 @@ class ShopPolicy
     {
         return $this->isOwner($user, $shop);
     }
+
+    public function addTelegramToken(User $user, Shop $shop): bool
+    {
+        return $this->isOwner($user, $shop);
+    }
 }
