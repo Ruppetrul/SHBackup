@@ -27,4 +27,5 @@ return [
     'cancel' => 'Отмена',
     'delete_account_button' => 'Удалить аккаунт',
     'shops' => 'Магазины',
+    'category_store_error' => 'Ошибка при сохранении категории.',
 ];

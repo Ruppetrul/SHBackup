@@ -27,4 +27,5 @@ return [
     'cancel' => 'Cancel',
     'delete_account_button' => 'Delete Account',
     'shops' => 'Shops',
+    'category_store_error' => 'Category store error.',
 ];
